@@ -1,0 +1,17 @@
+ÖPPETTIDER: ÖPPNA FRÅGOR OCH BESLUTSHISTORIK
+==========================================
+
+Ingen post i denna fil är en gällande regel. Kraven finns i
+rules/runtime/business-hours.txt. Källa: diskussionen 2026-10-18.
+
+[OPPEN-002] [ERSATT AV OPPEN-005] Frågan om standardvecka och datumavvikelser
+är avgjord genom användarens förtydligande; se OPPEN-005–009.
+
+[OPPEN-003] [ÖPPET] Besluta om appens öppettider är den auktoritativa driftkällan
+som publiceras till Google, eller om ändringar gjorda direkt i Google även ska
+läsas in. Textfilerna bestämmer beteendet; faktiska redigerbara tider är driftdata.
+Regler för konflikt, synkfel och återförsök behöver beslutas före implementation.
+
+[OPPEN-012] [ÖPPET] Precisera hur helt stängda datum, flera tidsintervall samma
+dag, tider över midnatt och exakt gränsminut ska hanteras. Bestäm tidszon och
+veckogräns innan datumvalidering och innevarande vecka implementeras.

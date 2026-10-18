@@ -1,0 +1,17 @@
+HISTORIK OCH ÄLDRE UNDERLAG
+===========================
+
+Status för samtliga poster i denna fil: HISTORIK.
+Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
+Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Se rules/index.txt för status, företräde och hur en post blir gällande.
+
+Underlagets omfattning och status
+---------------------------------
+[BAK-001] [HISTORIK] Dokumentet sammanställer regler, produktuppgifter och avsedda funktioner i Gulo Gulo-repot vid taggen backup-2026-10-18, commit ebd80af.
+[BAK-002] [HISTORIK] Underlaget är README.md, lib/prompt_base.ts, lib/prompt.ts, lib/menu.ts, lib/menytext.ts, lib/pricing.ts, lib/tools.ts, lib/db.ts, lib/time.ts, lib/ordernr.ts, lib/forfragan.ts, lib/mail.ts, lib/notis.ts och filerna under app/.
+[BAK-003] [HISTORIK] En beskriven regel är inte en garanti för att den nuvarande implementationen upprätthåller regeln. Kodgranskningen har visat flera avvikelser.
+[BAK-004] [HISTORIK] Punkter märkta ÖPPET BESLUT beskriver motsägelser eller frågor som verksamheten behöver avgöra inför nyimplementationen.
+[BAK-005] [HISTORIK] Det sista avsnittet innehåller uttryckligen märkta förbättringsförslag från kodgranskningen. Dessa är inte redan beslutade verksamhetsregler.
+[BAK-006] [HISTORIK] Produktpriser, recept, allergenuppgifter, adress och företagsfakta nedan är återgivna från repot. Inga nya sakuppgifter har lagts till från externa källor.
+[BAK-007] [HISTORIK] Nuvarande teknikval och numeriska skyddsgränser redovisas som befintliga förutsättningar, inte som krav på att en ny implementation måste använda samma teknik eller gränsvärden.

@@ -1,0 +1,42 @@
+MEDDELANDEN OCH ÄLDRE TEKNIKFÖRUTSÄTTNINGAR
+===========================================
+
+Status för samtliga poster i denna fil: FÖRSLAG.
+Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
+Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Se rules/index.txt för status, företräde och hur en post blir gällande.
+
+Mejl, pushnotiser och betalningsinformation för förfrågningar
+-------------------------------------------------------------
+[INT-001] [FÖRSLAG] Ny eller ändrad förfrågan ska mejlas till den konfigurerade orderadressen med namn, telefon, e-post, önskat datum och tid, beställning, antal och övrigt.
+[INT-002] [FÖRSLAG] Mejlet till personalen ska ha kundens e-postadress som svarsmottagare så att personalen kan svara direkt till kunden.
+[INT-003] [FÖRSLAG] Mejlet om en ändring ska tydligt säga att det ersätter den tidigare förfrågan.
+[INT-004] [FÖRSLAG] Personalens bekräftelsemejl till kunden ska innehålla tilltal med namn, slutligt belopp, Swishnummer, betalkod, hämtningens datum och tid, fullständig beställning, övrigt och eventuellt personligt meddelande.
+[INT-005] [FÖRSLAG] Kundmejlet ska instruera kunden att ange betalkoden i Swish-meddelandet och betala omgående för att behålla tiden.
+[INT-006] [FÖRSLAG] Kundmejlet anger att beställningen är bekräftad först när betalningen mottagits och att obetalda beställningar kan släppas till andra kunder. Hur detta ska benämnas i förhållande till statusen bekräftad är ett öppet beslut.
+[INT-007] [FÖRSLAG] Kundens svar på bekräftelsemejlet ska gå till verksamhetens orderadress.
+[INT-008] [FÖRSLAG] Vid visning av den slutliga beställningen i bekräftelsemejlet ska den tidigare texten om beräknat pris inte ligga kvar och konkurrera med det slutliga beloppet.
+[INT-009] [FÖRSLAG] Pushnotiser ska kunna skickas vid nya manuella direktbeställningar samt nya eller ändrade förfrågningar och innehålla relevant kund, hämtning och beställning.
+[INT-010] [FÖRSLAG] Push är ett komplement. Ett fel i pushnotisen får inte stoppa eller ogiltigförklara en redan sparad beställning.
+[INT-011] [FÖRSLAG] Nuvarande lösning föredrar Pushover när dess användare och token finns. Annars används ntfy om en topic finns. Om ingen kanal är konfigurerad skickas ingen pushnotis.
+[INT-012] [FÖRSLAG] Pushnotisen ska kunna länka till personalvyn. Ett test av pushnotiser ska kräva personalbehörighet.
+[INT-013] [FÖRSLAG] Direktbeställningar har ingen separat kundbekräftelse via mejl i nuvarande flöde; där lämnas kvittensen i chatten. Förfrågningar kan få kundmejl efter personalens bekräftelse trots att README beskriver kundbekräftelse som saknad.
+
+
+Befintlig teknik, konfiguration och skyddsgränser
+-------------------------------------------------
+[INT-014] [FÖRSLAG] Nuvarande app använder Next.js, React och TypeScript, kör serverdelen i Node.js och är konfigurerad för Vercel. Dessa teknikval behöver inte återanvändas för att verksamhetsreglerna ska bevaras.
+[INT-015] [FÖRSLAG] Modellen anropas på servern via Anthropic. API-nyckel, val av modell och eventuellt workspace konfigureras genom ANTHROPIC_API_KEY, ANTHROPIC_MODEL och ANTHROPIC_WORKSPACE_ID.
+[INT-016] [FÖRSLAG] Databasen är Supabase via REST med SUPABASE_URL och SUPABASE_SERVICE_ROLE_KEY. Service-nyckeln ska bara användas på servern och får inte skickas till webbläsaren.
+[INT-017] [FÖRSLAG] Nuvarande datakällor heter orders, quote_requests, slot_usage och loka_stock. Behovet är bestående lagring av beställningar, förfrågningar, beläggning och lagertillgänglighet, inte ett krav på exakt dessa tabellnamn.
+[INT-018] [FÖRSLAG] orders lagrar bland annat ID, skapandetid, hämtningsdatum, hämtningstid, kundnamn, kapacitetsantal, sammanfattning, belopp, status och eventuell reservationstid.
+[INT-019] [FÖRSLAG] quote_requests lagrar bland annat ID, skapandetid, namn, telefon, e-post, önskat datum och tid, beställningsbeskrivning, övrigt, status och beslutat belopp. Koden försöker även lagra kapacitetsantal i en kolumn korvar, men stöder att kolumnen saknas.
+[INT-020] [FÖRSLAG] Mejl skickas i nuvarande lösning via Resend med RESEND_API_KEY, OFFER_TO_EMAIL och RESEND_FROM. API-nycklar och andra hemligheter ska ligga i miljökonfiguration, aldrig i GitHub.
+[INT-021] [FÖRSLAG] Push konfigureras med PUSHOVER_USER, PUSHOVER_TOKEN, valfri PUSHOVER_SOUND och PUSHOVER_PRIORITY, eller med NTFY_TOPIC. NTFY_CLICK kan ange länken från notisen till personalvyn.
+[INT-022] [FÖRSLAG] STAFF_KEY styr nuvarande personalåtkomst, PAYMENT_MODE betalningsläge och SWISH_NUMBER det konfigurerade Swishnumret för direktbeställningar.
+[INT-023] [FÖRSLAG] Nuvarande kundmeddelande får vara högst 600 tecken. API:t accepterar högst 80 historikmeddelanden och högst 200 000 tecken i den JSON-kodade historiken.
+[INT-024] [FÖRSLAG] Nuvarande spamskydd tillåter högst 30 anrop per IP under tio minuter per serverinstans. Gränsen kan stoppa ett normalt beställningsflöde och ska omprövas.
+[INT-025] [FÖRSLAG] Nuvarande chattanrop har högst åtta modellomgångar, 2 048 utmatningstoken per modellanrop och en deklarerad maximal körtid på sextio sekunder. Detta är driftgränser, inte regler om hur lång en kunddialog får vara.
+[INT-026] [FÖRSLAG] Nuvarande prisfunktion accepterar i grunden 1–50 produkter per rad och antar ett om antal saknas. Den avrundar dessutom decimaltal nedåt; detta är ett implementationsbeteende att rätta eller uttryckligen besluta om, inte en säker tolkning av kundens antal.
+[INT-027] [FÖRSLAG] Nuvarande fältgränser vid förfrågan är namn 80, telefon 40, e-post 120, datum 60, tid 40 och övrigt 600 tecken. Fritextbeställning vid undantaget för stora order begränsas till 500 tecken. Personalens egna mejlmeddelande får vara högst 1 000 tecken.
+[INT-028] [FÖRSLAG] Nuvarande felgränser och fältkapning får inte behandlas som tillstånd att tyst tappa varor, kontaktuppgifter eller särskilda önskemål i nyimplementationen.

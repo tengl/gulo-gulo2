@@ -1,0 +1,53 @@
+KALENDER, HÄMTNING OCH KAPACITET
+================================
+
+Status för samtliga poster i denna fil: FÖRSLAG.
+Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
+Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Se rules/index.txt för status, företräde och hur en post blir gällande.
+
+Kalender, öppettider och hämtning
+---------------------------------
+[TID-001] [FÖRSLAG] All bedömning av idag, datum, veckodag och klockslag ska utgå från tidszonen Europe/Stockholm.
+[TID-002] [FÖRSLAG] Ordinarie öppettid är torsdag till söndag kl. 11:00–15:00. Måndag till onsdag är stängt.
+[TID-003] [FÖRSLAG] Direktbeställning gäller bara hämtning samma dag på en öppen dag.
+[TID-004] [FÖRSLAG] Beställning för samma dag öppnar kl. 10:30.
+[TID-005] [FÖRSLAG] Tillåtna hämtningstider är 11:30, 12:00, 12:30, 13:00, 13:30, 14:00 och 14:30. Det är varje halvtimme, inte varje kvart.
+[TID-006] [FÖRSLAG] Första hämtning är 11:30 och sista hämtning är 14:30. Enstaka äldre kommentarer och feltexter som anger 11:00 stämmer inte med den aktiva listan över tider.
+[TID-007] [FÖRSLAG] Vid direktbeställning måste hämtningen ligga minst 30 minuter efter registreringen av beställningen.
+[TID-008] [FÖRSLAG] Med sista hämtning 14:30 och minst 30 minuters framförhållning blir den senaste möjliga direktbeställningen kl. 14:00. Underlaget är motsägelsefullt om exakt gränstid; se öppna beslut.
+[TID-009] [FÖRSLAG] På stängda dagar, före beställningsöppning och när ingen giltig tid återstår ska kunden erbjudas beställningsförfrågan enligt reglerna för sådan.
+[TID-010] [FÖRSLAG] Före 10:30 anger instruktionen statusen "Beställning för idag kan hämtas från 11:30. Före 10:30 kan du bara skicka en beställningsförfrågan. Direktbeställning öppnar 10:30 på våra öppna dagar.". Använd inte denna morgontext på eftermiddagen eller kvällen.
+[TID-011] [FÖRSLAG] På en stängd dag anger instruktionen statusen "Idag har vi stängt och just nu kan du endast förboka wraps till annan dag.".
+[TID-012] [FÖRSLAG] Efter dagens beställningstid anger instruktionen statusen "Beställning för idag är stängd. Just nu kan du endast förboka wraps till annan dag.". Den exakta starttiden för detta besked behöver förenas med beslutet om sista beställningstid.
+[TID-013] [FÖRSLAG] Förbokning ska avse en öppen dag. Passerade datum ska inte erbjudas av tillgänglighetsfunktionen.
+[TID-014] [FÖRSLAG] Gissa inte vilken veckodag ett datum är och gissa inte ett datum utifrån en veckodag. Använd kalenderberäkning och fråga vid oklarheter.
+[TID-015] [FÖRSLAG] Nuvarande system ger modellen en kalender för idag och de kommande 13 dagarna. Detta är inte en uttrycklig verksamhetsgräns för hur långt i förväg kunden får beställa.
+[TID-016] [FÖRSLAG] Vid val av annan dag ska den dagens datum skickas till tillgänglighetsfunktionen i formatet ÅÅÅÅ-MM-DD. Tider representeras som HH:MM.
+[TID-017] [FÖRSLAG] Kontrollera tillgänglighet innan hämtningstid erbjuds och använd beställningens verkliga antal kapacitetsenheter.
+[TID-018] [FÖRSLAG] Erbjud och acceptera bara tider som faktiskt är tillgängliga för vald dag och beställning. Gissa inte en standardtid.
+[TID-019] [FÖRSLAG] En tid ska väljas av kunden eller uttryckligen accepteras efter ett erbjudande om just den tiden. Ett valt datum är inte samma sak som en vald tid.
+[TID-020] [FÖRSLAG] Om kunden byter dag behöver tillgängligheten för den nya dagen användas; redan valda uppgifter ska inte glömmas bort.
+[TID-021] [FÖRSLAG] Om flera tider finns, skriv "Dessa tider finns kvar." före "Vilken tid önskar du hämta?" eller "Vilken tid önskar du hämta på fredag?" och visa tiderna som knappar.
+[TID-022] [FÖRSLAG] Skriv inte "Vad tid" och räkna normalt inte upp alla tillgängliga tider i löptext när de visas som knappar.
+[TID-023] [FÖRSLAG] Om bara en tid finns ska assistenten uttryckligen fråga om kunden vill ha den, exempelvis "Idag finns bara kl 14:00 kvar som hämtningstid. Vill du ha den tiden?". Välj den inte automatiskt.
+[TID-024] [FÖRSLAG] Ett ja på erbjudandet om en bestämd ensam tid räknas som kundens val. Ett nej leder vidare till förfrågan om annan dag.
+[TID-025] [FÖRSLAG] Om inga tider finns för en annan dag ska kunden få veta det och få frågan "Till vilken dag önskar du beställa istället?".
+[TID-026] [FÖRSLAG] Om dagens tider är slut ska det förklaras tidigt, innan kunden behöver gå igenom hela dagens beställning. Kunden ska kunna visa menyn, beställa direkt på plats under öppettiden eller välja förboka till en annan dag.
+[TID-027] [FÖRSLAG] API:ts särskilda text vid fullbokat idag är "Beställning för idag är stängd, alla hämtningstider är tagna. Du är varmt välkommen till vår deli och beställa direkt på plats (öppet till 15:00). Du får gärna kika på menyn genom att skriva \"meny\", eller förboka till en annan dag genom att skriva \"förboka\".". Den ska enligt denna kodväg ges utan en följdfråga; promptens alternativa fråga redovisas under öppna beslut.
+[TID-028] [FÖRSLAG] Om kunden redan valt en annan dag ska ett meddelande om fullbokat idag inte stoppa den beställningsförfrågan.
+
+
+Kapacitet och stora beställningar
+---------------------------------
+[TID-029] [FÖRSLAG] Kapacitet räknas internt i korvar eller motsvarande grillostportioner: en enkel wrap är en kapacitetsenhet och en dubbelwrap är två.
+[TID-030] [FÖRSLAG] En direktbeställning får innehålla högst åtta kapacitetsenheter, exempelvis åtta enkla wraps eller fyra dubbelwraps.
+[TID-031] [FÖRSLAG] Antal wraps och antal kapacitetsenheter ska hållas isär vid prisberäkning, lagring och kontroll av tillgänglighet.
+[TID-032] [FÖRSLAG] Fler än åtta kapacitetsenheter ska hanteras som beställningsförfrågan, inte som en direktbeställning.
+[TID-033] [FÖRSLAG] Den särskilda regeln i verktygen och huvuddelen av instruktionen säger att en beställning över åtta kapacitetsenheter ska avse en annan dag än idag.
+[TID-034] [FÖRSLAG] Vid en stor beställning ska assistenten säga att det blir en beställningsförfrågan med bekräftelse och betalinfo via mejl och fråga "Till vilken dag önskar du beställa?".
+[TID-035] [FÖRSLAG] Skicka in förfrågan genom tjänsten. Hänvisa inte kunden till att själv mejla in den.
+[TID-036] [FÖRSLAG] I nuvarande tillgänglighetskod tas hela hämtningstiden i anspråk så fort en aktiv order finns, även om den innehåller färre än åtta kapacitetsenheter. Om tider ska delas mellan kunder är ett öppet beslut.
+[TID-037] [FÖRSLAG] Bekräftade och betalda beställningsförfrågningar tar också den aktuella tiden i anspråk. Enbart nya, obehandlade förfrågningar gör det inte i nuvarande kod.
+[TID-038] [FÖRSLAG] Betalda ordrar och reservationer som ännu inte löpt ut ska ingå i beläggningen. Exakt hur databasvyn slot_usage beräknar detta kan inte utläsas eftersom dess SQL saknas.
+[TID-039] [FÖRSLAG] Intern ledig kapacitet och totalt antal korvar ska enligt en grundinstruktion inte visas för kunden. Menytexter och särskilda meddelanden om gränsen åtta gör uttryckliga undantag i andra delar; detta är ett öppet beslut.

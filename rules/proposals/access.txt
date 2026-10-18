@@ -1,0 +1,14 @@
+BEHÖRIGHET: ÖPPNA VAL OCH FÖRSLAG
+================================
+
+Inga poster i denna fil är bindande. Se rules/runtime/access.txt för kraven.
+Källa: återstående frågor och arkitekturförslag efter användarens krav 2026-10-18.
+
+[BEH-003] [ÖPPET] Vilka funktioner som kräver superadmin, vilka som får användas
+av övrig personal och om verifieringen ska ske med kod, login eller båda behöver
+beslutas. Den gamla gemensamma STAFF_KEY-länken är inte ett bindande teknikval.
+
+[BEH-004] [FÖRSLAG] Använd Supabase Auth för individuella konton och serverkontrollerade
+roller/behörigheter för personal och superadmin. Behörighet kontrolleras vid
+varje skyddat dataanrop eller åtgärd; synlighet i menyer är inte behörighetskontroll.
+En eventuell superadmin-kod ska vara en separat, begränsad verifieringsmetod.

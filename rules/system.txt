@@ -1,0 +1,63 @@
+TEKNIK OCH ARBETSSÄTT
+====================
+
+Status: GÄLLANDE för denna grundstruktur.
+Beslutskälla: användarens uppdrag 2026-10-18 och initiala arkitekturval i repot.
+Inga verksamhetsbeslut från den tidigare implementationen ingår här.
+
+[SYS-001] [GÄLLANDE] Vercel används för webb/server, Supabase för databas och
+Claude för språkmodellen. Integrationerna anropas från servern. Arkitekturen ger
+plats för Supabase Auth om kontoinloggning väljs; se BEH-003–004.
+
+[SYS-002] [GÄLLANDE] Regler för det nya systemet skrivs i grupperade textfiler
+i rules/ med stabila ID:n och tydlig status. Gällande regeltext är facit för
+implementationen. docs/rules.txt och dess grupperade förslag är inte bindande.
+
+[SYS-003] [GÄLLANDE] Projektet börjar som en modulär monolit: en Next.js-app i
+apps/web, databasfiler i supabase, utvecklingsverktyg i tooling och separata
+regler, dokument, systemtester och AI-evals. Nya tjänster eller delade paket
+införs först när ett konkret behov finns.
+
+[SYS-004] [GÄLLANDE] Varje verksamhetsmodul äger sin domänlogik och sina use
+cases. Domänlogiken är vanlig TypeScript utan Next.js, React, Claude, Supabase,
+nätverk eller processmiljö. Use cases använder explicita portar för externa
+beroenden. Adaptrar finns i server/. HTTP-routes och UI innehåller inte egna
+versioner av verksamhetsreglerna. Andra moduler använder modulens publika API.
+
+[SYS-005] [GÄLLANDE] Pris, tillgänglighet, orderstatus och behörighet avgörs av
+validerad programkod och auktoritativ lagring. Claude tolkar språk och anropar
+begränsade verktyg. Modellens text, klienthistorik och verktygsargument är indata
+att validera, inte auktoritativa beslut eller bevis på en genomförd åtgärd.
+
+[SYS-006] [GÄLLANDE] Databasschema, rättigheter och serverfunktioner versionshanteras
+som migrationer. Redan släppta migrationer ändras inte. Migrationer ska kunna
+testas från tom lokal databas. Affärskritiska samtidighetskrav upprätthålls i
+databastransaktioner; beslut om deras verksamhetsvärden tas separat.
+
+[SYS-007] [GÄLLANDE] Hemligheter läggs i miljökonfiguration. Adaptrar och
+privilegierade databasnycklar är serverkod. Utveckling och preview använder
+separata resurser från produktion. Nycklar krävs först när en funktion behöver
+integrationen, inte för att bygga grundsidan.
+
+[SYS-008] [GÄLLANDE] Automatisk deployment körs bara för deploymentpåverkande
+ändringar. App och databas har separata ändringsbeslut. Dokumentation, öppna
+frågor, AGENTS.md, enbart tester och AI-evals skapar inte nya deployments.
+Releaseflödet skiljer detta från att köra kvalitetskontroller. Explicit manuell
+återkörning efter driftfel är tillåten utan en ny kodändring.
+
+[SYS-009] [GÄLLANDE] Produktionsrelease sker från main efter lyckade kontroller.
+Vid samtidig databas- och webbändring körs migrationen före webbdeploymenten.
+Schemaändringar ska vara bakåtkompatibla med föregående appversion. Produktions-
+releaser körs sekventiellt. Preview får inte migrera produktionsdatabasen.
+
+[SYS-010] [GÄLLANDE] Agenter läser det centrala regelregistret och instruktionerna
+för berörd katalog före ändringar. Beskrivningar hålls korta och nära ägd kod.
+Tester läggs nära implementationen; systemtester och modellberoende evals hålls
+separata. Verifiera relevanta kontroller och rapportera vad som inte kunnat köras.
+
+[SYS-011] [GÄLLANDE] Npm-workspaces, en incheckad låsfil och Node 24 används för
+reproducerbara installationer och samma grundkommandon lokalt och i CI.
+
+[SYS-012] [GÄLLANDE] När körningsfiler eller nya deployenheter tillkommer ska
+ändringsklassificeringen och dess regressionstester uppdateras i samma ändring.
+Ett okänt Git-intervall ska stoppa flödet med fel, inte behandlas som oförändrat.

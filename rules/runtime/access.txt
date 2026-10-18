@@ -1,0 +1,13 @@
+INTERN ADMINISTRATION OCH BEHÖRIGHET
+==================================
+
+Status: GÄLLANDE för samtliga poster i denna fil.
+Beslutskälla: användarens tillägg 2026-10-18.
+Öppna val och teknikförslag finns i rules/proposals/access.txt.
+
+[BEH-001] [GÄLLANDE] Det nya systemet ska vara Gulo Gulos interna system och
+omfatta ett administrationsgränssnitt. Kundens beställningsfunktion finns kvar
+inom projektets omfattning; interna funktioner skiljs från kundgränssnittet.
+
+[BEH-002] [GÄLLANDE] Vissa interna funktioner ska endast kunna nås efter
+verifiering med superadmin-kod eller inloggning med rätt behörighet.

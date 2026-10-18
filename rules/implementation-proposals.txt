@@ -1,0 +1,27 @@
+FÖRBÄTTRINGSFÖRSLAG FRÅN DEN TIDIGARE KODGRANSKNINGEN
+=====================================================
+
+Status för samtliga poster i denna fil: FÖRSLAG.
+Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
+Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Se rules/index.txt för status, företräde och hur en post blir gällande.
+
+FÖRSLAG INFÖR NYIMPLEMENTATION: krav härledda från kodgranskningen
+------------------------------------------------------------------
+[FOR-001] [FÖRSLAG] Förslag: håll det auktoritativa beställningstillståndet på servern eller skydda det på motsvarande sätt. Kunden ska inte kunna förfalska assistenthistorik, verktygsresultat eller beställningsgodkännanden.
+[FOR-002] [FÖRSLAG] Förslag: kontrollera i programkod att den exakta versionen av beställning, pris, dag och tid som registreras är den version kunden har godkänt.
+[FOR-003] [FÖRSLAG] Förslag: spara kundens uttryckliga val av dag och tid som strukturerade uppgifter. Tolka inte mängder, produktnummer, telefonnummer, nekade tider eller gamla val som ett aktuellt val av hämtningstid.
+[FOR-004] [FÖRSLAG] Förslag: koppla ändringar till en identifierad förfrågan och kundens behörighet eller session, inte enbart till e-postadress och en sex timmars tidslucka. En ny beställning ska kunna göras utan att en annan skrivs över.
+[FOR-005] [FÖRSLAG] Förslag: genomför kontroll av datum, tid, mängd, betalningsläge och kapacitet vid alla sparande och bekräftande åtgärder, även personalens. Ett tidigare tillgänglighetsanrop ska inte vara det enda skyddet.
+[FOR-006] [FÖRSLAG] Förslag: gör reservation och kapacitetskontroll atomära så att samtidiga kunder eller personalåtgärder inte kan dubbelboka en tid. Om databasen inte kan kontrolleras ska systemet inte anta att allt är ledigt.
+[FOR-007] [FÖRSLAG] Förslag: använd skydd mot upprepade anrop så att omladdning, nätfel eller omförsök inte skapar flera order, förfrågningar eller betalningsmejl för samma godkända åtgärd.
+[FOR-008] [FÖRSLAG] Förslag: låt lyckad registrering ge ett bestämt ordersvar med bestående orderreferens utan att ett ytterligare modellanrop måste lyckas. Skilj på fel före sparande och fel efter att ordern redan sparats.
+[FOR-009] [FÖRSLAG] Förslag: använd samma konfigurerade Swishmottagare i chatt, förfrågningsbekräftelse och mejl. Kontrollera att alla betalningsreferenser är entydiga och att ordernummer förblir stabila efter registrering.
+[FOR-010] [FÖRSLAG] Förslag: behåll betalda förfrågningar i personalens arbetslista fram till hanterad utlämning. Filtrering och paginering ska inte gömma äldre obehandlade eller framtida beställningar.
+[FOR-011] [FÖRSLAG] Förslag: modellera reservationens utgång och tillåtna statusövergångar uttryckligt. En utgången eller avbokad reservation ska inte kunna återaktiveras till en upptagen tid genom att bara markeras betald.
+[FOR-012] [FÖRSLAG] Förslag: skilj mellan beställningens status och leveransen av mejl eller push. Ett meddelandefel ska kunna hanteras utan att beställningen tappas bort eller registreras en gång till.
+[FOR-013] [FÖRSLAG] Förslag: samla meny, priser, ingredienser, allergener, öppettider och andra verksamhetsvärden i ett gemensamt underlag som driver både presentation, modellinstruktion och validering.
+[FOR-014] [FÖRSLAG] Förslag: validera datatyper, tillåtna produkt-ID:n, positiva heltalsantal och textlängder. Avvisa felaktiga uppgifter tydligt i stället för att tyst avrunda antal eller kapa viktig beställningstext.
+[FOR-015] [FÖRSLAG] Förslag: dimensionera historikhantering, tidsgränser och spamskydd så att hela det avsedda beställningsflödet kan genomföras, även med flera produkter och kunder bakom samma nätverk.
+[FOR-016] [FÖRSLAG] Förslag: checka in databasschema och migrationer, en hemlighetsfri konfigurationsmall och en låsfil, och dokumentera hur en ny miljö sätts upp och verifieras.
+[FOR-017] [FÖRSLAG] Förslag: automatisera tester för priser, dubbelwraps, bortval, datum och tidsgränser, kundens godkännande, ändringar, samtidiga bokningar, reservationsutgång, betalningsmottagare, fel efter sparande och personalens synlighet för betalda beställningar.

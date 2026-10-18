@@ -1,0 +1,24 @@
+PERSONALENS ARBETSFLÖDE
+=======================
+
+Status för samtliga poster i denna fil: FÖRSLAG.
+Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
+Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Se rules/index.txt för status, företräde och hur en post blir gällande.
+
+Personalens arbetsflöde
+-----------------------
+[PER-001] [FÖRSLAG] Personalvyn ska vara skyddad mot obehörig åtkomst. Nuvarande lösning använder STAFF_KEY för både visning och åtgärder.
+[PER-002] [FÖRSLAG] Personalen ska kunna se dagens ordrar med hämtningstid, namn, ordernummer, antal kapacitetsenheter, fullständig beställning, belopp och status.
+[PER-003] [FÖRSLAG] Dagens ordrar visas i nuvarande kod sorterade efter hämtningstid och därefter skapandetid.
+[PER-004] [FÖRSLAG] Personalen ska kunna markera en väntande direktbeställning som betald efter mottagen Swish, markera en betald beställning som hämtad och avboka en beställning.
+[PER-005] [FÖRSLAG] Nuvarande orderstatusar är väntar_betalning, betald, hämtad och avbokad. Regler för automatisk utgång finns inte fullständigt definierade i repot.
+[PER-006] [FÖRSLAG] Personalvyn visar totalsummor för antal ej avbokade ordrar, kapacitetsenheter och belopp. Nuvarande summering inkluderar även väntande och redan hämtade ordrar.
+[PER-007] [FÖRSLAG] Personalen ska kunna se förfrågningar med önskat datum och tid, namn, telefon, e-post, fullständig beställning, övriga meddelanden, betalkod, status och eventuellt beslutat pris.
+[PER-008] [FÖRSLAG] Nuvarande förfrågningsstatusar är ny, bekräftad, betald och avböjd. Ett saknat statusvärde visas som ny.
+[PER-009] [FÖRSLAG] Personalen ska kunna bekräfta en ny förfrågan genom att ange ett totalpris större än noll och eventuellt ett eget meddelande.
+[PER-010] [FÖRSLAG] Det beräknade priset används som förslag i personalens prisfält. Personalen kan ange det slutliga priset.
+[PER-011] [FÖRSLAG] Vid bekräftelse ska kunden få ett mejl med betalningsinformation. Om mejlet misslyckas ska personalen få ett fel och inte en falsk framgångsbekräftelse.
+[PER-012] [FÖRSLAG] Personalen ska kunna avböja en ny förfrågan samt markera en bekräftad förfrågan som betald eller avboka den.
+[PER-013] [FÖRSLAG] Nuvarande personalvy uppdateras automatiskt var trettionde sekund och ska inte indexeras av sökmotorer.
+[PER-014] [FÖRSLAG] Nuvarande kod döljer betalda och avböjda förfrågningar och hämtar högst femtio förfrågningar före filtrering. Att betalda eller äldre obehandlade beställningar därmed kan försvinna ur arbetslistan är kända brister att rätta, inte verksamhetsregler att återskapa.

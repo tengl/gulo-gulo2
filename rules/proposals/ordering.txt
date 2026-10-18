@@ -1,0 +1,101 @@
+BESTÄLLNINGAR, FÖRFRÅGNINGAR OCH BETALNING
+==========================================
+
+Status för samtliga poster i denna fil: FÖRSLAG.
+Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
+Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Se rules/index.txt för status, företräde och hur en post blir gällande.
+
+Tjänstens uppdrag och avgränsning
+---------------------------------
+[ORD-001] [FÖRSLAG] Tjänsten är Gulo Gulos digitala beställningsassistent och ska prata svenska med kunden.
+[ORD-002] [FÖRSLAG] Assistenten ska hjälpa kunden att välja korvwrap, förstå innehållet, välja dryck, välja hämtning, granska beställningen och gå vidare till betalning eller beställningsförfrågan.
+[ORD-003] [FÖRSLAG] Kunden ska kunna beställa genom textchatt och, i webbläsare som stöder det, genom taligenkänning på svenska.
+[ORD-004] [FÖRSLAG] Bara wraps och dryck enligt menyn får beställas genom tjänsten.
+[ORD-005] [FÖRSLAG] Andra butiksvaror, exempelvis Loos-senap, skärbrädor och kepsar, får inte beställas i chatten. Hänvisa till personalen på plats.
+[ORD-006] [FÖRSLAG] Leverans, andra produkter och andra tjänster får inte utlovas utan stöd i verksamhetens underlag.
+[ORD-007] [FÖRSLAG] Pris, kapacitet, lager och orderregistrering ska skötas av vanlig programkod och datakällor. Språkmodellen får inte själv bestämma dessa uppgifter.
+[ORD-008] [FÖRSLAG] Skilj mellan direktbeställning för idag och beställningsförfrågan som måste hanteras av personalen.
+[ORD-009] [FÖRSLAG] En beställningsförfrågan är inte en bekräftad beställning.
+
+
+Sammanfattning och kundens godkännande
+--------------------------------------
+[ORD-010] [FÖRSLAG] Priset ska räknas av prisfunktionen. Assistenten får inte räkna ut totalpriset själv.
+[ORD-011] [FÖRSLAG] Innan "Stämmer det?" ska hela beställningen stå i samma meddelande, inte bara totalpriset.
+[ORD-012] [FÖRSLAG] Sammanfattningen ska ha en rad per produkt med antal, enkel/dubbel för wraps samt produktnummer och namn, och en rad per dryck med antal och namn.
+[ORD-013] [FÖRSLAG] Bortval, surkålsbyten, ketchup, glutenfritt bröd och eventuell folie ska framgå.
+[ORD-014] [FÖRSLAG] Sammanfattningen ska ange "Hämtning:" med dag och tid och "Totalt:" med det beräknade beloppet i kronor.
+[ORD-015] [FÖRSLAG] Eventuell gemensam information om val av drycksort eller smak på plats ska stå efter varorna.
+[ORD-016] [FÖRSLAG] Den befintliga kundinstruktionen säger att beställningar inte kan avbokas och att det ska anges före betalning. Personalens rätt att avboka beskrivs separat och förhållandet är ett öppet beslut.
+[ORD-017] [FÖRSLAG] Sammanfattningen ska avslutas med "Stämmer det?" och invänta kundens uttryckliga godkännande.
+[ORD-018] [FÖRSLAG] Vid ett nej ska assistenten fråga vad som ska ändras, rätta beställningen och låta kunden bekräfta den rättade versionen.
+[ORD-019] [FÖRSLAG] Ordern får registreras först när kunden har godkänt sammanställningen och priset och nödvändigt namn och vald hämtning finns.
+[ORD-020] [FÖRSLAG] Säg inte att något är registrerat, skickat, uppdaterat eller betalt innan motsvarande åtgärd faktiskt har lyckats.
+
+
+Kontaktuppgifter och kontroll av förfrågningar
+----------------------------------------------
+[ORD-021] [FÖRSLAG] Vid direktbeställning ska bara förnamnet på den som swishar efterfrågas, med frågan "Vad är förnamnet på den som swishar?".
+[ORD-022] [FÖRSLAG] Be inte om telefonnummer eller e-postadress för en vanlig direktbeställning.
+[ORD-023] [FÖRSLAG] Vid beställningsförfrågan krävs namn, mobilnummer, e-postadress, önskad dag och tid samt fullständigt beställningsunderlag och antal.
+[ORD-024] [FÖRSLAG] Fråga efter saknade kontaktuppgifter tillsammans: "Vad heter du, och vilket mobilnummer och vilken e-postadress kan vi nå dig på?".
+[ORD-025] [FÖRSLAG] Underlaget föreskriver också förklaringen "Mobilnumret ska vara det du swishar från, så att vi kan koppla betalningen till din beställning." på raden under kontaktfrågan. Detta krockar med en annan instruktion att inte nämna Swish vid insamling av en förfrågan; se öppna beslut.
+[ORD-026] [FÖRSLAG] Kunden får lämna alla kontaktuppgifter i samma meddelande. Fråga bara om det som saknas eller behöver rättas.
+[ORD-027] [FÖRSLAG] Ett svenskt mobilnummer ska efter normalisering ha tio siffror och börja med 07. Formen +46 7 följt av åtta siffror ska förstås som motsvarande svenska nummer; koden hanterar också inledande 0046.
+[ORD-028] [FÖRSLAG] Mellanslag och bindestreck i telefonnummer ska kunna tas bort vid kontroll och lagring.
+[ORD-029] [FÖRSLAG] Om numret är felaktigt ska kunden ombes skriva det igen innan kontrollfrågan om kontaktuppgifter visas. Behåll redan kända namn och e-postuppgifter.
+[ORD-030] [FÖRSLAG] Den föreskrivna feltexten är "Numret ser inte ut som ett mobilnummer (10 siffror, börjar på 07). Kan du skriva det igen?". Nuvarande API använder också en variant som visar det inmatade numret och antalet siffror.
+[ORD-031] [FÖRSLAG] Nuvarande kod accepterar även internationella nummer med plustecken och 8–14 siffror; om denna bredare regel ska gälla är ett öppet beslut.
+[ORD-032] [FÖRSLAG] En skriven e-postadress ska återges exakt som kunden skrev den. Bygg inte en adress av kundens namn, ändra inte stavningen och blanda inte delar från olika meddelanden.
+[ORD-033] [FÖRSLAG] Talad eller bokstaverad e-post ska kunna tolkas: "snabel-a", "snabela", "at-tecken", "krumelur" och fristående "at", "ät" eller "att" kan betyda @; "punkt" och "dot" kan betyda punkt.
+[ORD-034] [FÖRSLAG] En e-postadress måste ha rimligt format med lokal del, @ och domän. Om adressen inte går att förstå ska kunden få rätta eller bokstavera den.
+[ORD-035] [FÖRSLAG] Innan förfrågan skickas ska kunden få kontrolltexten "Stämmer detta?" följt av namn, telefonnummer och e-postadress på varsin rad.
+[ORD-036] [FÖRSLAG] Invänta ett ja på kontrollfrågan. Vid nej ska det felaktiga rättas och kontrollfrågan visas igen. Ställ inte en separat extra kontrollfråga bara om e-postadressen.
+[ORD-037] [FÖRSLAG] Om kunden bara rättar telefonnumret eller e-postadressen ska övriga uppgifter bevaras och den nya samlade kontrollen visas direkt.
+
+
+Beställningsförfrågan, ändringar och återkoppling
+-------------------------------------------------
+[ORD-038] [FÖRSLAG] Förfrågan används för en annan hämtningsdag än idag, stora beställningar och när direktbeställning för idag inte kan göras.
+[ORD-039] [FÖRSLAG] Före kl. 10:30 på en öppen dag kan en förfrågan enligt underlaget också gälla hämtning senare samma dag, om den inte är för stor. Reglerna för framförhållning vid förfrågan är inte fullständigt definierade.
+[ORD-040] [FÖRSLAG] Förklara positivt varför beställningen blir en förfrågan, att personalen behöver bekräfta och att bekräftelse och betalinfo kommer via mejl.
+[ORD-041] [FÖRSLAG] Om en dag saknas när direktbeställning inte går ska relevant status följas av "Det blir en beställningsförfrågan som vi återkommer med bekräftelse på via mejl." och frågan "Till vilken dag önskar du beställa?".
+[ORD-042] [FÖRSLAG] Välj inte en påhittad dag åt kunden och börja inte ett sådant besked med "Tyvärr".
+[ORD-043] [FÖRSLAG] Om kunden redan valt en dag ska den behållas och dialogen gå vidare med nästa saknade uppgift.
+[ORD-044] [FÖRSLAG] Förfrågan ska innehålla hela beställningen: produkter, antal, enkel/dubbel, ändringar, dryck, folie, önskat datum och tid, kontaktuppgifter samt övriga meddelanden. Ett enda totalt antal räcker inte.
+[ORD-045] [FÖRSLAG] Strukturerade produkt- och dryckrader ska skickas med så att systemet kan räkna pris och antal kapacitetsenheter. Samma krav gäller vid ändring.
+[ORD-046] [FÖRSLAG] När priset kan beräknas ska underlaget till personalen innehålla "Beräknat pris: [belopp] kr".
+[ORD-047] [FÖRSLAG] Nuvarande kod har ett undantag med fritext och utan beräknat pris för mycket stora antal. Detta får inte tolkas som att giltighets- och kapacitetsregler saknas; hanteringen är ett öppet beslut.
+[ORD-048] [FÖRSLAG] En lyckad förfrågan ska sparas i databasen och meddelas personalen via mejl och, om konfigurerat, pushnotis.
+[ORD-049] [FÖRSLAG] Efter en skickad förfrågan ska svaret avslutas med "Vi kollar på detta och återkommer med bekräftelse och betalinfo!".
+[ORD-050] [FÖRSLAG] Om förfrågan sparades men mejlet till personalen inte kunde skickas ska kunden få veta det, och uppmanas att gärna kontakta verksamheten direkt. Påstå inte att mejlet nådde fram.
+[ORD-051] [FÖRSLAG] Om kunden ändrar en redan skickad förfrågan ska hela den uppdaterade förfrågan skickas in och ersätta just den tidigare förfrågan, och personalen ska meddelas att det är en ändring.
+[ORD-052] [FÖRSLAG] Bekräfta en lyckad ändring med "Klart, jag har uppdaterat din beställningsförfrågan." och därefter det vanliga avslutet om återkoppling.
+[ORD-053] [FÖRSLAG] Nuvarande implementation kopplar ändringar till senaste nya förfrågan med samma e-postadress inom sex timmar. Det är en känd brist, inte ett lämpligt krav på hur en kunds beställningar ska identifieras.
+
+
+Betalning och reservation av direktbeställning
+----------------------------------------------
+[ORD-054] [FÖRSLAG] Betalning ska ske i förskott med Swish. I det befintliga repot finns manuell betalningskontroll och simulerat testläge, men ingen automatisk Swishintegration.
+[ORD-055] [FÖRSLAG] Vilket betalningsläge som används bestäms av PAYMENT_MODE. Nuvarande tillåtna lägen är manual och simulated.
+[ORD-056] [FÖRSLAG] Om betalningsläget saknas eller är något annat får direktbeställningen inte registreras som om betalning vore ansluten.
+[ORD-057] [FÖRSLAG] I manuellt läge registreras ordern först som väntar_betalning, med en reservationstid på fem minuter.
+[ORD-058] [FÖRSLAG] En registrerad order i manuellt läge är inte betald. Personalen måste se betalningen och markera ordern som betald.
+[ORD-059] [FÖRSLAG] Kunden ska efter registrering få exakt belopp, Swishnummer, ordernummer och hur länge tiden hålls, hämtade från systemets ordersvar.
+[ORD-060] [FÖRSLAG] Kunden ska skriva ordernumret i Swish-meddelandet och använda det namn som lämnats i beställningen.
+[ORD-061] [FÖRSLAG] Standardnumret i repot är 123 258 90 67. Miljövariabeln SWISH_NUMBER kan ange verksamhetens andra nummer för direktbeställningar.
+[ORD-062] [FÖRSLAG] En obetald reservation ska enligt kundinstruktionen släppas efter fem minuter om betalningen inte kommit. Den exakta databasfunktionen för detta finns inte med i repot.
+[ORD-063] [FÖRSLAG] Kunden ska få veta att beställningen inte är klar förrän personalen sett betalningen. Assistenten får inte själv påstå att den är betald.
+[ORD-064] [FÖRSLAG] I simulerat läge registrerar den nuvarande koden ordern som betald för teständamål. Kunden ska tydligt få veta att betalningen är simulerad och att ordern är registrerad i testversionen.
+[ORD-065] [FÖRSLAG] Ge aldrig betalningsuppmaning eller ordernummer utifrån modellens gissning. Uppgifterna får bara visas efter en lyckad orderregistrering.
+[ORD-066] [FÖRSLAG] Kunden ska ombes spara ordernumret eller ta en skärmbild och ha uppgiften med vid hämtning.
+
+
+Ordernummer och betalkoder
+--------------------------
+[ORD-067] [FÖRSLAG] Direktbeställningens synliga ordernummer består av veckodag som första siffra, måndag 1 till söndag 7, följt av dagens löpnummer med minst två siffror.
+[ORD-068] [FÖRSLAG] Exempel: torsdagens första och andra beställning får 401 och 402. Nuvarande prefix är tomt.
+[ORD-069] [FÖRSLAG] Löpnumret ska följa registreringsordningen för dagens beställningar. Avbokade beställningar ska behålla sina nummer.
+[ORD-070] [FÖRSLAG] Nuvarande kod räknar fram numret genom att sortera dagens ordrar på skapandetid och ID; den lagrar inte ett separat oföränderligt visningsnummer.
+[ORD-071] [FÖRSLAG] Förfrågningar använder i nuvarande mejl en betalkod med F följt av de fyra första tecknen i förfrågans ID utan bindestreck, i versaler. Denna korta kod kan kollidera och är en teknisk lösning att ompröva, inte ett krav på nyimplementationen.

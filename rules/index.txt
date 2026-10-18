@@ -1,0 +1,69 @@
+REGELREGISTRET FÖR GULO GULO 2
+============================
+
+Syfte
+De beslutade regeltexterna i rules/ är facit. Kod, tester, prompter och
+databasschema är implementationer av dessa texter, inte alternativa regelkällor.
+docs/rules.txt är bevarat historiskt underlag och är inte bindande.
+
+Status
+[GÄLLANDE] är beslutat för det nya systemet.
+[FÖRSLAG] är underlag för beslut och får inte behandlas som ett krav.
+[ÖPPET] är en fråga eller motsägelse som ännu inte är avgjord.
+[HISTORIK] beskriver den tidigare implementationen.
+[ERSATT AV <ID>] behåller ett gammalt ID utan att hålla regeln aktiv.
+
+Utgångsläge
+Verksamhetsreglerna från docs/rules.txt har grupperats utan sakändringar.
+De är fortfarande förslag, även när originaltexten säger "ska" eller "får inte".
+Ingen prislista, faktisk öppettid, allergiformulering, ordergräns eller betalningsregel
+från det gamla systemet har därigenom godkänts för det nya systemet.
+Gällande inledande teknik- och arbetsregler finns i system.txt. Nya uttryckliga
+krav på intern administration, skyddade funktioner och Google-öppettider finns
+i runtime/access.txt och runtime/business-hours.txt.
+
+Filkarta
+system.txt                       SYS  Teknik, arkitektur och arbetssätt
+runtime/access.txt               BEH  Intern administration och behörighet
+runtime/business-hours.txt       OPPEN  Öppettider i Google och synkronisering
+proposals/catalog.txt            KAT  Förslag: verksamhetsfakta, meny, innehåll
+proposals/conversation.txt       DIA  Förslag: ton, dialog, text, röst, knappar
+proposals/ordering.txt           ORD  Förslag: beställning, godkännande, betalning
+proposals/availability.txt       TID  Förslag: datum, tider, kapacitet
+proposals/staff.txt              PER  Förslag: personalens arbetsflöde
+proposals/integrations.txt       INT  Förslag: meddelanden och äldre teknik
+proposals/access.txt             BEH  Öppet: login/kod, roller och teknikförslag
+proposals/business-hours.txt     OPPEN  Öppet: synkriktning, tidsdetaljer, historik
+open-decisions.txt               OPP  Äldre motsägelser och öppna beslut
+implementation-proposals.txt     FOR  Tidigare tekniska förbättringsförslag
+background.txt                   BAK  Historik och underlagets ursprung
+
+Att ändra en regel
+1. Leta upp relevant område och ID. Skapa inte samma regel på flera ställen.
+2. Vid verksamhetsbeslut: skriv den fullständiga nya regeln i klartext, markera
+   den GÄLLANDE och ange beslutsdatum och kort beslutskälla. Ett uttryckligt
+   användarbeslut är en beslutskälla. En agents gissning är det inte.
+3. Behåll stabila ID:n. Nya ID:n tar nästa lediga nummer; återanvänd inte gamla.
+   Markera ersatta poster och hänvisa till efterföljaren. Hänvisa till relaterade
+   OPP-poster när motsägelser avgörs, och markera dessa som avgjorda.
+4. Förslag och öppna frågor ligger utanför runtime/. När en verksamhetsregel
+   beslutas flyttas den till rätt fil under runtime/ med samma ID. Uppdatera
+   inledning och hänvisningar. Behåll inte en dubblett på den gamla platsen.
+5. Anpassa implementation och meningsfulla tester i samma ändring. Tester och
+   use cases hänvisar till regel-ID:n. En prompt ensam upprätthåller inte en
+   regel om exempelvis pris, behörighet, bokning eller betalning.
+6. Om en ändring enbart förtydligar text: kontrollera att beteendet fortfarande
+   stämmer. Försök inte tolka ett förslag som färdigt verksamhetsbeslut.
+
+Företräde och konflikter
+Uttryckliga nya användarbeslut uppdaterar regeltexterna. Vid skillnad mellan
+gällande regel och implementation ska implementationen rättas. Vid motstridiga
+eller saknade verksamhetsbeslut ska frågan dokumenteras; den gamla koden eller
+historikfilen får inte användas för att tyst avgöra frågan.
+
+Deployment
+runtime/ avgränsar texter som beskriver appens avsedda beteende och ska följa
+med dess releaser. Ändringar i dessa .txt-filer utlöser webbens releaseflöde.
+system.txt, detta register, proposals/, historik och öppna frågor är arbetsunderlag och
+utlöser inte deployment. Flytta inte driftprompter eller annan körningsdata
+till docs/ eller andra kataloger som undantas från deployment.

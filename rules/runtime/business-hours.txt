@@ -1,0 +1,50 @@
+ÖPPETTIDER, HÄMTNING OCH SAMMADAGSBESTÄLLNINGAR
+============================================
+
+Status: GÄLLANDE för samtliga poster i denna fil.
+Beslutskälla: användarens tillägg och förtydliganden 2026-10-18.
+Öppna frågor och ersatta poster finns i rules/proposals/business-hours.txt.
+
+[OPPEN-001] [GÄLLANDE] Behörig administratör ska kunna uppdatera Gulo Gulos
+öppettider i Google från det interna systemets administrationsgränssnitt.
+
+[OPPEN-004] [GÄLLANDE] Administratören ska kunna ange två slags tider för varje
+dag: öppettider och tidsfönster då beställningar för samma dag tas emot.
+Den ena uppgiften ska inte tyst ersätta den andra. Se OPPEN-011 och OPPEN-014.
+
+[OPPEN-005] [GÄLLANDE] Administratören ska kunna ange en standardvecka med
+öppettider och tidsfönster för sammadagsbeställningar för varje veckodag.
+
+[OPPEN-006] [GÄLLANDE] Administratören ska kunna ange andra öppettider och
+beställningsfönster för specifika kalenderdatum.
+
+[OPPEN-007] [GÄLLANDE] Ett datum använder standardveckans tider för sin veckodag
+om datumet inte har ett undantag för den berörda tidstypen. Datumundantaget
+ersätter då standardtiden för just det datumet och den tidstypen.
+
+[OPPEN-008] [GÄLLANDE] Tidsgränssnittet ska som grundvy visa innevarande vecka
+med dagarnas öppettider och tidsfönster för sammadagsbeställningar.
+
+[OPPEN-009] [GÄLLANDE] Det ska tydligt framgå i veckovyn när en visad tid skiljer
+sig från standardveckan. Skillnaden gäller den effektiva tiden jämfört med
+standardtiden, inte enbart att ett undantag finns registrerat.
+
+[OPPEN-010] [GÄLLANDE] Tider och datumundantag är redigerbara driftdata och ska
+kunna ändras från administrationen utan kodändring eller ny deployment.
+Regeltexterna är facit för hur dessa uppgifter tolkas, visas och publiceras.
+
+[OPPEN-011] [GÄLLANDE] Beställningsfönstret avser tidpunkter när systemet tar
+emot beställningar som ska hämtas samma dag. Det avser inte tider för hämtning.
+
+[OPPEN-013] [GÄLLANDE] Utanför dagens beställningsfönster hanteras en beställning
+som en förbeställning, det flöde som i den gamla appen kallades beställningsförfrågan.
+Det nya flödets övriga regler beslutas separat; gamla detaljer blir inte bindande
+genom denna hänvisning.
+
+[OPPEN-014] [GÄLLANDE] Hämtningstider följer tills vidare öppettiderna. Samma
+schema används för båda, utan en separat inställning för hämtningsöppettider.
+Detaljer om framförhållning och bokningsbara kapacitetstider är separata frågor.
+
+[OPPEN-015] [GÄLLANDE] Google-publiceringen gäller öppettiderna. Appens fönster
+för att ta emot sammadagsbeställningar är ett eget begrepp och ska inte publiceras
+som verksamhetens öppettider i Google.

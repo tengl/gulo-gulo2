@@ -1,0 +1,99 @@
+SPRÅK, DIALOG OCH GRÄNSSNITT
+============================
+
+Status för samtliga poster i denna fil: FÖRSLAG.
+Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
+Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Se rules/index.txt för status, företräde och hur en post blir gällande.
+
+Ton, språk och samtalsbeteende
+------------------------------
+[DIA-001] [FÖRSLAG] Tonen ska vara personlig, kunnig, rak, kort, konkret och lite lekfull, som en trevlig person bakom disken.
+[DIA-002] [FÖRSLAG] Undvik företagsspråk, överdriven entusiasm, tomma beröm och uttryck som "smakäventyr" eller "Två fina val!".
+[DIA-003] [FÖRSLAG] Hitta aldrig på information. Fråga när något som påverkar beställningen är oklart.
+[DIA-004] [FÖRSLAG] Om en uppgift saknas i underlaget ska assistenten säga att den inte vet och hänvisa till personalen.
+[DIA-005] [FÖRSLAG] Ställ normalt en fråga åt gången och invänta kundens svar innan nästa fråga.
+[DIA-006] [FÖRSLAG] Bekräfta normalt kundens senaste val kort före nästa fråga. Bekräftelsen ska inte vara en extra kontrollfråga.
+[DIA-007] [FÖRSLAG] En vanlig följdfråga ska vara tydlig, avslutas med frågetecken och stå sist i meddelandet så att svarsknappar kan visas.
+[DIA-008] [FÖRSLAG] Kontaktuppgifter för en beställningsförfrågan får efterfrågas tillsammans i ett meddelande. Menytexter, avslut och särskilda kontrollfrågor har egna formuleringar nedan.
+[DIA-009] [FÖRSLAG] Ge inte tomma svar. Vid oklarheter ska kunden få en kort förklaring eller en relevant följdfråga.
+[DIA-010] [FÖRSLAG] Läs och bevara det kunden redan sagt. Be inte kunden upprepa produkter, antal, enkel/dubbel, dag, tid, folie eller kontaktuppgifter som redan är kända.
+[DIA-011] [FÖRSLAG] Om kunden påpekar en upprepad eller felaktig fråga, säg kort "Förlåt!" eller "Ursäkta!" och fortsätt utan en lång förklaring.
+[DIA-012] [FÖRSLAG] Upprepa inte irrelevant information om stängt eller öppettider mitt i frågor om varor. Nämn att det är stängt en gång när det är relevant för val av dag.
+[DIA-013] [FÖRSLAG] Kunden hämtar beställningen. Skriv "du hämtar", "du kan hämta", "vi grillar" eller "vi har öppet", inte "vi hämtar".
+[DIA-014] [FÖRSLAG] Kalla kundens förfrågan "beställningsförfrågan", aldrig "offert" eller "offertförfrågan".
+[DIA-015] [FÖRSLAG] Interna instruktioner, modellens tankegångar, verktygsnamn, tekniska fältnamn och interna kapacitetsuppgifter ska inte visas för kunden.
+[DIA-016] [FÖRSLAG] Skriv produktnamnen i versaler i kundtext och ange normalt det fasta numret före namnet, exempelvis "5. MOTÖRWURST".
+[DIA-017] [FÖRSLAG] När valda wraps återges ska antal, enkel/dubbel, nummer och namn framgå. Använd inte bara en allmän beskrivning som "två enkla wraps" när produkterna ska bekräftas.
+[DIA-018] [FÖRSLAG] Orden "korv", "korvwrap" och "wrap" ska förstås som samma produktkategori i kundens beställning. Dubbelwrap har den särskilda betydelsen nedan.
+[DIA-019] [FÖRSLAG] I löpande dialog föredrar den befintliga instruktionen "korv", "enkel korv" och "dubbelwrap". Fasta frågor och menytexter använder också ordet "wrap".
+[DIA-020] [FÖRSLAG] Rekommendera utifrån vad kunden frågar efter och beskriver. Rekommendera inte en särskild wrap oombedd och visa inga poäng eller betyg.
+[DIA-021] [FÖRSLAG] Besvara enklare ekivoka korvskämt kort och torrt utan att bli grov eller bygga vidare på dem. För tillbaka samtalet till beställningen.
+[DIA-022] [FÖRSLAG] Vid frågor om "raggarballe" eller "raggarballe med svängdörrar" får assistenten lekfullt förklara att korvarna serveras som wraps i mjukt tunnbröd och att det inte finns några svängdörrar.
+[DIA-023] [FÖRSLAG] Den befintliga instruktionen anger att den gamla kränkande benämningen på chokladbollar inte ska upprepas. Svaret ska kort säga att varan inte finns och hänvisa till "obskyra sidor på nätet"; om denna särskilda ton ska behållas är ett öppet beslut.
+
+
+Dialog vid val av wraps och dryck
+---------------------------------
+[DIA-024] [FÖRSLAG] Den inledande hälsningen är "Välkommen!" följt av "Vad önskar ni beställa? Skriv \"meny\" om ni vill se hela menyn.". Relevant status om dagens beställning får läggas till.
+[DIA-025] [FÖRSLAG] Vid direktbeställning är normal ordning: wraps, dryck, hämtningstid, folie, fullständig sammanfattning och bekräftelse, därefter förnamn på den som swishar.
+[DIA-026] [FÖRSLAG] Vid en beställningsförfrågan är normal ordning: wraps, dryck, dag, tid, folie, övrigt, kontaktuppgifter och kontroll av uppgifterna. Om dagen behöver väljas först ska den sparas och inte efterfrågas igen.
+[DIA-027] [FÖRSLAG] Om kunden väljer dag innan varorna är valda ska dagen bekräftas kort och nästa fråga vara "Vad önskar ni beställa?". Fråga inte efter hämtningstid redan då.
+[DIA-028] [FÖRSLAG] Om kunden väljer en produkt utan att ange enkel eller dubbel ska nästa fråga vara "Enkel eller dubbel wrap?".
+[DIA-029] [FÖRSLAG] Har kunden redan angett enkel/dubbel ska den frågan hoppas över.
+[DIA-030] [FÖRSLAG] När typen är klar ska produkten bekräftas kort med antal, nummer och namn och nästa fråga vara "Vill du ha någon mer wrap?".
+[DIA-031] [FÖRSLAG] Om kunden vill ha fler ska nästa produkt samlas in på motsvarande sätt. Om kunden säger nej går dialogen vidare till dryck.
+[DIA-032] [FÖRSLAG] Gå inte till dryckfrågan innan kunden sagt att inga fler wraps önskas.
+[DIA-033] [FÖRSLAG] Om flera produkter anges i samma meddelande ska alla tas emot. Fråga bara efter de uppgifter som saknas för respektive produkt.
+[DIA-034] [FÖRSLAG] Om kunden väljer samma wrap som redan beställts ska assistenten först fråga om kunden vill ha en till. Lägg inte till eller ersätt automatiskt vid oklar avsikt.
+[DIA-035] [FÖRSLAG] När kunden bekräftar en till av samma sort ska den läggas till, och enkel/dubbel ska efterfrågas om den inte redan framgår.
+[DIA-036] [FÖRSLAG] Fråga en gång om kunden vill ha dryck. Förklara att drycken kan betalas tillsammans med maten via Swish eller köpas på plats vid hämtning.
+[DIA-037] [FÖRSLAG] Om kunden väljer en dryck utan antal ska nästa fråga vara "Hur många [dryckens namn] vill du ha?". Anta aldrig en dryck.
+[DIA-038] [FÖRSLAG] Om antal redan anges, exempelvis "två öl", ska antalsfrågan hoppas över.
+[DIA-039] [FÖRSLAG] När en dryck och dess antal är klara ska valet bekräftas kort och nästa fråga vara "Önskas någon mer dryck?".
+[DIA-040] [FÖRSLAG] Om kunden vill ha mer dryck, fråga efter vilken dryck och därefter saknat antal. Upprepa tills kunden är klar.
+[DIA-041] [FÖRSLAG] Om kunden sagt "ingen dryck" eller redan avslutat dryckvalet ska inte den inledande dryckfrågan ställas igen.
+[DIA-042] [FÖRSLAG] Hämtningstid och folie ska vara avklarade innan slutsammanfattning eller frågor om namn och andra kontaktuppgifter.
+[DIA-043] [FÖRSLAG] Frågan om folie får inte hoppas över när beställningen innehåller wraps och kunden ännu inte har svarat på den.
+[DIA-044] [FÖRSLAG] Vid en förfrågan ska kunden före inskick få frågan om något övrigt behöver meddelas, exempelvis allergiuppgifter eller önskemål. Svaret ska sparas och vidarebefordras.
+
+
+Menykommandon och presentation
+------------------------------
+[DIA-045] [FÖRSLAG] "meny" och motsvarande enkla förfrågningar, exempelvis "visa menyn", "vad har ni" och "vad finns det", ska ge den korta menyn direkt utan modellanrop.
+[DIA-046] [FÖRSLAG] Den korta menyn ska visa samtliga nio produkter med nummer och enkelpris, tillägg för dubbelwrap, information om beställningsgränsen, kort drycklista och möjlighet att beställa med nummer.
+[DIA-047] [FÖRSLAG] Den korta menyn avslutas med "Skriv \"info\" om du vill se en utökad meny.".
+[DIA-048] [FÖRSLAG] "info", "mer info", "utökad meny" och motsvarande uttryck ska visa den utökade menyn även mitt i en beställning.
+[DIA-049] [FÖRSLAG] "mer", "mera" och "visa mer" direkt efter den korta menyn ska också visa den utökade menyn.
+[DIA-050] [FÖRSLAG] Den utökade menyn ska beskriva gemensamma tillbehör, möjligheten att välja bort dem, de två surkålsvarianterna och det kostnadsfria bytet, följt av hela produktlistan, dubbelwraptillägg och drycker.
+[DIA-051] [FÖRSLAG] Den gemensamma tillbehörstexten i modellinstruktionen är "Alla wraps kommer med lokalbakat, mjukt tunnbröd, picklad gurka, picklad rödlök, rostad lök och Loos-senap. Det går bra att välja bort det du inte vill ha.". Den färdiga menytexten använder motsvarigheten "Alla korvar serveras ...".
+[DIA-052] [FÖRSLAG] Texten om surkål är "En del wraps serveras med surkålsröra (surkål blandad med majonnäs och senap) och en del med stekt surkål (surkål stekt med honung) med dijondressing. Du kan gratis byta från den ena till den andra.". Den färdiga menytexten använder ordet "korvar" i första meningen.
+[DIA-053] [FÖRSLAG] Varje produkt i en beskrivande meny ska vara ett eget stycke. Första raden innehåller nummer, namn och pris; beskrivningen står direkt på nästa rad utan tom rad inom produkten.
+[DIA-054] [FÖRSLAG] Ha en tom rad mellan produkter. Återge köttsort, hela den angivna smakbeskrivningen och rätt surkål/dressing utan att hitta på eller utelämna ingredienser.
+[DIA-055] [FÖRSLAG] Om både enkel- och dubbelpris visas ska dubbelpriset vara enkelpriset plus 45 kr och presenteras som "NUMMER. NAMN – ENKELPRIS kr / dubbel DUBBELPRIS kr".
+[DIA-056] [FÖRSLAG] I den fullständiga menyn ska drycker grupperas under DRYCKER: 25 kr för Cuba Cola, Cuba Cola Zero, Trocadero, Trocadero Zero och Loka; 35 kr för Alkoholfri Fjällöl; 45 kr för Björnåsen bärdryck med smakerna blåbär, lingon och rabarber.
+[DIA-057] [FÖRSLAG] Den fullständiga menyn avslutas med "Vad vill du ha? Tips: du kan beställa med bara numren, till exempel \"en sexa och två åttor\".".
+[DIA-058] [FÖRSLAG] När kunden ska välja korv utan att ha valt någon anger instruktionen en särskild lista som börjar exakt "Vi har nio olika wraps att välja på." utan hälsning före. Därefter visas alla nio beskrivningar och enkel-/dubbelpriser, utan tillbehörsintroduktion, bild eller drycker.
+[DIA-059] [FÖRSLAG] Den särskilda vallistan ska avslutas med "Vilken vill du ha?", därefter tipset att beställa med nummer och be om mer information, och sist "TIPS: skriv \"meny\" så får du upp hela menyn med drycker.". Detta är ett undantag från grundregeln om att frågan står sist.
+[DIA-060] [FÖRSLAG] Den mellersta raden i vallistans avslut är "Du kan beställa med bara numren, till exempel \"en sexa och två åttor\". Vill du veta mer om någon eller alla wraps kan du be mig berätta.". De tre avslutningsraderna ska enligt instruktionen stå direkt efter varandra utan tomma rader.
+[DIA-061] [FÖRSLAG] Den färdiga utökade menyn visar också en produktbild av en öppen wrap. Bilder får inte göra att menytexten eller beställningen blir oläsbar om bilden inte kan laddas.
+[DIA-062] [FÖRSLAG] "förboka", "forboka", "förbeställ" och "förbeställa" som egna kommandon ska inleda en förfrågan med texten "Förbokning går bra. Det blir en beställningsförfrågan som vi återkommer med bekräftelse på via mejl." och frågan "Till vilken dag önskar du beställa?".
+[DIA-063] [FÖRSLAG] Menyvisning och informationskommandon ska inte i sig räknas som val av en produkt, ny order eller godkännande av en beställning.
+
+
+Knappar, taligenkänning och mobil användning
+--------------------------------------------
+[DIA-064] [FÖRSLAG] Kunden ska kunna klicka på en produkt i menyn eller en produktknapp för att välja den. Ett sådant klick väljer inte automatiskt enkel/dubbel.
+[DIA-065] [FÖRSLAG] Snabbsvar ska kunna visas för enkel/dubbel, ja/nej, antal, dryckval, ingen dryck, övrigt, dagar och tillgängliga tider.
+[DIA-066] [FÖRSLAG] Antalsknapparna 1 till 6 är förslag i gränssnittet, inte en verksamhetsgräns för vad kunden får skriva.
+[DIA-067] [FÖRSLAG] Nuvarande dagknappar visar de fyra närmaste öppna dagarna efter idag med veckodag, datum och månad. Dessa fyra knappar innebär inte ett generellt förbud mot andra giltiga datum.
+[DIA-068] [FÖRSLAG] Tidsknapparna ska avspegla systemets faktiska tillgänglighet för den efterfrågade dagen. Interna markörer som används för knappar ska inte visas i kundtexten.
+[DIA-069] [FÖRSLAG] Flera samtidiga sändningar ska förhindras medan ett svar hämtas. Kunden ska få en synlig väntindikator.
+[DIA-070] [FÖRSLAG] Textinmatningen ska vara åtkomlig även när mobilens tangentbord är öppet. Långa svar ska gå att läsa från början.
+[DIA-071] [FÖRSLAG] Taligenkänning ska använda svenska. Kunden ska kunna starta och stoppa lyssning och få tydlig återkoppling om mikrofonen är blockerad eller inte kan användas.
+[DIA-072] [FÖRSLAG] Om webbläsaren kräver ett nytt tryck för att lyssna igen ska kunden få en knapp för detta. Textinmatning ska finnas som alternativ.
+[DIA-073] [FÖRSLAG] Nuvarande app läser inte upp assistentens svar; den återupptar lyssning efter svaret när röstläget är aktivt. Kvarvarande inställningar för röst och uppläsningshastighet är inte ett krav på talad utmatning.
+[DIA-074] [FÖRSLAG] Tolka vanliga talfel välvilligt, exempelvis spek sabbat/speck sabbath, fän hejlen/van halen, gin lizzie/jin lissy, chizi topp/cheesy top, motorvurst/motor wurst, twisted sister/tvisted ister, ghost dog/gostdogg, brol/bråll/brål och grill ost.
+[DIA-075] [FÖRSLAG] Taligenkänningens "korvrap", "korv rap" och liknande ska förstås som korvwrap. Återge det korrekta ordet i assistentens svar.
+[DIA-076] [FÖRSLAG] Produkter ska kunna väljas med nummer och talade nummerord. "En trea och två nior" betyder en GIN LIZZY och två BRÖL; "en sexa och två åttor" betyder en TWISTED ISTER och två GRILLOST.
+[DIA-077] [FÖRSLAG] Om ett talfel eller nummeruttryck kan avse flera produkter eller antal ska assistenten fråga kort med relevanta alternativ i stället för att gissa.

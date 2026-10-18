@@ -1,0 +1,1 @@
+-- Endast syntetiska lokala utvecklingsdata. Inget verksamhetsschema är beslutat.

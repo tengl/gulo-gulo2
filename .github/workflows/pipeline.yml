@@ -1,0 +1,179 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Explicit recovery deployment from main
+        type: choice
+        options: [web, database, both]
+        default: web
+        required: true
+
+permissions:
+  contents: read
+
+# Queue whole production pipelines before checks, so faster later builds cannot
+# overtake an earlier migration. Docs-only runs leave the queue without deploying.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('pr-run-{0}', github.run_id) || 'production-pipeline' }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.scope.outputs.web }}
+      database: ${{ steps.scope.outputs.database }}
+      checks: ${{ steps.scope.outputs.checks }}
+      databaseChecks: ${{ steps.scope.outputs.databaseChecks }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - id: scope
+        env:
+          RECOVERY_TARGET: ${{ inputs.target }}
+        run: |
+          node tooling/check-rules.mjs
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            [[ "$GITHUB_REF" == "refs/heads/main" ]] || { echo "Recovery must run from main"; exit 1; }
+            case "$RECOVERY_TARGET" in
+              web) printf 'web=true\ndatabase=false\nchecks=true\ndatabaseChecks=false\n' >> "$GITHUB_OUTPUT" ;;
+              database) printf 'web=false\ndatabase=true\nchecks=false\ndatabaseChecks=true\n' >> "$GITHUB_OUTPUT" ;;
+              both) printf 'web=true\ndatabase=true\nchecks=true\ndatabaseChecks=true\n' >> "$GITHUB_OUTPUT" ;;
+              *) exit 1 ;;
+            esac
+          else
+            node tooling/changes.mjs
+          fi
+
+  checks:
+    needs: changes
+    if: needs.changes.outputs.checks == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+
+  database-checks:
+    needs: changes
+    if: needs.changes.outputs.databaseChecks == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm run db:start
+      - run: npm run db:reset
+      - run: npm exec -- supabase db lint --level error
+      - name: Database tests, when present
+        run: |
+          if find supabase/tests -name '*.sql' -print -quit | read -r test_file; then
+            npm run db:test
+          fi
+      - if: always()
+        run: npm run db:stop
+
+  # Use this stable job name for required branch checks, including docs-only PRs.
+  verified:
+    needs: [changes, checks, database-checks]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          CHANGES: ${{ needs.changes.result }}
+          CHECKS: ${{ needs.checks.result }}
+          DATABASE_CHECKS: ${{ needs.database-checks.result }}
+        run: |
+          [[ "$CHANGES" == "success" ]]
+          [[ "$CHECKS" == "success" || "$CHECKS" == "skipped" ]]
+          [[ "$DATABASE_CHECKS" == "success" || "$DATABASE_CHECKS" == "skipped" ]]
+
+  preview:
+    needs: [changes, verified]
+    if: >-
+      always() && needs.verified.result == 'success' &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    environment: preview
+    concurrency:
+      group: preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: npm ci
+      - run: bash tooling/deploy-web.sh preview
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+  production:
+    needs: [changes, verified]
+    if: >-
+      always() && needs.verified.result == 'success' &&
+      github.ref == 'refs/heads/main' && github.event_name != 'pull_request' &&
+      (needs.changes.outputs.web == 'true' || needs.changes.outputs.database == 'true')
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: npm ci
+      - name: Apply database migrations before deploying the app
+        if: needs.changes.outputs.database == 'true'
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          : "${SUPABASE_ACCESS_TOKEN:?Missing SUPABASE_ACCESS_TOKEN}"
+          : "${SUPABASE_DB_PASSWORD:?Missing SUPABASE_DB_PASSWORD}"
+          : "${SUPABASE_PROJECT_REF:?Missing SUPABASE_PROJECT_REF}"
+          npm exec -- supabase link --project-ref "$SUPABASE_PROJECT_REF"
+          npm exec -- supabase db push --dry-run
+          npm exec -- supabase db push --yes
+      - name: Deploy app
+        if: needs.changes.outputs.web == 'true'
+        run: bash tooling/deploy-web.sh production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
