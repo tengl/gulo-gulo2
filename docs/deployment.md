@@ -9,6 +9,11 @@ reporoten om inget annat anges.
 Använd Node 24 enligt `.node-version`, kör `npm ci` och `npm run dev`.
 Appen finns på `http://localhost:3000`. Kör `npm run check` och `npm run build`
 före kodändringar släpps. Inga externa nycklar behövs för grundsidan.
+Startsidan är nu en demomeny med lokalt utkast och enkel texttolkning. Ingen
+riktig order skickas och utkastet finns bara i den öppna sidan, inte på servern.
+Webbläsartester körs med `npm run test:browser` efter
+`npm exec -- playwright install chromium`. De startar en separat lokal server
+på port 3100. CI verifierar samma flöden före release.
 
 När serverintegrationer införs: kopiera `apps/web/.env.example` till
 `apps/web/.env.local` och fyll i den lokala miljöns uppgifter. Använd inte
@@ -47,6 +52,7 @@ giltiga statusar, ersättningsreferenser och enbart gällande poster i `runtime/
 | Enbart tester, fixtures eller evals | Webb | Ingen |
 | Supabase-konfiguration, seed eller SQL-tester | Lokal databas | Ingen |
 | Ändringsklassificeraren eller lintkonfiguration | Webb | Ingen |
+| `playwright.config.ts` | Webb och webbläsare | Ingen |
 | `docs/`, README, AGENTS, övriga `rules/` | Inga appkontroller | Ingen |
 
 Nya körningskataloger och byggkonfigurationer måste läggas till i klassificeringen

@@ -26,6 +26,7 @@ Filkarta
 system.txt                       SYS  Teknik, arkitektur och arbetssätt
 runtime/access.txt               BEH  Intern administration och behörighet
 runtime/business-hours.txt       OPPEN  Öppettider i Google och synkronisering
+runtime/ordering-experience.txt  UX  Mobil beställning och första demoversion
 proposals/catalog.txt            KAT  Förslag: verksamhetsfakta, meny, innehåll
 proposals/conversation.txt       DIA  Förslag: ton, dialog, text, röst, knappar
 proposals/ordering.txt           ORD  Förslag: beställning, godkännande, betalning
@@ -34,6 +35,7 @@ proposals/staff.txt              PER  Förslag: personalens arbetsflöde
 proposals/integrations.txt       INT  Förslag: meddelanden och äldre teknik
 proposals/access.txt             BEH  Öppet: login/kod, roller och teknikförslag
 proposals/business-hours.txt     OPPEN  Öppet: synkriktning, tidsdetaljer, historik
+proposals/legacy-update-2026-10-22.txt NY  Nyare kod i det äldre repot, ej bindande
 open-decisions.txt               OPP  Äldre motsägelser och öppna beslut
 implementation-proposals.txt     FOR  Tidigare tekniska förbättringsförslag
 background.txt                   BAK  Historik och underlagets ursprung

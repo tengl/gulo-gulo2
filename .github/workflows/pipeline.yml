@@ -73,6 +73,8 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+      - run: npm exec -- playwright install --with-deps chromium
+      - run: npm run test:browser
 
   database-checks:
     needs: changes

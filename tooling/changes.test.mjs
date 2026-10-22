@@ -29,7 +29,7 @@ test("tests and evals run checks without deploying", () => {
   for (const path of [
     "apps/web/src/modules/ordering/domain/order.test.ts", "apps/web/src/app/page.spec.tsx",
     "apps/web/src/modules/catalog/__fixtures__/menu.json", "tests/e2e/order.spec.ts",
-    "evals/order.json", "tooling/changes.mjs", "apps/web/eslint.config.mjs",
+    "evals/order.json", "tooling/changes.mjs", "apps/web/eslint.config.mjs", "playwright.config.ts",
   ]) {
     const result = classifyFiles([path]);
     assert.equal(result.web, false, path);

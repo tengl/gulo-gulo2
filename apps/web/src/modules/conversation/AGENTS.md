@@ -4,5 +4,6 @@ Dialogtillstånd och validerade verktygsåtgärder. Claude-adaptern ligger i ser
 
 Regelunderlag: `rules/proposals/conversation.txt`. Läs status på varje post innan implementation.
 
-Modulen är ännu inte implementerad. Följ `../AGENTS.md` och skapa endast de
-lager, publika API:er och tester som den första funktionen behöver.
+`domain/demo-request.ts` känner igen en avgränsad grammatik enligt UX-008 och
+ger granskningsbara förslag. Den är inte en AI-chatt. `ui/OrderingExperience.tsx`
+sätter samman meny, textförslag och samma demoutkast. Claude och röst återstår.

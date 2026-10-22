@@ -6,5 +6,6 @@ Regelunderlag: `rules/proposals/ordering.txt`. Läs status på varje post innan 
 Beslutat mottagningsfönster för samma dag och övergång till förbeställning finns
 i `rules/runtime/business-hours.txt` (OPPEN-011 och OPPEN-013).
 
-Modulen är ännu inte implementerad. Följ `../AGENTS.md` och skapa endast de
-lager, publika API:er och tester som den första funktionen behöver.
+`domain/cart.ts` implementerar ett lokalt demoutkast enligt UX-003 och UX-006–009.
+`ui/OrderSummary.tsx` visar och redigerar samma utkast. Ingen order sparas,
+betalas eller reserveras. Koppla framtida server-use cases härifrån, inte från UI.

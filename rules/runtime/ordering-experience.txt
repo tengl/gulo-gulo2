@@ -1,0 +1,49 @@
+MOBIL BESTÄLLNINGSUPPLEVELSE OCH FÖRSTA DEMOVERSION
+================================================
+
+Status: GÄLLANDE. Omfattningen gäller första provbara versionen, inte drift.
+Beslutskälla: användarens uppdrag och godkännande av demodata 2026-10-22.
+Tekniska detaljer nedan är implementationens avgränsning för denna prototyp.
+
+[UX-001] [GÄLLANDE] Kunden ska enkelt kunna bygga en beställning i mobilen.
+Grafiska menyer och val får kombineras med text; gränssnittet behöver inte vara
+en traditionell chatt med enbart meddelandebubblor.
+
+[UX-002] [GÄLLANDE] Kunden ska senare även kunna prata för att beställa.
+Röst behöver inte fungera i första versionen. Claude är fortsatt det planerade
+stödet för fri språkförståelse; den första demon kräver inga externa nycklar.
+
+[UX-003] [GÄLLANDE] Menyval, textförslag och sammanställning ska använda samma
+strukturerade beställningsutkast. Att byta vy får inte tappa eller dubblera val.
+
+[UX-004] [GÄLLANDE] Menyn och priserna i det äldre repot vid commit 1ef53f5 får
+användas som tydligt märkta demodata. Källor: lib/menu.ts och lib/menytext.ts.
+Det omfattar nio wraps, drycker och dubbelwrapstillägg på 45 kr. Detta gör inte
+de gamla verksamhetsreglerna i rules/proposals/ bindande för den framtida driften.
+
+[UX-005] [GÄLLANDE] Demon ska tydligt ange att ingen riktig beställning skickas.
+Den får inte registrera en order, debitera pengar, reservera kapacitet eller
+visa påhittade lediga tider. Granskning av utkastet är slutpunkten i denna version.
+
+[UX-006] [GÄLLANDE] Priser ska beräknas deterministiskt från katalogen, i heltalsöre.
+Modelltext, textinmatning och UI får inte bestämma egna styckpriser.
+
+[UX-007] [GÄLLANDE] Wrapens variant ska väljas uttryckligen: enkel eller dubbel.
+Antal ska vara positiva heltal. Demon har en teknisk gräns på 99 per unik rad.
+Samma produkt med samma variant och bortval kan slås ihop; olika val ska bevaras
+som skilda rader. Bortval av standardtillbehör ändrar inte demopriset.
+
+[UX-008] [GÄLLANDE] Den nyckelfria textfunktionen får bara tolka tydliga enkla
+produktval, mängder, enkel/dubbel och stödda bortval. Alla förslag ska granskas
+och saknad variant väljas innan de läggs till. Vid oklar eller delvis okänd text
+ska hela inmatningen lämnas utan ändring av utkastet. Funktionen får inte
+presenteras som en fri AI-chatt eller ge intryck av att röst redan fungerar.
+
+[UX-009] [GÄLLANDE] Kunden ska kunna ändra antal, ta bort rader och granska
+produkter, antal, variant, bortval, radpris och total innan någon senare
+orderfunktion anropas. En ändring i utkastet ska synas direkt i sammanställningen.
+
+[UX-010] [GÄLLANDE] Mobilvyn ska ha tydliga tryckytor och fungera utan horisontell
+sidrullning. Produktval och granskning ska också fungera med tangentbord.
+Dialogrutor ska ha rubrik, stängknapp och Escape-stöd; statusmeddelanden ska
+vara tillgängliga för skärmläsare. Röst visas först när funktionen fungerar.

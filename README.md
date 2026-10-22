@@ -6,8 +6,10 @@ Pris, kapacitet, lager och ordrar avgörs av vanlig programkod och databas.
 Administrationen ska även kunna uppdatera öppettider i Google och skydda
 vissa funktioner med superadmin-kod eller inloggning.
 
-Repot innehåller en byggbar grundstruktur. Affärsfunktioner och integrationer
-är ännu inte implementerade.
+Startsidan innehåller en mobil demoversion: välj från menyn eller skriv en enkel
+beställning, justera antal/variant/bortval och granska samma beställningsutkast.
+Menyn och priserna är godkända demodata från det äldre repot. Ingen riktig order
+skickas, ingen betalning görs och ingen kapacitet reserveras.
 
 - Börja i [regelregistret](rules/index.txt): beslutade textregler är facit.
   Äldre verksamhetsregler är grupperade förslag, inte bindande krav.
@@ -33,6 +35,18 @@ Grundsidan fungerar utan API-nycklar. När integrationer införs används
 npm run check
 npm run build
 ```
+
+Webbläsartester för mobil och dator:
+
+```sh
+npm exec -- playwright install chromium
+npm run test:browser
+```
+
+Om Google Chrome redan är installerat kan du i stället köra
+`PLAYWRIGHT_CHANNEL=chrome npm run test:browser`. Testerna startar en egen
+testserver på port 3100. Ingen extern tjänst behövs. Fri Claude-dialog,
+röst, hämtningstider, inskick och betalning återstår att bygga.
 
 GitHub Actions skiljer kontroller från deployment. App-/driftregeländringar
 kan släppa webben; SQL-migrationer kan släppa databasen. Dokumentation,

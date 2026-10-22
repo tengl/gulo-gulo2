@@ -1,0 +1,39 @@
+NYARE UNDERLAG FRÅN DET ÄLDRE REPOT
+=================================
+
+Status: FÖRSLAG/HISTORIK, inte nya bindande verksamhetsregler.
+Granskat 2026-10-22: /home/tengl/Code/gulogulo/gulo-gulo, HEAD 1ef53f5.
+Jämförelsepunkt: ebd80af, som det ursprungliga regeluttaget hänvisar till.
+Källan lästes utan ändringar. docs/rules.txt här behålls som ursprunglig historik.
+
+[NY-001] [HISTORIK] lib/menu.ts och lib/pricing.ts är oförändrade i jämförelsen.
+De tidigare extraherade menypriserna och tillägget 45 kr för dubbelwrap är
+fortfarande aktuella i källkoden vid 1ef53f5. UX-004 godkänner dem enbart för demo.
+
+[NY-002] [FÖRSLAG] Nya lib/swish.ts och lib/betalning.ts innehåller ett Swish-läge
+som skickar betalningsförfrågan till kundens mobil och läser betalningsstatus.
+Detta kompletterar äldre manual/simulated. Vid en framtida betalningsimplementation
+behöver aktuell serververifiering, idempotens, behörighet och återhämtning granskas.
+
+[NY-003] [FÖRSLAG] app/Chat.tsx skickar sessions-ID, erbjuder Avbryt/Ny beställning
+och Visa min beställning. app/api/chat/route.ts och lib/db.ts hanterar korta
+tidsreservationer per session och frigörande vid avbrott. Atomär kapacitetskontroll
+och serverägt tillstånd måste fortfarande utformas för det nya systemet.
+
+[NY-004] [FÖRSLAG] Ny personalvy app/personal/hamta/page.tsx samlar dagens ordrar
+och relevanta förfrågningar, med sökning på namn/nummer och markering av hämtad
+direktorder. Den gamla gemensamma STAFF_KEY-mekanismen finns kvar.
+
+[NY-005] [FÖRSLAG] lib/epost.ts hanterar fler varianter av talad e-post och används
+av både chattklient och server. Dessa normaliseringar bör senare provas med
+regressionstester innan de överförs till nya systemet.
+
+[NY-006] [FÖRSLAG] Aktuell chatttext anger öppet tors–sön 11–15 och tar emot
+sammadagsbeställningar 10:30–14:00. Tidskonstanter och bokningsbara tider i
+lib/menu.ts är inte ändrade samtidigt. Värdena är därför fortsatt underlag,
+inte ett beslut om det nya systemets tider; se OPPEN-reglerna för det beslutade
+beteendet med standardvecka och datumundantag.
+
+[NY-007] [FÖRSLAG] Nyare verktyg stöder en ungefärlig önskad tid i en förfrågan
+när en tid redan är bokad. Vad personalen kan bekräfta, och hur kapaciteten
+reserveras, behöver beslutas före en sådan funktion i nya systemet.

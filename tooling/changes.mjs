@@ -31,6 +31,7 @@ export function classifyFiles(files) {
     if (!isInstructions(path) && (
       path.startsWith("apps/web/") || path.startsWith("tooling/")
       || path.startsWith("tests/") || path.startsWith("evals/")
+      || path === "playwright.config.ts"
       || path.startsWith(".github/workflows/")
     )) result.checks = true;
   }
