@@ -41,7 +41,7 @@ export function AdminLogin({ configured }: { configured: boolean }) {
         />
         <span className="eyebrow">Gulo Gulo · internt</span>
         <h1>Välkommen in.</h1>
-        <p>Logga in för att planera veckan och justera tider.</p>
+        <p>Logga in för att hantera beställningar och planera veckan.</p>
         {configured ? (
           <form onSubmit={login}>
             <label htmlFor="admin-code">Superadmin-kod</label>
@@ -49,6 +49,7 @@ export function AdminLogin({ configured }: { configured: boolean }) {
               id="admin-code"
               name="code"
               type="password"
+              disabled={!ready || busy}
               autoComplete="current-password"
               required
               maxLength={512}
@@ -59,7 +60,7 @@ export function AdminLogin({ configured }: { configured: boolean }) {
                 {error}
               </p>
             )}
-            <button className="admin-primary" disabled={busy}>
+            <button className="admin-primary" disabled={!ready || busy}>
               {busy ? "Loggar in…" : "Logga in"}
             </button>
           </form>

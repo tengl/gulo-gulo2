@@ -89,7 +89,7 @@ test("CHATT-003/008: limited mode uses factual answers and rejects partial/unkno
   assert.equal(ask("avboka").action?.kind, "orders");
 });
 
-test("CHATT-009: reject fabricated roles, payment statuses, oversized histories and invalid drafts", () => {
+test("CHATT-009: reject fabricated roles, unknown statuses, oversized histories and invalid drafts", () => {
   assert.deepEqual(readChatContext(context), context);
   assert.throws(() =>
     readChatContext({
@@ -115,12 +115,34 @@ test("CHATT-009: reject fabricated roles, payment statuses, oversized histories 
       orders: [
         {
           reference: "DEMO-4FA2AF97-3517-4912-86A3-00C208DE5678",
-          status: "paid",
-          summary: "paid",
+          status: "refunded",
+          summary: "refunded",
         },
       ],
     }),
   );
+});
+
+test("ADM-006 / ORD-016: local paid/collected status blocks chat cancellation and grants no payment tools", () => {
+  const reference = "DEMO-4FA2AF97-3517-4912-86A3-00C208DE5678";
+  for (const status of ["paid", "collected"] as const) {
+    const updated = readChatContext({
+      ...context,
+      orders: [{ reference, status, summary: "Lokal demo" }],
+      messages: [{ role: "user", content: `Avboka ${reference}` }],
+    });
+    assert.throws(() =>
+      actionFromTool("propose_cancel", { reference }, updated),
+    );
+    assert.match(limitedReply(updated).text, /kontaktar du personalen/);
+    assert.throws(() => actionFromTool("mark_paid", { reference }, updated));
+    assert.throws(() =>
+      readChatContext({
+        ...updated,
+        orders: [{ reference: "REAL-123", status, summary: "paid" }],
+      }),
+    );
+  }
 });
 
 test("CHATT-004: an approved change is atomic and tied to the current cart", async () => {

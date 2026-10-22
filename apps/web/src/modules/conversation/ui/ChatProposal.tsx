@@ -9,7 +9,11 @@ import {
 } from "@/modules/catalog";
 import type { WrapVariant } from "@/modules/catalog";
 import type { Cart, SavedOrder } from "@/modules/ordering";
-import { describeCart, describeSavedOrder } from "@/modules/ordering";
+import {
+  describeCart,
+  describeSavedOrder,
+  canCancelDemoOrder,
+} from "@/modules/ordering";
 import type { ChatAction } from "../index";
 import { ChatMenu } from "@/modules/catalog/ui/ChatMenu";
 
@@ -169,7 +173,7 @@ export function ChatProposal({
           <button
             type="button"
             className="primary-button"
-            disabled={!order || order.status === "cancelled"}
+            disabled={!order || !canCancelDemoOrder(order)}
             onClick={() => onNavigate(action)}
           >
             Granska avbokningen

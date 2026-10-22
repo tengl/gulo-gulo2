@@ -5,8 +5,8 @@ Beslutskälla: användarens uppdrag att börja med administration 2026-10-22.
 Följande beskriver den första implementationens avgränsning, inte färdig drift.
 
 [ADM-001] [GÄLLANDE] /admin skyddas enligt BEH-005 och börjar med öppettider,
-standardvecka och datumundantag enligt OPPEN-004–009. Orderhantering och
-personliga personalkonton införs senare.
+standardvecka och datumundantag enligt OPPEN-004–009. Beställningsvyn beskrivs
+i ADM-004–007. Personliga personalkonton införs senare.
 
 [ADM-002] [GÄLLANDE] Före anslutning till Supabase sparas ändrade scheman endast
 som lokal förhandsvisning på aktuell webbläsare. Detta ska framgå tydligt före
@@ -19,3 +19,56 @@ och tidstyp har ett intervall inom samma kalenderdag eller är stängd. Från-ti
 måste vara före till-tiden. Ett datumundantag kan självständigt ärva standarden,
 ange eget intervall eller stänga respektive tidstyp. Flera intervall, nattöppet
 och exakt tidsgränskontroll för orderregistrering återstår enligt OPPEN-012.
+
+[ADM-004] [GÄLLANDE] Administrationen har en skyddad beställningssida med
+lista, sökning, statusfilter, datumfilter och fullständiga beställningsdetaljer.
+Beslutskälla: användarens uppdrag 2026-10-22 om beställningssidan för admin.
+Före serverlagring visas samma lokala demobeställningar som på kundsidan, utan
+påhittade kundnamn, kontaktuppgifter eller hämtningstider. Datum avser då när
+demon sparades, inte hämtning. Tomt och felaktigt minne skiljs åt. Förfrågningar
+och riktiga ordrar från andra enheter ingår ännu inte.
+
+[ADM-005] [GÄLLANDE] Personal ska kunna markera en beställning som betald och
+därefter hämtad. Beslutskälla: användarens uttryckliga val 2026-10-22, "Även
+markera betald och hämtad". I första lokala förhandsvisningen tillåts övergångarna
+sparad/obetald till betald eller avbokad, och betald till hämtad. Hämtad och
+avbokad är slutstatusar. Inga återbetalningar, automatiska betalningar eller
+avbokningar av betalda beställningar införs genom detta beslut.
+
+[ADM-006] [GÄLLANDE] En statusändring granskas och bekräftas för en bestämd
+referens. Sessionen kontrolleras igen före ändring. En ändrad eller borttagen
+beställning ska göra ett gammalt ändringsförslag ogiltigt. Betalnings- och
+hämtningsmarkeringar i lokal demo är uttryckliga simuleringar, inte besked om
+verklig betalning eller utlämning. Kundvy och admin visar samma lokala status;
+efter betalningsmarkering erbjuds inte kundavbokning i GUI eller chatt (ORD-016).
+Lagringsfel får inte ge ett lyckat ändringsbesked eller tappa kundens utkast.
+
+[ADM-007] [GÄLLANDE] Beställningsvyn räknar sina summeringar från de poster
+som matchar aktuella filter. Avbokade undantas från antal aktiva beställningar,
+antal wraps och sammanlagt demobelopp. En dubbelwrap räknas som en wrap här,
+inte två wraps eller som en beslutad kapacitetsenhet. Demobelopp är inte omsättning.
+
+[ADM-008] [GÄLLANDE] När en ny beställning kommer in ska ett ljud spelas upp.
+Beslutskälla: användarens tillägg 2026-10-22. Webbläsarens ljud aktiveras med
+ett uttryckligt klick i admin; visa läget och erbjud testljud och avstängning.
+Ljudet bevakar nya referenser oberoende av listfilter och vald adminvy. Redan
+inläst historik, statusändringar och återvisade referenser ska inte ge nya ljud.
+Efter omladdning behöver ljudet aktiveras igen. Nekat ljud eller avbruten
+ljudkontext ska visas tydligt, utan att orderhanteringen blockeras.
+I den lokala demon upptäcks nya sparade demobeställningar från samma webbläsare,
+även från en annan flik. Sessionen ska vara giltig när signalen spelas. Det är
+ännu inte en servernotis, pushfunktion eller garanti om ljud när webbläsaren
+är stängd, enheten sover eller operativsystemet tystar fliken.
+
+[ADM-009] [GÄLLANDE] Personalen ska kunna bekräfta mottagning av en beställning
+och markera den som tillagad. Mottagning/tillagning är separat från betalning:
+ny till mottagen till tillagas till tillagad, för en beställning som inte är avbokad eller
+hämtad. Bekräftelse och versionskontroll följer ADM-006. Beslutskälla:
+användarens uttryckliga tillägg 2026-10-22. Ändringen ska synas i samma
+beställning som kunden använder, utan att kunden behöver skapa om beställningen.
+Kundvyn uppdateras när den delade statusen ändras och chatten får aktuellt läge.
+I den lokala demon gäller detta samma webbläsare/ursprung, även över flikar;
+gemensam serverlagring och uppdatering mellan olika enheter återstår.
+Äldre lokala poster utan mottagningsläge börjar som obekräftade. Befintliga
+betalningsmarkeringar får inte tyst räknas som bekräftad mottagning eller tillagning.
+Användarens förtydligande 2026-10-22: även påbörjad tillagning har en egen status.

@@ -96,6 +96,7 @@ export function Chat({
           orders: orders.map((order) => ({
             reference: order.reference,
             status: order.status,
+            preparation: order.preparation,
             summary: describeSavedOrder(order).slice(0, 8000),
           })),
         }),

@@ -2,12 +2,22 @@
 
 import { getProduct, formatPrice, omissionLabels } from "@/modules/catalog";
 import type { SavedOrder } from "../index";
+import {
+  canCancelDemoOrder,
+  demoOrderStatusLabels,
+  demoOrderPreparationLabels,
+} from "../index";
 import { Icon } from "@/shared/Icon";
 
 export function SavedOrderDetails({ order }: { order: SavedOrder }) {
   return (
     <>
       <p className="order-reference">{order.reference}</p>
+      {order.status !== "cancelled" && order.status !== "collected" && (
+        <p className={`order-preparation preparation-${order.preparation}`}>
+          {demoOrderPreparationLabels[order.preparation]} · demo
+        </p>
+      )}
       <ul className="saved-order-lines">
         {order.cart.map((line, index) => (
           <li key={line.key}>
@@ -85,11 +95,24 @@ export function SavedOrders({
                 }).format(new Date(order.createdAt))}
               </time>
               <span className={`order-status status-${order.status}`}>
-                {order.status === "cancelled" ? "Avbokad" : "Sparad demo"}
+                {demoOrderStatusLabels[order.status]}
               </span>
             </div>
             <SavedOrderDetails order={order} />
-            {order.status === "saved" && (
+            {order.status === "paid" && (
+              <p className="sheet-description">
+                Markerad som betald i adminförhandsvisningen. Efter betalning
+                kontaktar du personalen för avbokning. Ingen riktig betalning
+                har gjorts.
+              </p>
+            )}
+            {order.status === "collected" && (
+              <p className="sheet-description">
+                Markerad som hämtad i adminförhandsvisningen. Ingen riktig
+                utlämning har registrerats.
+              </p>
+            )}
+            {canCancelDemoOrder(order) && (
               <button
                 type="button"
                 className="text-button"

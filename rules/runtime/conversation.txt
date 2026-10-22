@@ -46,7 +46,10 @@ och får inte påstå att en beställning har sparats.
 [CHATT-007] [GÄLLANDE] Avbokning ska kunna påbörjas i både chatt och GUI och
 avse en bestämd referens. Visa den valda beställningen och begär bekräftelse före
 ändring. Demobeställningar kan avbokas; samma delade status ska synas i båda vyer.
-Betalda/hämtade riktiga ordrar eller återbetalningar får inte simuleras. Den gamla
+Riktiga betalningar, utlämningar eller återbetalningar får inte påstås vara
+genomförda genom lokal data. Administrationens uttryckligt simulerade demo-
+statusar enligt ADM-005–006 ska visas även här och blockera kundavbokning
+efter betalningsmarkering. Den gamla
 appens förbud mot kundavbokning av lagd order och nya önskemålet om avbokning
 har avgjorts i ORD-016: kunden får avboka före betalning; efter betalning
 ska kunden kontakta personalen. Ingen automatisk återbetalning utlovas.

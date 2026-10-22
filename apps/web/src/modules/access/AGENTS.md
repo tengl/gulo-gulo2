@@ -7,6 +7,6 @@ Regelunderlag: `rules/runtime/access.txt`. Läs status på varje post innan impl
 
 `ui/AdminLogin.tsx` skickar koden till `/api/admin/session`. Serveradaptern
 `server/access/session.ts` äger kodkonfiguration och signerade sessioner.
-`app/admin/page.tsx` kontrollerar sessionen före rendering. Kod får aldrig
+`app/admin/AdminScreen.tsx` kontrollerar sessionen för varje adminsida före rendering. Kod får aldrig
 skickas i sidans props eller sparas i localStorage. Sessionssäkerhet testas i
 `tests/security/` med Node-villkoret `react-server`, som ingår i `npm test`.

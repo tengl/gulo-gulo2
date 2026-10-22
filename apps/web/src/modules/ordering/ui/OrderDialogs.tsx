@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { cartFingerprint } from "../index";
+import { cartFingerprint, canCancelDemoOrder } from "../index";
 import type { Cart, SavedOrder } from "../index";
 import { Sheet } from "@/shared/Sheet";
 import { Icon } from "@/shared/Icon";
@@ -98,7 +98,7 @@ export function CancelOrder({
           <button
             type="button"
             className="primary-button"
-            disabled={order.status === "cancelled"}
+            disabled={!canCancelDemoOrder(order)}
             onClick={() => {
               try {
                 onConfirm();
@@ -111,7 +111,9 @@ export function CancelOrder({
           >
             {order.status === "cancelled"
               ? "Redan avbokad"
-              : "Ja, avboka demobeställningen"}
+              : canCancelDemoOrder(order)
+                ? "Ja, avboka demobeställningen"
+                : "Kan inte avbokas här"}
           </button>
         </>
       ) : (

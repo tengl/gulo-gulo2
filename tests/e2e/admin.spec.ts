@@ -152,7 +152,7 @@ test("OPPEN-005–009 / ADM-002: standard week and independent date override per
   await expect(
     page.getByText("Standardveckan gäller alla dagar"),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Anslutningar", exact: true }).click();
+  await page.getByRole("link", { name: "Anslutningar", exact: true }).click();
   await expect(page.getByText("Ej anslutet", { exact: true })).toBeVisible();
   await page.goto("/");
   await expect(page.locator(".opening-hours")).not.toContainText("09:00–12:00");
@@ -316,5 +316,7 @@ test("ADM-002/003: invalid interval and broken local data give errors, no false 
   await page
     .getByRole("button", { name: "Återställ lokal förhandsvisning" })
     .click();
-  await expect(page.getByRole("status")).toContainText("återställd");
+  await expect(page.locator("main").getByRole("status")).toContainText(
+    "återställd",
+  );
 });

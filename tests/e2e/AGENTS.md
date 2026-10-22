@@ -7,6 +7,10 @@ Installera Chromium med `npm exec -- playwright install chromium`, eller använd
 De ska verifiera beslutade regel-ID:n från `rules/`, inklusive felvägar.
 `admin.spec.ts` provar serverns kodskydd, session, standardvecka och datumundantag.
 Testservern använder en separat syntetisk admin-kod från playwright.config.ts;
-återanvänd aldrig en riktig kod. Säkerhetstester för signering finns i
+återanvänd aldrig en riktig kod.
+`admin-orders.spec.ts` provar delad demohistorik, statusövergångar, inaktuella förslag,
+lagringsfel och orderljud. Ljudtestet instrumenterar riktiga Web Audio-noder och
+verifierar startade signaler; det verifierar inte operativsystemets högtalare.
+Säkerhetstester för signering finns i
 `tests/security/` och körs via `npm test` med Node-villkoret `react-server`.
 Enbart teständringar ska köra kontroller utan att skapa en deployment.

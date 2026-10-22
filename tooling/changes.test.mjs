@@ -20,6 +20,7 @@ test("each runtime input independently requires a web deployment", () => {
     "apps/web/src/app/page.tsx", "apps/web/src/server/claude/prompts/order.txt",
     "apps/web/src/modules/ordering/domain/order.ts", "apps/web/public/menu.png",
     "apps/web/src/app/admin/page.tsx", "apps/web/src/app/admin/admin.css",
+    "apps/web/src/app/admin/bestallningar/page.tsx", "apps/web/src/modules/staff/ui/OrdersAdmin.tsx",
     "apps/web/src/app/api/admin/session/route.ts", "apps/web/src/server/access/session.ts",
     "rules/runtime/administration.txt",
     "rules/runtime/business-hours.txt", "rules/runtime/access.txt", "package-lock.json", "package.json", ".node-version",

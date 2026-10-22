@@ -178,6 +178,35 @@ samma schema är nästa steg. Google behöver därefter separat kontokoppling,
 beslutad synkriktning och hantering av publiceringsfel enligt OPPEN-003.
 Anslutningsvyn visar uttryckligen att dessa integrationer inte är anslutna.
 
+### Beställningar och orderljud
+
+`/admin/bestallningar` visar samma `gulo-order-memory-v1` som kundens Mina
+beställningar. Spara först en demobeställning på kundsidan och öppna admin i
+samma webbläsare/ursprung. Sök på produkt eller referens och filtrera på status
+eller sparandedatum i Stockholm. Hämtningstid och kunduppgifter finns inte ännu.
+Avbokade räknas inte i summeringarna; beloppen är lokala prisögonblicksbilder.
+
+Markera obetald demo som betald, därefter som hämtad, eller avboka en obetald.
+Mottagning och tillagning är separata steg: obekräftad → mottagning bekräftad
+→ tillagas → tillagad. De kan uppdateras för obetalda eller betalda beställningar,
+men inte för avbokade eller hämtade. Samma ändring syns direkt i kundens
+beställning i andra öppna flikar, och finns kvar efter omladdning. Chatten får
+också aktuellt mottagnings-/tillagningsläge. Detta delar inte data mellan enheter.
+Varje ändring kräver granskning, bekräftelse och giltig session. Aktuellt innehåll
+och status jämförs efter sessionskontrollen; ett gammalt förslag avvisas.
+Utkastet i kundens varukorg bevaras. Betald/hämtad demo kan inte kundavbokas,
+vare sig via GUI eller chatt. Inga verkliga betalningar kontrolleras eller görs.
+
+Klicka **Aktivera orderljud** i admin för att låsa upp webbläsarens ljud och höra
+en testsignal. Ljudet följer nya referenser oberoende av listfilter och adminvy,
+även från kundsidan i en annan flik. Historik och statusändringar är tysta.
+Läget överlever interna adminlänkar men behöver aktiveras igen efter omladdning.
+Om ljudkontexten pausas visas det i admin. En ny signal kontrollerar sessionen;
+felaktigt lokalt minne stoppar bevakningen och återläses utan historiklarm.
+Detta är en lokal bevakning, utan Supabase Realtime, serverpollning eller push.
+Stängd webbläsare, sovande enhet eller systemets ljudavstängning ger inga löften
+om hörbar signal. Webbläsarens krav beskrivs i [MDN:s Web Audio-råd](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices).
+
 Sessionens tekniska skydd följer [OWASP:s sessionsråd](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html).
 
 ## Chatt och lokalt minne

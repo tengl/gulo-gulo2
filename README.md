@@ -19,6 +19,13 @@ separat slumpmässig `ADMIN_ACCESS_CODE` (minst 16 tecken) i `apps/web/.env.loca
 och starta om servern. Utan kod är administrationen låst. Tider sparas tills
 vidare endast som lokal förhandsvisning; kundvyn och Google påverkas inte.
 
+`/admin/bestallningar` visar samma lokala demobeställningar som kunden ser.
+Sök, filtrera och granska. Bekräfta mottagning, påbörja tillagning och markera
+som tillagad; samma status uppdateras i kundens beställning. Betald, hämtad
+och avbokad hanteras separat från mottagning och tillagning.
+Aktivera orderljud för en signal när en ny demobeställning sparas, även från
+en annan flik. Inga riktiga betalningar eller utlämningar registreras.
+
 - Börja i [regelregistret](rules/index.txt): beslutade textregler är facit.
   Regler som beslutats finns i `rules/runtime/`; återstående äldre förslag har egen status.
 - [Arkitektur och kodkarta](docs/architecture.md).

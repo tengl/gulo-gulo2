@@ -115,6 +115,11 @@ Administrationen och Google-integrationen är beslutade nya funktioner i
 [business-hours.txt](../rules/runtime/business-hours.txt). `/admin` använder
 serververifierad superadmin-kod enligt BEH-005. `server/access/` signerar och
 validerar sessionscookies, `/api/admin/session` hanterar login och logout.
+`app/admin/AdminScreen.tsx` återkontrollerar sessionen på varje adminsida.
+Beställningsvyn på `/admin/bestallningar` läser samma lokala historik som kunden;
+ordering äger demoövergångarna och staff äger filter, summeringar och ljud.
+Nya referenser upptäcks oberoende av listfilter. Web Audio aktiveras uttryckligen
+av personalen och sessionen kontrolleras igen innan en ankomstsignal spelas.
 Personliga konton, detaljerad behörighetsmatris och Googles synkriktning är öppna.
 
 Tidsmodulen ska hålla öppettider och beställningsfönster för samma dag åtskilda. Varje

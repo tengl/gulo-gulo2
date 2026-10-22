@@ -17,6 +17,9 @@ Läs `rules/runtime/ordering-experience.txt`, `conversation.txt`, `catalog.txt` 
 `/admin` använder serververifierad superadmin-kod. Läs runtime/access.txt och
 administration.txt. Tidsredigeringen är en lokal förhandsvisning. Riktiga ordrar,
 databas, personliga konton, Google-publicering, betalning och röst återstår.
+`/admin/bestallningar` visar lokal demohistorik med bekräftade statusändringar.
+Alla adminsidor kontrollerar sessionen via `app/admin/AdminScreen.tsx`;
+flytta inte åtkomstkontrollen till enbart layouten. Orderljudet ägs av staff.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

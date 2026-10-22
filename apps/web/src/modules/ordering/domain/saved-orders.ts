@@ -10,7 +10,8 @@ import type { Cart, Selection } from "./cart.ts";
 export type SavedOrder = Readonly<{
   reference: string;
   createdAt: string;
-  status: "saved" | "cancelled";
+  status: "saved" | "paid" | "collected" | "cancelled";
+  preparation: "new" | "confirmed" | "preparing" | "prepared";
   cart: Cart;
   pricesOre: readonly number[];
   totalOre: number;
@@ -21,6 +22,116 @@ export type OrderMemory = Readonly<{
 }>;
 export const EMPTY_MEMORY: OrderMemory = { cart: [], orders: [] };
 export const MAX_SAVED_ORDERS = 30;
+export const demoOrderStatusLabels = {
+  saved: "Sparad demo",
+  paid: "Betald · demo",
+  collected: "Hämtad · demo",
+  cancelled: "Avbokad",
+} as const;
+export const demoOrderPreparationLabels = {
+  new: "Inväntar mottagningsbekräftelse",
+  confirmed: "Mottagning bekräftad",
+  preparing: "Tillagas",
+  prepared: "Tillagad",
+} as const;
+
+export function isDemoOrderPreparation(
+  value: unknown,
+): value is SavedOrder["preparation"] {
+  return (
+    typeof value === "string" &&
+    Object.hasOwn(demoOrderPreparationLabels, value)
+  );
+}
+
+export function canChangeDemoOrderPreparation(
+  order: Pick<SavedOrder, "status" | "preparation">,
+  to: SavedOrder["preparation"],
+): boolean {
+  return (
+    order.status !== "cancelled" &&
+    order.status !== "collected" &&
+    ((order.preparation === "new" && to === "confirmed") ||
+      (order.preparation === "confirmed" && to === "preparing") ||
+      (order.preparation === "preparing" && to === "prepared"))
+  );
+}
+
+// ADM-009: preparation and payment are independent; both use the same version check.
+export function changeDemoOrderPreparation(
+  memory: OrderMemory,
+  reference: string,
+  expected: string,
+  preparation: SavedOrder["preparation"],
+): OrderMemory {
+  const order = memory.orders.find((item) => item.reference === reference);
+  if (!order)
+    throw new Error("Beställningen finns inte längre i det lokala minnet.");
+  if (demoOrderFingerprint(order) !== expected)
+    throw new Error(
+      "Beställningen har ändrats. Stäng och granska den aktuella versionen.",
+    );
+  if (!canChangeDemoOrderPreparation(order, preparation))
+    throw new Error(
+      "Den ändringen av mottagning eller tillagning är inte tillåten.",
+    );
+  return {
+    ...memory,
+    orders: memory.orders.map((item) =>
+      item.reference === reference ? { ...item, preparation } : item,
+    ),
+  };
+}
+
+export function isDemoOrderStatus(
+  value: unknown,
+): value is SavedOrder["status"] {
+  return (
+    typeof value === "string" && Object.hasOwn(demoOrderStatusLabels, value)
+  );
+}
+
+export function canCancelDemoOrder(order: Pick<SavedOrder, "status">): boolean {
+  return canCustomerCancel(order.status === "saved" ? "unpaid" : order.status);
+}
+
+export function demoOrderFingerprint(order: SavedOrder): string {
+  return JSON.stringify(order);
+}
+
+// ADM-005/006: local simulation only; real transitions require an authorized server transaction.
+export function canChangeDemoOrderStatus(
+  from: SavedOrder["status"],
+  to: SavedOrder["status"],
+): boolean {
+  return (
+    (from === "saved" && (to === "paid" || to === "cancelled")) ||
+    (from === "paid" && to === "collected")
+  );
+}
+
+export function changeDemoOrderStatus(
+  memory: OrderMemory,
+  reference: string,
+  expected: string,
+  status: SavedOrder["status"],
+): OrderMemory {
+  const order = memory.orders.find((item) => item.reference === reference);
+  if (!order)
+    throw new Error("Beställningen finns inte längre i det lokala minnet.");
+  if (demoOrderFingerprint(order) !== expected)
+    throw new Error(
+      "Beställningen har ändrats. Stäng och granska den aktuella versionen.",
+    );
+  if (!canChangeDemoOrderStatus(order.status, status))
+    throw new Error("Den statusändringen är inte tillåten.");
+  return {
+    ...memory,
+    orders: memory.orders.map((item) =>
+      item.reference === reference ? { ...item, status } : item,
+    ),
+  };
+}
 
 // CHATT-009: reconstruct selections; never trust keys or prices from JSON/model input.
 export function readSelections(
@@ -74,7 +185,7 @@ export function cartFingerprint(cart: Cart): string {
 }
 
 export function describeSavedOrder(order: SavedOrder): string {
-  return describeLines(order.cart, order.pricesOre, order.totalOre);
+  return `${demoOrderStatusLabels[order.status]} · ${demoOrderPreparationLabels[order.preparation]} (lokal demo)\n${describeLines(order.cart, order.pricesOre, order.totalOre)}`;
 }
 
 export function describeCart(cart: Cart): string {
@@ -133,6 +244,7 @@ export function saveDemoOrder(
         reference,
         createdAt,
         status: "saved",
+        preparation: "new",
         cart,
         pricesOre: cart.map((line) =>
           unitPriceOre(line.productId, line.variant),
@@ -157,8 +269,12 @@ export function cancelDemoOrder(
 ): OrderMemory {
   const order = memory.orders.find((item) => item.reference === reference);
   if (!order) throw new Error("Beställningen finns inte i det lokala minnet.");
-  if (!canCustomerCancel(order.status === "saved" ? "unpaid" : "cancelled"))
-    throw new Error("Demobeställningen är redan avbokad.");
+  if (!canCancelDemoOrder(order))
+    throw new Error(
+      order.status === "cancelled"
+        ? "Demobeställningen är redan avbokad."
+        : "Efter betalning kontaktar du personalen. Beställningen kan inte avbokas här.",
+    );
   return {
     ...memory,
     orders: memory.orders.map((item) =>
@@ -189,7 +305,9 @@ export function parseMemory(raw: string | null): OrderMemory {
       typeof order.createdAt !== "string" ||
       order.createdAt.length > 30 ||
       !Number.isFinite(Date.parse(order.createdAt)) ||
-      (order.status !== "saved" && order.status !== "cancelled")
+      !isDemoOrderStatus(order.status) ||
+      (order.preparation !== undefined &&
+        !isDemoOrderPreparation(order.preparation))
     )
       throw new Error("Ogiltig sparad demobeställning.");
     seen.add(order.reference);
@@ -215,6 +333,10 @@ export function parseMemory(raw: string | null): OrderMemory {
       reference: order.reference,
       createdAt: order.createdAt,
       status: order.status,
+      preparation:
+        order.preparation === undefined
+          ? "new"
+          : (order.preparation as SavedOrder["preparation"]),
       cart,
       pricesOre,
       totalOre,

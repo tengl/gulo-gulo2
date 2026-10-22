@@ -14,7 +14,7 @@ const listeners = new Set<() => void>();
 function getSnapshot(): Snapshot {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw !== lastRaw || !snapshot.ready) {
+    if (raw !== lastRaw || !snapshot.ready || snapshot.error) {
       const memory = parseMemory(raw);
       lastRaw = raw;
       snapshot = { memory, ready: true, error: "" };

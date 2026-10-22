@@ -6,9 +6,12 @@ import { useState } from "react";
 import { Icon } from "@/shared/Icon";
 import { HoursAdmin } from "@/modules/business-hours/ui/HoursAdmin";
 import { useHydrated } from "@/shared/useHydrated";
+import { OrdersAdmin } from "./OrdersAdmin";
+import { AdminOrderSound } from "./AdminOrderSound";
 
-export function AdminApp({ today }: { today: string }) {
-  const [view, setView] = useState<"hours" | "connections">("hours");
+export type AdminView = "hours" | "orders" | "connections";
+
+export function AdminApp({ today, view }: { today: string; view: AdminView }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const ready = useHydrated();
@@ -35,20 +38,30 @@ export function AdminApp({ today }: { today: string }) {
         </Link>
         <span className="admin-nav-caption">Din verksamhet</span>
         <nav aria-label="Administration">
-          <button
+          <Link
+            href="/admin/bestallningar"
+            aria-current={view === "orders" ? "page" : undefined}
+            prefetch={false}
+          >
+            <Icon name="bag" />
+            Beställningar
+          </Link>
+          <Link
+            href="/admin"
             aria-current={view === "hours" ? "page" : undefined}
-            onClick={() => setView("hours")}
+            prefetch={false}
           >
             <Icon name="clock" />
             Öppettider
-          </button>
-          <button
+          </Link>
+          <Link
+            href="/admin/anslutningar"
             aria-current={view === "connections" ? "page" : undefined}
-            onClick={() => setView("connections")}
+            prefetch={false}
           >
             <Icon name="menu" />
             Anslutningar
-          </button>
+          </Link>
         </nav>
         <div className="admin-sidebar-bottom">
           <span className="admin-role">● Superadmin</span>
@@ -59,7 +72,14 @@ export function AdminApp({ today }: { today: string }) {
         <header className="admin-topbar">
           <span>
             Gulo Gulo{" "}
-            <span>/ {view === "hours" ? "Öppettider" : "Anslutningar"}</span>
+            <span>
+              /{" "}
+              {view === "hours"
+                ? "Öppettider"
+                : view === "orders"
+                  ? "Beställningar"
+                  : "Anslutningar"}
+            </span>
           </span>
           <Link className="admin-mobile-customer-link" href="/">
             Beställningen ↗
@@ -68,13 +88,16 @@ export function AdminApp({ today }: { today: string }) {
             {busy ? "Loggar ut…" : "Logga ut"}
           </button>
         </header>
+        <AdminOrderSound />
         {error && (
           <p role="alert" className="admin-error">
             {error}
           </p>
         )}
         <main>
-          {view === "hours" ? (
+          {view === "orders" ? (
+            <OrdersAdmin today={today} />
+          ) : view === "hours" ? (
             <HoursAdmin today={today} />
           ) : (
             <>

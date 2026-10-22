@@ -11,9 +11,12 @@ import {
   readCart,
   addSelections,
   cartFingerprint,
+  isDemoOrderStatus,
+  canCancelDemoOrder,
+  isDemoOrderPreparation,
 } from "../../ordering/index.ts";
 import { ordinaryHoursText } from "../../business-hours/index.ts";
-import type { Cart, Selection } from "../../ordering/index.ts";
+import type { Cart, Selection, SavedOrder } from "../../ordering/index.ts";
 import { normalizeText, parseDemoRequest } from "./demo-request.ts";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string };
@@ -32,7 +35,8 @@ export type ChatContext = {
   cart: Cart;
   orders: {
     reference: string;
-    status: "saved" | "cancelled";
+    status: SavedOrder["status"];
+    preparation?: SavedOrder["preparation"];
     summary: string;
   }[];
 };
@@ -123,7 +127,9 @@ export function readChatContext(input: unknown): ChatContext {
       !order ||
       typeof order.reference !== "string" ||
       !/^DEMO-[0-9A-F-]{36}$/.test(order.reference) ||
-      (order.status !== "saved" && order.status !== "cancelled") ||
+      !isDemoOrderStatus(order.status) ||
+      (order.preparation !== undefined &&
+        !isDemoOrderPreparation(order.preparation)) ||
       typeof order.summary !== "string" ||
       order.summary.length > 8000
     )
@@ -131,6 +137,9 @@ export function readChatContext(input: unknown): ChatContext {
     return {
       reference: order.reference,
       status: order.status,
+      ...(order.preparation === undefined
+        ? {}
+        : { preparation: order.preparation as SavedOrder["preparation"] }),
       summary: order.summary,
     };
   });
@@ -171,7 +180,7 @@ export function actionFromTool(
     typeof value.reference === "string" &&
     context.orders.some(
       (order) =>
-        order.reference === value.reference && order.status === "saved",
+        order.reference === value.reference && canCancelDemoOrder(order),
     )
   )
     return { kind: "cancel", reference: value.reference };
@@ -242,6 +251,14 @@ export function limitedReply(context: ChatContext): ChatReply {
     });
   const reference = /^avboka\s+(DEMO-[0-9A-F-]{36})$/i.exec(raw.trim());
   if (reference) {
+    const order = context.orders.find(
+      (item) => item.reference === reference[1]!.toUpperCase(),
+    );
+    if (order && (order.status === "paid" || order.status === "collected"))
+      return reply({
+        text: "Demobeställningen är markerad som betald eller hämtad. Efter betalning kontaktar du personalen för avbokning. Ingen riktig betalning har gjorts i demon.",
+        action: { kind: "orders" },
+      });
     try {
       return {
         ...toolReply(
