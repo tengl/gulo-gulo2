@@ -15,6 +15,10 @@ Repot innehåller en byggbar grundstruktur. Affärsfunktioner och integrationer
 - [Lokal utveckling och deployment](docs/deployment.md).
 - [Instruktioner för agenter](AGENTS.md).
 
+Koden skrivs av AI-agenter. Lokala arbetsinstruktioner finns i `AGENTS.md` nära
+koden och delas av Codex och uppdaterad Claude Code. Regeltexterna finns i
+`rules/`; denna README är en kort ingång, inte en separat instruktionskälla.
+
 Med Node 24 installerat:
 
 ```sh

@@ -27,10 +27,36 @@ tests/e2e/              hela kund- och personalflöden
 evals/                  modellberoende dialog- och verktygsscenarier
 ```
 
-Områdeskatalogerna börjar med en kort ansvarstext. Skapa `domain/`,
+Områdeskatalogerna börjar med en kort ansvarstext i `AGENTS.md`. Skapa `domain/`,
 `application/`, publikt `index.ts` och `ui/` när respektive funktion införs.
 Se [modulinstruktionerna](../apps/web/src/modules/AGENTS.md). Separata paket,
 mikrotjänster och en uppgiftsorkestrerare behövs inte för den här grunden.
+
+Kod och dokumentation är organiserade för agentarbete enligt SYS-013:
+
+- `AGENTS.md` innehåller korta arbetsinstruktioner för sitt underträd och pekar
+  ut relevant regelunderlag. Instruktioner som behövs vid kodändring ligger här.
+- Codex och uppdaterad Claude Code delar dessa `AGENTS.md`-filer. Vi underhåller
+  inga parallella `CLAUDE.md`-kopior eller importfiler för äldre verktygsversioner.
+- Rotens `README.md` är en kort ingång. Längre arkitektur- och driftförklaringar
+  ligger i `docs/` och läses vid behov. Verksamhetsregler hålls samlade i `rules/`.
+
+Codex upptäcker instruktioner längs vägen från projektroten till arbetskatalogen;
+det innebär inte att alla agentfiler längre ned redan finns i kontexten.
+Rotinstruktionen kräver därför läsning längs sökvägen till filerna som ska ändras.
+Claude Code läser också lokala `AGENTS.md` när den arbetar i underkataloger.
+Direkt AGENTS.md-stöd finns från 2.1.277 i standardkonfiguration; använd en
+uppdaterad version. Om en överordnad `CLAUDE.md` eller `CLAUDE.local.md` finns,
+kontrollera att Claudes inställning för Project instructions även läser AGENTS.md.
+Kontrollera inlästa filer med `/context`. Repoändringen ändrar inga personliga
+verktygsinställningar.
+
+Lägg en ny lokal `AGENTS.md` när området behöver egen vägledning. Håll den kort
+och hänvisa till reglerna i stället för att kopiera dem. Instruktionsfilerna är
+undantagna från deploymentklassificeringen.
+
+Laddningsbeteende: [OpenAI Docs om AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
+och [Claude Code om AGENTS.md](https://code.claude.com/docs/en/memory#agentsmd).
 
 ```mermaid
 flowchart LR

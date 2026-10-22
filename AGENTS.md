@@ -4,6 +4,13 @@ Läs [rules/index.txt](rules/index.txt), relevanta regelområden och instruktion
 i berörd katalog. Gällande regeltexter är facit. Den gamla `docs/rules.txt` och
 poster märkta FÖRSLAG är underlag, inte beslutade verksamhetsregler.
 
+Repots kod skrivs av AI-agenter. Läs före ändring varje `AGENTS.md` längs vägen
+från reporoten till den berörda filens katalog, även när sessionen startar i roten.
+Alla underkatalogers instruktioner laddas inte automatiskt vid sessionsstart.
+Codex och uppdaterad Claude Code använder samma `AGENTS.md`-filer. Förvara
+arbetsinstruktioner här eller i rätt underkatalog, utan separata verktygskopior.
+Se SYS-013.
+
 - Karta och beroenderiktning: [docs/architecture.md](docs/architecture.md).
 - Lokal körning och release: [docs/deployment.md](docs/deployment.md).
 - Ett verksamhetsbeslut skrivs först i rätt textfil med stabilt regel-ID och

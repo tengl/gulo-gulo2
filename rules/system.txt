@@ -61,3 +61,12 @@ reproducerbara installationer och samma grundkommandon lokalt och i CI.
 [SYS-012] [GÄLLANDE] När körningsfiler eller nya deployenheter tillkommer ska
 ändringsklassificeringen och dess regressionstester uppdateras i samma ändring.
 Ett okänt Git-intervall ska stoppa flödet med fel, inte behandlas som oförändrat.
+
+[SYS-013] [GÄLLANDE] Repots kod och arbetsinstruktioner optimeras för AI-agenter
+som Codex och Claude Code. Beslutskälla: användarens förtydligande 2026-10-22.
+Gemensamma arbetsinstruktioner finns i korta AGENTS.md-filer nära berörd kod.
+Codex och uppdaterad Claude Code ska läsa samma filer utan parallella kopior
+av arbetsinstruktionerna. Inför arbete läses instruktionerna längs hela katalogvägen till berörda
+filer; förlita dig inte på att alla underkataloger har laddats vid sessionsstart.
+README.md används vid behov för översikt, inte som enda bärare av arbetskrav.
+Verksamhetsreglerna ligger kvar i rules/ och kopieras inte in i agentfilerna.
