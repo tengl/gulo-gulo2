@@ -2,7 +2,10 @@
 
 Beställningsutkast, versionsbundet godkännande, order och betalningsstatus.
 
-Regelunderlag: `rules/proposals/ordering.txt`. Läs status på varje post innan implementation.
+Gällande underlag: `rules/runtime/ordering.txt`, `rules/runtime/conversation.txt`,
+`rules/runtime/ordering-experience.txt` och `rules/runtime/administration.txt`
+(ADM-005–009).
+Återstående förslag: `rules/proposals/ordering.txt`. Läs status före implementation.
 Beslutat mottagningsfönster för samma dag och övergång till förbeställning finns
 i `rules/runtime/business-hours.txt` (OPPEN-011 och OPPEN-013).
 

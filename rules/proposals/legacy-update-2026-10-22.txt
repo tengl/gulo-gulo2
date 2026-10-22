@@ -31,8 +31,9 @@ regressionstester innan de överförs till nya systemet.
 [NY-006] [FÖRSLAG] Aktuell chatttext anger öppet tors–sön 11–15 och tar emot
 sammadagsbeställningar 10:30–14:00. Tidskonstanter och bokningsbara tider i
 lib/menu.ts är inte ändrade samtidigt. Värdena är därför fortsatt underlag,
-inte ett beslut om det nya systemets tider; se OPPEN-reglerna för det beslutade
-beteendet med standardvecka och datumundantag.
+inte ett godkännande av bokningsbara tider eller driftkapacitet. Ordinarie
+demopresentation har därefter godkänts i OPPEN-017; se OPPEN-004–016 för
+standardvecka, datumundantag och de åtskilda tidsbegreppen.
 
 [NY-007] [FÖRSLAG] Nyare verktyg stöder en ungefärlig önskad tid i en förfrågan
 när en tid redan är bokad. Vad personalen kan bekräfta, och hur kapaciteten

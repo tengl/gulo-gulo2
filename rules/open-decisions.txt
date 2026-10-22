@@ -1,9 +1,10 @@
 ÖPPNA VERKSAMHETSBESLUT
 =======================
 
-Status för samtliga poster i denna fil: ÖPPET.
+Status anges per post: ÖPPET eller ersatt genom hänvisat beslut.
 Källa: docs/rules.txt, historiskt underlag från den tidigare implementationen.
-Ingen post har beslutats som verksamhetsregel för det nya systemet.
+Gällande beslut finns i runtime/; återstående historiska motsägelser blir inte
+krav på nya systemet. En öppen post kan vara delvis avgjord; se hänvisningarna.
 Se rules/index.txt för status, företräde och hur en post blir gällande.
 
 ÖPPET BESLUT: motsägelser och ofullständiga regler
@@ -24,7 +25,7 @@ Se rules/index.txt för status, företräde och hur en post blir gällande.
 [OPP-014] [ÖPPET] Telefon och e-post: prompten säger svenska mobilnummer och exakt kopia av e-post, medan koden även accepterar internationella nummer och gör e-post till gemener. Bestäm accepterade telefonformat och hur originalvärde respektive normaliserat värde ska användas.
 [OPP-015] [ÖPPET] Allergianpassning och övertalning: det finns både förbud mot receptändringar, tillåtna surkålsbyten och definierade allergianpassningar. Ange tydlig prioritet och avgör formuleringarna om att kunden ska prova helheten, om "absolut allergisk" och om att lite senap kan vara okej. Dessa ska inte okritiskt föras över som säkerhetsbedömningar från en språkmodell.
 [OPP-016] [ERSATT AV ORD-016] Avgörande 2026-10-22: kunden får avboka före betalning; därefter kontakt med personalen. Ingen automatisk återbetalning utlovas.
-[OPP-017] [ÖPPET] Bekräftelse och betalning: personalens status bekräftad reserverar en tid och skickar betalinfo, samtidigt som kundmejlet säger att beställningen är bekräftad först efter betalning. Definiera vad accepterad, reserverad, bekräftad och betald betyder.
+[OPP-017] [ÖPPET] Bekräftelse och betalning: den äldre förfrågningskodens bekräftelse reserverar en tid och skickar betalinfo, samtidigt som kundmejlet knyter bekräftelsen till betalning. ADM-009 skiljer nu mottagnings-/tillagningsläge från betalning i den lokala admin- och kunddemon. Det avgör inte verklig kapacitetsreservation, accept av förbeställningsförfrågningar eller mejlets betalningsvillkor; dessa delar återstår.
 [OPP-018] [ÖPPET] Reservationer: fem minuter anges för direktbeställning, men ingen motsvarande tidsgräns är definierad för bekräftade obetalda förfrågningar. Bestäm giltighetstid, sen betalning och hur utgångna reservationer ska visas för personalen.
 [OPP-019] [ÖPPET] Lager: tomt eller misslyckat Loka-lageranrop ersätts i nuvarande kod med samtliga standardsmaker. Detta skiljer inte slutsålt från okänt lager. Bestäm hur verkligt lagerslut och driftfel ska presenteras.
 [OPP-020] [ÖPPET] Föråldrade fält: typer och konstanter innehåller fortfarande pretzelbröd, bada_surkal och ett tillägg på 10 kr för båda surkålssorterna, men aktiva verktyg och prisberäkning använder inte detta. Betrakta det inte som erbjudna tillval utan ett nytt uttryckligt beslut.

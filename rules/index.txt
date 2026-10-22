@@ -18,7 +18,9 @@ Verksamhetsreglerna från docs/rules.txt har grupperats utan sakändringar.
 De är fortfarande förslag, även när originaltexten säger "ska" eller "får inte".
 Grupperingen i sig godkänner inga gamla regler. Senare uttryckliga beslut
 finns i runtime/: godkänd demomeny, produkt-/tillverkningsfakta, ny chatt och
-regeln om kundavbokning före betalning. Övriga förslag behåller sin status.
+regeln om kundavbokning före betalning. Administration, orderljud, mottagning
+och tillagning har också beslutats i runtime/administration.txt. Övriga förslag
+behåller sin status.
 Gällande inledande teknik- och arbetsregler finns i system.txt. Nya uttryckliga
 krav på intern administration, skyddade funktioner och Google-öppettider finns
 i runtime/access.txt och runtime/business-hours.txt.
@@ -26,7 +28,7 @@ i runtime/access.txt och runtime/business-hours.txt.
 Filkarta
 system.txt                       SYS  Teknik, arkitektur och arbetssätt
 runtime/access.txt               BEH  Intern administration och behörighet
-runtime/administration.txt       ADM  Första adminversionens omfång
+runtime/administration.txt       ADM  Admin, orderstatus, tillagning och orderljud
 runtime/business-hours.txt       OPPEN  Öppettider i Google och synkronisering
 runtime/ordering-experience.txt  UX  Mobil beställning och första demoversion
 runtime/conversation.txt         CHATT  Chatt, gemensam varukorg och lokalt minne
@@ -44,6 +46,9 @@ proposals/legacy-update-2026-10-22.txt NY  Nyare kod i det äldre repot, ej bind
 open-decisions.txt               OPP  Äldre motsägelser och öppna beslut
 implementation-proposals.txt     FOR  Tidigare tekniska förbättringsförslag
 background.txt                   BAK  Historik och underlagets ursprung
+
+Projektets verifierade implementationsläge och uppskjutet arbete finns i
+docs/project-context.txt. Det är arbetskontext, inte en kompletterande regelfil.
 
 Att ändra en regel
 1. Leta upp relevant område och ID. Skapa inte samma regel på flera ställen.

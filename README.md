@@ -31,6 +31,8 @@ en annan flik. Inga riktiga betalningar eller utlämningar registreras.
 - [Arkitektur och kodkarta](docs/architecture.md).
 - [Lokal utveckling och deployment](docs/deployment.md).
 - [Instruktioner för agenter](AGENTS.md).
+- [Aktuellt projektläge och överlämning](docs/project-context.txt): läses av nya
+  agenter tillsammans med instruktionerna. Swish-arbetet är tills vidare uppskjutet.
 
 Koden skrivs av AI-agenter. Lokala arbetsinstruktioner finns i `AGENTS.md` nära
 koden och delas av Codex och uppdaterad Claude Code. Regeltexterna finns i
@@ -68,5 +70,5 @@ riktig orderlagring i Supabase, betalning och säker orderåtkomst återstår at
 GitHub Actions skiljer kontroller från deployment. App-/driftregeländringar
 kan släppa webben; SQL-migrationer kan släppa databasen. Dokumentation,
 agentinstruktioner, enbart tester och evals skapar inga deployments.
-Miljöer och nycklar behöver kopplas enligt driftinstruktionen innan en release
-kan köras. Inga externa projekt har skapats eller deployats av grundarbetet.
+Miljöer och nycklar konfigureras enligt driftinstruktionen. Repot beskriver
+releaseflödet; faktisk deploymentstatus kontrolleras i GitHub Actions/Vercel.

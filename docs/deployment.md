@@ -21,7 +21,8 @@ utvecklingsserver på port 3000 kan fortsätta köra. Testservern stänger uttry
 av Claude-nyckeln. CI verifierar samma flöden före release.
 
 För serverintegrationer: kopiera `apps/web/.env.example` till
-`apps/web/.env.local` och fyll i den lokala miljöns uppgifter. Använd inte
+`apps/web/.env.local` om filen saknas och fyll i den lokala miljöns uppgifter.
+Bevara befintliga värden om filen redan finns. Använd inte
 produktionsnycklar för lokal utveckling eller preview.
 
 Supabase kräver Docker lokalt:
@@ -103,9 +104,10 @@ npm run changes -- <base-sha> <head-sha>
 | `SUPABASE_PROJECT_REF` | Produktionens Supabase-projekt |
 | `SUPABASE_DB_PASSWORD` | Produktionens databaslösenord |
 
-Grundarbetet skapar konfiguration och instruktioner; dessa externa resurser och
-hemligheter har inte kopplats eller ändrats här. Första pushen kommer därför att
-kunna köra kontroller men releasejobbet kräver att miljöerna är konfigurerade.
+Repot innehåller konfiguration och instruktioner. Det visar inte om externa
+projekt, hemligheter eller releasejobb är aktiverade just nu. Kontrollera faktisk
+konfiguration i GitHub/Vercel separat; en lyckad push betyder inte att releasen
+har lyckats. Releasejobben kräver att motsvarande miljö är konfigurerad.
 
 ## Release och återhämtning
 
@@ -213,12 +215,16 @@ Sessionens tekniska skydd följer [OWASP:s sessionsråd](https://cheatsheetserie
 
 `GET /api/chat` visar om Claude är konfigurerad. `POST /api/chat` validerar
 meddelanden, aktuell varukorg och lokala DEMO-referenser. Verktygen ger enbart
-förslag; kunden godkänner dem i gränssnittet. Servern tar inte emot egna priser,
-betalningsstatusar eller roller i klienthistoriken. Claude felar tydligt utan att
+förslag; kunden godkänner dem i gränssnittet. Priser räknas från katalogen;
+påhittade roller, okända statusar och riktiga orderreferenser avvisas i demohistoriken.
+Betald/hämtad och mottagnings-/tillagningsläge accepteras enbart som obetrodd
+DEMO-kontext enligt ADM-006/009. De är inte verifierade betalningar eller
+behörighetsbevis för riktiga ordrar. Claude felar tydligt utan att
 byta till ett påhittat AI-svar. Tidsgränsen för modellen är 25 sekunder.
 
 `gulo-order-memory-v1` lagrar versionerat demoinnehåll, referenser, prisögonblicks-
-bilder och avbokningsstatus. Inga kontaktuppgifter sparas. Det fungerar på samma
+bilder, betalnings-/avbokningsstatus och mottagnings-/tillagningsläge.
+Allt är lokal demodata. Inga kontaktuppgifter sparas. Det fungerar på samma
 webbläsare och ursprung; annan port, inkognitoläge och rensad lagring har eget minne.
 Mina beställningar kan rensa minnet, med uttrycklig information om att det inte
 avbokar riktiga ordrar. Blockerad/trasig lagring ger fel och inga falska sparbesked.

@@ -41,16 +41,15 @@ Kod och dokumentation är organiserade för agentarbete enligt SYS-013:
   inga parallella `CLAUDE.md`-kopior eller importfiler för äldre verktygsversioner.
 - Rotens `README.md` är en kort ingång. Längre arkitektur- och driftförklaringar
   ligger i `docs/` och läses vid behov. Verksamhetsregler hålls samlade i `rules/`.
+- [Projektkontexten](project-context.txt) är agentens aktuella överlämning.
+  Den skiljer implementerat beteende, kommande integrationer och uppskjutet arbete
+  utan att bli en andra regelkälla. Uppdatera den när projektläget ändras.
 
-Codex upptäcker instruktioner längs vägen från projektroten till arbetskatalogen;
-det innebär inte att alla agentfiler längre ned redan finns i kontexten.
-Rotinstruktionen kräver därför läsning längs sökvägen till filerna som ska ändras.
-Claude Code läser också lokala `AGENTS.md` när den arbetar i underkataloger.
-Direkt AGENTS.md-stöd finns från 2.1.277 i standardkonfiguration; använd en
-uppdaterad version. Om en överordnad `CLAUDE.md` eller `CLAUDE.local.md` finns,
-kontrollera att Claudes inställning för Project instructions även läser AGENTS.md.
-Kontrollera inlästa filer med `/context`. Repoändringen ändrar inga personliga
-verktygsinställningar.
+Arbetsinstruktionen i rotens `AGENTS.md` kräver uttrycklig läsning av projektkontext,
+regelregister och instruktionerna längs sökvägen till filerna som ska ändras.
+Det gäller oavsett vilka filer agentverktyget redan har laddat automatiskt.
+Håll denna rutin gemensam för verktygen i stället för att underhålla separata
+kopior av instruktionerna. Repoändringar ändrar inga personliga verktygsinställningar.
 
 Lägg en ny lokal `AGENTS.md` när området behöver egen vägledning. Håll den kort
 och hänvisa till reglerna i stället för att kopiera dem. Instruktionsfilerna är
@@ -141,6 +140,8 @@ Nyare ändringar i det äldre repot vid 1ef53f5 finns som separat
 [underlag](../rules/proposals/legacy-update-2026-10-22.txt). Produkt- och tillverkningsfakta har därefter godkänts i runtime/catalog.txt.
 Betalnings-, tids- och kapacitetsregler blir inte bindande enbart genom demomenyn.
 
-Nästa funktionella del är serverägt beställningsutkast och säker Supabase-orderlagring.
-Därefter kopplas regler för hämtning, orderregistrering och betalning.
+Gemensam serverlagring är nästa större tekniska beroende för order och tider.
+Det är en arkitekturbedömning; aktuell arbetsprioritering finns i projektkontexten.
+Användaren har tills vidare skjutit upp Swish-arbetet. Ingen betalningsleverantör
+eller bankkonfiguration är beslutad för det nya systemet.
 Kundavbokning före betalning är beslutad i ORD-016; efter betalning kontaktas personalen. Röstanvändning är en senare inmatningsväg till samma beställningsmodell.

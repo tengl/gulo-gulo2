@@ -1,0 +1,175 @@
+PROJEKTKONTEXT FÖR NÄSTA AGENT
+============================
+
+Uppdaterad 2026-10-23. Verifierad funktionsbas: commit 989b4f6.
+Detta är en överlämning av nuläge och arbetsprioritering, inte verksamhetsregler.
+Facit: rules/index.txt, rules/system.txt och berörda rules/runtime/*.txt.
+Verifiera berörd kod och git status; denna fil är ingen garanti om driftsmiljön.
+
+MÅLET OCH ANVÄNDARENS ARBETSSÄTT
+
+Gulo Gulo 2 är en omimplementation av Gulo Gulos tidigare beställningsapp och
+ska bli verksamhetens interna system med ett mobilt kundgränssnitt. Kunden
+beställer via en bekant chatt eller klickbar meny och ska senare kunna prata.
+Kunden ska också kunna fråga om produkter och tillverkning. Personal hanterar
+samma beställning, tider och senare öppettider i Google från administrationen.
+
+Koden skrivs av AI-agenter som Codex och uppdaterad Claude Code. Gemensamma
+AGENTS.md-filer innehåller arbetsinstruktioner; separata verktygskopior behövs
+inte. Läs instruktionerna längs hela sökvägen till filerna du ändrar. Användaren
+ska inte behöva återberätta denna bakgrund vid nästa koduppgift.
+
+Gamla regler är rekommendationer tills de uttryckligen godkänts i nya systemet.
+Behåll status och stabila ID:n; använd aldrig gammal kod för att tyst avgöra ett
+öppet beslut. Meny-/tillverkningsfakta och flera nya användarkrav har därefter
+godkänts i runtime/. Läs där, inte bara i det historiska regeluttaget.
+
+VAD SOM FINNS NU
+
+Appen är en lokal demo med fungerande serververifierad admininloggning och
+valfri Claude-dialog. En DEMO-referens innebär inte en riktig registrerad order.
+
+Adress                       Nuvarande funktion
+/                            Kundens chatt, meny, delad varukorg och Mina beställningar.
+/admin                       Kodskyddad veckovy, standardvecka och datumundantag.
+/admin/bestallningar          Lista, filter, detaljer och bekräftade demostatusändringar.
+/admin/anslutningar           Ärlig status för ej ansluten gemensam lagring och Google.
+/api/chat                    Kontextvalidering, begränsat demoläge eller Claude-adapter.
+/api/admin/session           Serverns login, sessionskontroll och logout.
+
+Kundupplevelsen är avsiktligt genomarbetad för mobil: kompakt huvud som krymper
+när samtalet börjar, järven från loggan som avatar, snabbval under samtalet,
+direktsända färdiga svar, klickbar chattmeny och skrivfält som växer med texten.
+Meny- och chattval använder samma utkast. Se UX- och CHATT-reglerna.
+
+Två olika lagringar ska hållas isär:
+- gulo-order-memory-v1: kundens utkast och sparade demobeställningar. Kund och
+  admin delar samma historik/status i samma webbläsare och ursprung, även över
+  flikar. Status, prisögonblicksbilder och referenser finns kvar efter omladdning.
+  Inga kundnamn, telefonnummer eller e-postadresser samlas in i denna demo.
+- gulo-hours-preview-v1: separat lokal adminförhandsvisning av tider. Den ändrar
+  inte kundens visade demotider eller Google. Den rensar inte kundens varukorg.
+
+Orderns status och preparation är två separata fält i ordering-modulen.
+Läs ADM-005–009 och ORD-016 innan du ändrar flödet. Aktuell kod använder:
+- status: saved (obetald demo), paid, collected, cancelled.
+- preparation: new, confirmed, preparing, prepared.
+Kundens gränssnitt visar mottagnings-/tillagningsändringar direkt över flikar,
+och chatten får aktuellt läge i varje anrop. Äldre sparade poster utan
+preparation läses som new. Adminåtgärder granskas före ändring och jämförs med
+aktuell orderversion efter sessionskontroll. Detta är lokal simulering.
+
+Orderljud bevakar nya referenser oberoende av vy/filter. Personalen aktiverar
+ljudet med ett klick; historik och statusändringar är tysta. Ljudläget överlever
+interna adminlänkar, inte omladdning. Detta är lokal bevakning, inte serverpush.
+Se ADM-008 och staff/ui/order-sound.ts.
+
+Öppettider, mottagningsfönster för sammadagsbeställningar och hämtning är
+utredda begrepp i OPPEN-reglerna. Lägg inte tillbaka gamla bokningsslotar som
+öppettider eller blanda ihop beställningstidpunkten med hämtningstidpunkten.
+Kundens nuvarande tidsrader kommer från business-hours/domain/demo-hours.ts;
+adminförhandsvisningen kommer från domain/schedule.ts och sin separata lagring.
+
+VAD SOM ÅTERSTÅR
+
+Supabase-konfiguration och lokala DB-kommandon finns, men ännu inga ordertabeller,
+migrationer, repository-adaptrar, RLS eller riktig orderregistrering. Appen har
+ingen säker orderåtkomst eller statusuppdatering mellan olika kunders enheter.
+Hur kunden identifieras och återfår åtkomst till riktiga ordrar återstår att
+utforma; lokalt sparade referenser eller kontaktuppgifter är inte i sig behörighet.
+Tillgänglighet, kapacitet, tidsreservationer och förbeställningsförfrågningar är
+inte implementerade. Availability-modulen är endast en ansvarskatalog.
+
+Röst, riktiga betalningar/återbetalningar, personliga personalkonton,
+Google OAuth/publicering och servernotiser/mejl är inte anslutna. Evals finns
+som manuella scenarier, utan automatiserad modellutvärderingskörning.
+Miljövariabler i .env.example är konfigurationsplatser, inte bevis på integration.
+
+SENASTE ARBETSVAL: SWISH ÄR UPPSKJUTET
+
+Användaren sade 2026-10-22: "vi tar det senare" om Swish, och beställde denna
+genomgång för agentöverlämning i stället. Återuppta inte betalningsimplementation
+som en antagen pågående uppgift. Bank, Swish Företag/Handel-avtal, certifikat och
+aktiv driftkonfiguration är okända. Ingen betalningsleverantör har valts här.
+
+Diskussionen skilde på QR/manuell avstämning och automatisk Swish Handel.
+Det var alternativ/råd, inte ett beslut om integration eller nya affärsregler.
+Gamla repot har en Swish Handel-adapter och manual/simulated/swish-lägen, men
+dess README/ursprungliga regler beskriver äldre lägen. Kodstödet visar inte
+vilket avtal som finns eller om produktionens betalningar fungerar.
+Läs NY-002 i rules/proposals/legacy-update-2026-10-22.txt vid återupptagning.
+
+Nästa större tekniska beroende är gemensam serverlagring med kontrollerad
+åtkomst för order och tider. Det är en arkitekturbedömning, inte en ny beställning
+att börja migrera eller deploya. Följ användarens nästa konkreta uppdrag.
+Inför verklig bokning/betalning kvarstår beslut om kapacitet, reservationsfrister,
+sen betalning och avbokning under pågående betalningsförsök. Se open-decisions.txt.
+Google-synkriktning och felhantering är öppna i proposals/business-hours.txt.
+
+KODKARTA FÖR ATT HITTA RÄTT
+
+Alla modulvägar nedan är under apps/web/src/modules/:
+catalog/domain/demo-menu.ts          Produkter och priser i heltalsöre.
+catalog/domain/knowledge.ts          Godkända produkt-/tillverkningsfakta.
+ordering/domain/cart.ts              Det gemensamma beställningsutkastet.
+ordering/domain/saved-orders.ts      Validering, snapshots, demoövergångar/versioner.
+ordering/ui/useOrderMemory.ts        Delad lokal orderlagring och storage-event.
+conversation/domain/chat.ts         Kontext, verktygsvalidering, begränsad fallback.
+conversation/ui/OrderingExperience.tsx Kundvyerna och deras gemensamma tillstånd.
+conversation/ui/Chat.tsx             Meddelanden och aktuellt order-/utkastunderlag.
+staff/ui/OrdersAdmin.tsx             Adminlista och sammansättning av statusändring.
+staff/ui/OrderAdminDetails.tsx       Granskning/bekräftelse av bestämd referens.
+staff/domain/                       Sökning, summeringar och nya referenser.
+business-hours/domain/schedule.ts    Effektiva tider, undantag och veckoberäkning.
+
+Servergränser och övergripande karta:
+apps/web/src/app/admin/AdminScreen.tsx Sessionskontroll på varje adminsida.
+apps/web/src/server/access/session.ts Kodkonfiguration och signerad cookie.
+apps/web/src/server/claude/chat.ts    Modellanrop och driftprompt, inga direkta mutationer.
+docs/architecture.md                 Beroenderiktning och gränser för kommande adaptrar.
+
+KOM IGÅNG OCH VERIFIERA
+
+Från reporoten med Node 24: npm ci, sedan npm run dev (port 3000).
+Grundsidan fungerar utan nycklar. För admin: sätt ADMIN_ACCESS_CODE till en egen
+slumpmässig kod om minst 16 tecken i apps/web/.env.local och starta om servern.
+För fri chatt krävs både ANTHROPIC_API_KEY och ANTHROPIC_MODEL där; ingen modell
+väljs implicit. Bevara en befintlig .env.local, skriv inte över den från mallen.
+Läs inte ut eller kopiera hemliga värden till rapporter, tester eller dokument.
+
+Efter kodändring: npm run check, npm run build och relevanta webbläsarflöden.
+npm run check omfattar regelkontroll, lint, typer och Node-tester inklusive
+tests/security/ med react-server-villkoret. Domäntester ligger intill modulerna.
+npm run test:browser kör Playwright på mobil och dator. Installera Chromium med
+npm exec -- playwright install chromium, eller använd PLAYWRIGHT_CHANNEL=chrome
+om Chrome finns. Testservern använder port 3100, .next-e2e och syntetisk adminkod;
+den stänger av Claude så att inga riktiga modell-/betalningsanrop behövs.
+Behåll användarens utvecklingsserver på port 3000. Genererade next-env.d.ts kan
+växla typsökväg under test/bygge; granska diffen så att tillfällig sökväg inte följer med.
+
+Funktionsbasen 989b4f6 verifierades med check, produktionsbygge och 64
+webbläsartester; detta är historiskt verifieringsunderlag, inte resultat för
+framtida ändringar. SQL-arbete kräver lokal Docker/Supabase och schema-/RLS-tester.
+Ren dokumentation kräver kontroll av hänvisningar/status, inte nytt appbygge.
+
+DEPLOYMENT OCH EXTERNT TILLSTÅND
+
+tooling/changes.mjs skiljer kontroller, webbdeployment och databasmigrationer.
+Dokument, AGENTS.md, enbart tester/evals och icke-runtime-regler deployar inte.
+rules/runtime/*.txt följer appens releaser och kan utlösa webbdeployment.
+apps/web/vercel.json stänger av Vercels direkta Git-deployment; GitHub Actions
+är det avsedda releaseflödet. Produktionsmigrationer går före webb när båda ändras.
+Korrekt konfiguration och hemligheter i GitHub/Vercel måste kontrolleras separat;
+en push eller en fil i repot är inte bevis på en lyckad deployment eller aktiv tjänst.
+Exakta instruktioner: docs/deployment.md. Inga externa konton eller projekt
+behöver skapas för att börja arbeta med kund-/adminprototypen.
+
+ÄLDRE REPO SOM REFERENS
+
+Användarens sökväg är /home/tengl/Code/gulogulo/gulo-gulo/ om den finns på maskinen.
+Behandla det som läsunderlag; ändra det inte som del av arbete i detta repo.
+Senast granskade snapshot: 1ef53f5. Ursprungligt regeluttag: ebd80af.
+Kontrollera aktuell HEAD inför en ny jämförelse. Om sökvägen saknas finns det
+bevarade underlaget i docs/rules.txt och rules/proposals/; grundappen är oberoende
+av tillgång till det gamla repot. Gamla STAFF_KEY-länkar, prompttext och
+Swish-konfiguration är referenser och ska inte kopieras som nya behörighetsbeslut.
