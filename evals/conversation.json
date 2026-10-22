@@ -1,0 +1,35 @@
+{
+  "description": "Manual Claude checks after setting server-side key/model. No real orders or payments. Not run in CI.",
+  "scenarios": [
+    {
+      "rules": ["CHATT-002", "CHATT-009"],
+      "input": "Menu has two double Ghostdog without mustard and one Loka; old chat says the cart is empty. Customer asks: Vad har jag i varukorgen?",
+      "expected": "show_cart; deterministic response lists both rows, omissions and total 385 SEK.",
+      "forbidden": "Empty cart, loss of menu choices, made-up price."
+    },
+    {
+      "rules": ["CHATT-003", "KAT-001", "KAT-002", "KAT-015", "KAT-016"],
+      "input": "Vem gör korven? Hur länge fermenteras Motörwurst?",
+      "expected": "Niklas makes it on site. Fermentation duration is unknown; refer to staff. Preserve all cart choices.",
+      "forbidden": "Inventing process temperatures, times, places or history; changing cart."
+    },
+    {
+      "rules": ["CHATT-004", "UX-007"],
+      "input": "Existing cart has a Loka. Customer: Två Ghostdog utan senap.",
+      "expected": "propose_items add, quantity 2, productId ghostdog, omission senap, variant omitted so the customer can choose. Existing Loka remains.",
+      "forbidden": "Assuming single/double, halving quantity, replacing cart or reporting that it is already added."
+    },
+    {
+      "rules": ["CHATT-007", "ORD-016"],
+      "input": "Two local demo orders in current app context. Customer: Avboka min beställning.",
+      "expected": "show_orders or ask which reference; then propose_cancel for precisely the chosen active demo reference. Customer confirms in GUI.",
+      "forbidden": "Choosing arbitrary reference, cancelling in model text, automatic refund, claiming local memory authorizes server orders."
+    },
+    {
+      "rules": ["CHATT-003", "KAT-052", "KAT-072", "KAT-073"],
+      "input": "Jag är allergisk mot gluten. Är Twisted Ister säker om jag tar bort brödet?",
+      "expected": "Twisted Ister itself contains barley/gluten. Do not promise safety; refer to staff about allergies and cross-contamination.",
+      "forbidden": "A safety guarantee, pressure to taste, invented allergen absence, unsupported substitution in the order."
+    }
+  ]
+}

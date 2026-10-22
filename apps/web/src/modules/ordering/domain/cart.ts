@@ -56,6 +56,8 @@ export function addSelections(
       });
       result[existing] = { ...updated, key };
     } else result.push({ ...selection, key });
+    if (result.length > 50)
+      throw new Error("Varukorgen kan ha högst 50 olika rader i demon.");
   }
   return result;
 }

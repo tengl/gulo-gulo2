@@ -4,6 +4,10 @@ test("UX-003/006/007/009: build, edit and review an order through the menu", asy
   page,
 }, testInfo) => {
   await page.goto("/");
+  await page
+    .getByRole("navigation", { name: "Beställningssätt" })
+    .getByRole("button", { name: "Välj från menyn", exact: true })
+    .click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Bra korv.",
   );
@@ -77,22 +81,20 @@ test("UX-003/006/007/009: build, edit and review an order through the menu", asy
   await expect(review).not.toBeVisible();
 });
 
-test("UX-008: reject partially understood text and require review of missing variant", async ({
+test("UX-008 / CHATT-001: safe text proposals and conversation survive view switches", async ({
   page,
 }) => {
   await page.goto("/");
-  await page
-    .getByRole("navigation", { name: "Beställningssätt" })
-    .getByRole("button", { name: "Skriv din beställning", exact: true })
-    .click();
-  const input = page.getByRole("textbox", { name: "Din beställning i text" });
+  const input = page.getByRole("textbox", {
+    name: "Meddelande till Gulo Gulo",
+  });
+  const send = page.getByRole("button", {
+    name: "Skicka meddelande",
+    exact: true,
+  });
   await input.fill("två ghostdog och en pizza");
-  await page
-    .getByRole("button", { name: "Visa mitt förslag", exact: true })
-    .click();
-  await expect(
-    page.getByText(/Jag kunde inte tolka hela texten/),
-  ).toBeVisible();
+  await send.click();
+  await expect(page.getByRole("log")).toContainText("Inget har ändrats");
   await expect(
     page.getByRole("button", {
       name: "Visa beställning, 0 varor",
@@ -100,34 +102,34 @@ test("UX-008: reject partially understood text and require review of missing var
     }),
   ).toBeVisible();
   await input.fill("två Ghostdog utan senap och en Loka");
-  await page
-    .getByRole("button", { name: "Visa mitt förslag", exact: true })
-    .click();
+  await send.click();
   const add = page.getByRole("button", {
     name: "Lägg till dessa val",
     exact: true,
   });
   await expect(add).toBeDisabled();
+  await input.fill("Min nästa fråga");
   await page
+    .getByRole("navigation")
     .getByRole("button", { name: "Välj från menyn", exact: true })
     .click();
   await page
-    .getByRole("navigation", { name: "Beställningssätt" })
-    .getByRole("button", { name: "Skriv din beställning", exact: true })
+    .getByRole("navigation")
+    .getByRole("button", { name: "Chatta med oss", exact: true })
     .click();
-  await expect(input).toHaveValue("två Ghostdog utan senap och en Loka");
+  await expect(input).toHaveValue("Min nästa fråga");
   await expect(add).toBeDisabled();
   await page
     .getByRole("combobox", { name: "Variant för GHOSTDOG", exact: true })
     .selectOption("double");
   await add.click();
-  await expect(
-    page.getByText("Dina val är tillagda.", { exact: false }),
-  ).toBeVisible();
+  await expect(page.getByRole("log")).toContainText("Varukorgen är uppdaterad");
   await page
     .getByRole("button", { name: "Visa beställning, 3 varor", exact: true })
     .click();
-  await expect(page.getByRole("complementary")).toContainText(/385\s*kr/);
+  await expect(
+    page.getByRole("complementary", { name: "Beställningsöversikt" }),
+  ).toContainText(/385\s*kr/);
 });
 
 test("UX-010: narrow viewports and keyboard dismissal", async ({ page }) => {
@@ -138,6 +140,10 @@ test("UX-010: narrow viewports and keyboard dismissal", async ({ page }) => {
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
+  await page
+    .getByRole("navigation")
+    .getByRole("button", { name: "Välj från menyn", exact: true })
+    .click();
   const choose = page.getByRole("button", {
     name: "Välj GRILLOST",
     exact: true,

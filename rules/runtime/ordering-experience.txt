@@ -22,8 +22,10 @@ Det omfattar nio wraps, drycker och dubbelwrapstillägg på 45 kr. Detta gör in
 de gamla verksamhetsreglerna i rules/proposals/ bindande för den framtida driften.
 
 [UX-005] [GÄLLANDE] Demon ska tydligt ange att ingen riktig beställning skickas.
-Den får inte registrera en order, debitera pengar, reservera kapacitet eller
-visa påhittade lediga tider. Granskning av utkastet är slutpunkten i denna version.
+Den får inte registrera en riktig order, debitera pengar, reservera kapacitet eller
+visa påhittade lediga tider. Kunden kan efter granskning spara en uttrycklig
+demobeställning lokalt och prova historik och avbokning enligt CHATT-005–007.
+Uppdaterad 2026-10-22 genom användarens uppdrag om chatt och sparade beställningar.
 
 [UX-006] [GÄLLANDE] Priser ska beräknas deterministiskt från katalogen, i heltalsöre.
 Modelltext, textinmatning och UI får inte bestämma egna styckpriser.
@@ -33,11 +35,12 @@ Antal ska vara positiva heltal. Demon har en teknisk gräns på 99 per unik rad.
 Samma produkt med samma variant och bortval kan slås ihop; olika val ska bevaras
 som skilda rader. Bortval av standardtillbehör ändrar inte demopriset.
 
-[UX-008] [GÄLLANDE] Den nyckelfria textfunktionen får bara tolka tydliga enkla
-produktval, mängder, enkel/dubbel och stödda bortval. Alla förslag ska granskas
-och saknad variant väljas innan de läggs till. Vid oklar eller delvis okänd text
-ska hela inmatningen lämnas utan ändring av utkastet. Funktionen får inte
-presenteras som en fri AI-chatt eller ge intryck av att röst redan fungerar.
+[UX-008] [GÄLLANDE] Chatten använder Claude för fri dialog när integrationen är
+konfigurerad. Utan Claude finns ett tydligt märkt begränsat demoläge för enkla
+produktval, meny, varukorg och faktasvar. Alla ändringsförslag ska granskas och
+saknad variant väljas innan de genomförs. Oklar eller delvis okänd text ska inte
+ändra utkastet. Röst visas först när den fungerar. Se CHATT-001–009.
+Uppdaterad 2026-10-22 genom användarens uppdrag om en ChatGPT-liknande chatt.
 
 [UX-009] [GÄLLANDE] Kunden ska kunna ändra antal, ta bort rader och granska
 produkter, antal, variant, bortval, radpris och total innan någon senare

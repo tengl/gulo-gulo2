@@ -48,3 +48,22 @@ Detaljer om framförhållning och bokningsbara kapacitetstider är separata frå
 [OPPEN-015] [GÄLLANDE] Google-publiceringen gäller öppettiderna. Appens fönster
 för att ta emot sammadagsbeställningar är ett eget begrepp och ska inte publiceras
 som verksamhetens öppettider i Google.
+
+[OPPEN-016] [GÄLLANDE] Öppettider visas kompakt i det gemensamma sidhuvudet.
+Fönstret för att lägga beställning för samma dag visas i själva chatt- och
+menyvyn när de öppnas, tillsammans med förklaringen om förbeställning utanför
+fönstret. Beställningsfönstret ska inte visas i det gemensamma sidhuvudet.
+På mobil ska huvudet ta liten plats och krympa ytterligare när kunden skickat
+sitt första chattmeddelande. Introduktion och beställningstider får då döljas
+för att ge samtalet mer utrymme; meny, varukorg och historik ska förbli nåbara.
+Visa samma tidsunderlag i båda beställningsvyerna. Beslutskälla: användarens
+uttryckliga tillägg och revideringar 2026-10-22.
+
+[OPPEN-017] [GÄLLANDE] Den nuvarande demon visar ordinarie tider från gamla
+appens gränssnitt vid 1ef53f5: öppet torsdag–söndag 11:00–15:00; mottagning av
+sammadagsbeställningar torsdag–söndag 10:30–14:00. Källa: användarens uppdrag
+2026-10-22 om samma regler som gamla appen och synliga tider. Det är en
+demopresentation av standardtider, utan besked om faktisk dagskapacitet,
+datumundantag eller bokningsbara tider. Detta implementerar inte administration,
+Google-synk eller exakt tidsgränskontroll för riktig orderregistrering (OPP-001).
+Vid drift ska redigerbara scheman och datumundantag enligt OPPEN-004–010 användas.

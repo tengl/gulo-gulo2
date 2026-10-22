@@ -22,6 +22,7 @@ export default defineConfig({
   webServer: {
     command:
       "npm run dev --workspace @gulo/web -- --hostname 127.0.0.1 --port 3100",
+    env: { ANTHROPIC_API_KEY: "", ANTHROPIC_MODEL: "", GULO_BROWSER_TEST: "1" },
     url: "http://127.0.0.1:3100",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

@@ -16,8 +16,9 @@ Status
 Utgångsläge
 Verksamhetsreglerna från docs/rules.txt har grupperats utan sakändringar.
 De är fortfarande förslag, även när originaltexten säger "ska" eller "får inte".
-Ingen prislista, faktisk öppettid, allergiformulering, ordergräns eller betalningsregel
-från det gamla systemet har därigenom godkänts för det nya systemet.
+Grupperingen i sig godkänner inga gamla regler. Senare uttryckliga beslut
+finns i runtime/: godkänd demomeny, produkt-/tillverkningsfakta, ny chatt och
+regeln om kundavbokning före betalning. Övriga förslag behåller sin status.
 Gällande inledande teknik- och arbetsregler finns i system.txt. Nya uttryckliga
 krav på intern administration, skyddade funktioner och Google-öppettider finns
 i runtime/access.txt och runtime/business-hours.txt.
@@ -27,6 +28,9 @@ system.txt                       SYS  Teknik, arkitektur och arbetssätt
 runtime/access.txt               BEH  Intern administration och behörighet
 runtime/business-hours.txt       OPPEN  Öppettider i Google och synkronisering
 runtime/ordering-experience.txt  UX  Mobil beställning och första demoversion
+runtime/conversation.txt         CHATT  Chatt, gemensam varukorg och lokalt minne
+runtime/catalog.txt              KAT  Godkända produkt- och tillverkningsfakta
+runtime/ordering.txt             ORD  Beslutad kundavbokning före betalning
 proposals/catalog.txt            KAT  Förslag: verksamhetsfakta, meny, innehåll
 proposals/conversation.txt       DIA  Förslag: ton, dialog, text, röst, knappar
 proposals/ordering.txt           ORD  Förslag: beställning, godkännande, betalning

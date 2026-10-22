@@ -1,0 +1,94 @@
+CHATT, GEMENSAM VARUKORG OCH MINA BESTÄLLNINGAR
+============================================
+
+Status: GÄLLANDE för den provbara appen.
+Beslutskälla: användarens uppdrag 2026-10-22 om chatt som i tidigare app,
+produkt- och tillverkningsfrågor, gemensamma val, minne och avbokning.
+Riktig orderregistrering, betalning och kapacitet ingår ännu inte i demon.
+
+[CHATT-001] [GÄLLANDE] Chatten ska ha en bekant meddelandevy, kvarvarande
+samtalshistorik när kunden byter vy, skrivfält och skicka-knapp. Kunden ska kunna
+växla mellan meny, chatt, varukorg och sina sparade beställningar.
+Assistentens avatar använder järven från Gulo Gulos logga, även vid skrivindikering
+(uttryckligt användarönskemål 2026-10-22).
+
+[CHATT-002] [GÄLLANDE] Samma strukturerade varukorg används överallt. Chatten
+ska vid varje fråga få aktuella val även från menyn. Frågor om varukorgen ska
+visa alla rader med antal, variant, bortval och deterministiskt beräknat pris.
+Tidigare meddelanden får inte ersätta det aktuella tillståndet.
+
+[CHATT-003] [GÄLLANDE] De gamla sakreglerna om produktfakta och tillverkning
+gäller för chatten. Godkänt underlag finns i runtime/catalog.txt. Svara på svenska,
+kort och naturligt, fråga vid oklarheter och bevara kända val. Hitta inte på
+ingredienser, tillverkningsmetoder, lager, tider eller företagsberättelser.
+Om uppgifter saknas, säg det och hänvisa till personalen. Ge inga individuella
+allergisäkerhetslöften; ingrediensinformation är inte en säkerhetsbedömning.
+
+[CHATT-004] [GÄLLANDE] Claude får föreslå validerade ändringar, öppna granskning,
+visa historik och föreslå avbokning. Modellsvar får aldrig själva registrera,
+betala eller avboka en order. Kunden bekräftar en konkret ändring i gränssnittet.
+Ett förslag som bygger på en ändrad varukorg får inte tillämpas på den nya
+versionen. Modellens produkt-ID:n, antal, varianter och bortval valideras i kod.
+
+[CHATT-005] [GÄLLANDE] Efter granskning kan en demobeställning sparas med en
+unik DEMO-referens och en oföränderlig kopia av rader och priser. Historiken
+ska överleva omladdning på samma enhet. Spara referenser och demoinnehåll i
+localStorage; samla inte in e-post eller telefon enbart för detta minne.
+Det är inte inloggning eller bevis på ägarskap till en riktig serverorder.
+Riktiga ordrar ska senare hämtas med serverkontrollerad behörighet och status.
+
+[CHATT-006] [GÄLLANDE] Mina beställningar ska visa referens, innehåll, total,
+skapandetid och status, tydligt märkt som lokala demobeställningar. Kunden kan
+ta bort det lokala minnet. Säg uttryckligen att borttagning av minnet inte är
+en avbokning. Vid trasig eller blockerad lagring ska appen ge begriplig återkoppling
+och får inte påstå att en beställning har sparats.
+
+[CHATT-007] [GÄLLANDE] Avbokning ska kunna påbörjas i både chatt och GUI och
+avse en bestämd referens. Visa den valda beställningen och begär bekräftelse före
+ändring. Demobeställningar kan avbokas; samma delade status ska synas i båda vyer.
+Betalda/hämtade riktiga ordrar eller återbetalningar får inte simuleras. Den gamla
+appens förbud mot kundavbokning av lagd order och nya önskemålet om avbokning
+har avgjorts i ORD-016: kunden får avboka före betalning; efter betalning
+ska kunden kontakta personalen. Ingen automatisk återbetalning utlovas.
+
+[CHATT-008] [GÄLLANDE] Claude körs endast på servern. Nyckel och modell anges
+via miljökonfiguration. Ingen nyckel krävs för meny eller lokalt demoläge.
+Visa tydligt när fri AI-dialog är avstängd. Vid nätverksfel ska meddelandet kunna
+försökas igen utan att varukorgen eller sparade beställningar ändras.
+
+[CHATT-009] [GÄLLANDE] Klienthistorik, lokala referenser och modellverktyg är
+obetrodda indata. Begränsa storlek, antal och tillåtna fält. Pris beräknas från
+katalogen och verklig orderstatus måste senare hämtas från servern. Skicka inte
+e-post, telefon eller påstådda betalningsstatusar som behörighetsbevis till Claude.
+
+[CHATT-010] [GÄLLANDE] Ett klick på ett färdigt chattmeddelande eller svar ska
+skicka det direkt till chatten. Kunden ska inte behöva skicka en gång till från
+skrivfältet. Egen påbörjad text ska bevaras när en förslagsknapp används.
+Granskningskraven för varukorgsändringar, sparande och avbokning gäller fortsatt
+enligt CHATT-004–007. Beslutskälla: användarens uttryckliga tillägg 2026-10-22.
+
+[CHATT-011] [GÄLLANDE] Snabbval ska finnas kvar under hela samtalet, även
+efter svar och vid fel. Meny ska alltid erbjudas; visa varukorg och granskning
+när varukorgen har innehåll, och sparade beställningar när sådana finns.
+Snabbval anpassas till aktuella gemensamma data och skickar färdiga meddelanden
+direkt enligt CHATT-010. Under pågående svar får de vara tillfälligt inaktiva.
+Beslutskälla: användarens uttryckliga tillägg 2026-10-22.
+
+[CHATT-012] [GÄLLANDE] När chatten visar menyn ska produktvalen vara klickbara
+inne i samtalet, som i den äldre appen. Klick skickar produktvalet direkt och
+behåller kunden i chatten. Antal, variant, bortval och godkännande följer samma
+flöde som ett skrivet produktval. Meny och priser hämtas från katalogen; ingen
+prislista ska tolkas ur fri modelltext. Beslutskälla: användarens tillägg 2026-10-22.
+
+[CHATT-013] [GÄLLANDE] Skrivfältet visas som en rad utan fokus. Med fokus ska
+minst två rader synas och fältet växa vidare när texten blir längre. Begränsa
+höjden så att samtal och snabbval får plats; längre text får rullas inom fältet.
+Texten ska bevaras när fältet krymper. Beslutskälla: användarens uttryckliga
+önskemål och förtydligande 2026-10-22.
+
+Tekniska demogränser för CHATT-005/009: högst 50 unika rader i ett utkast,
+30 lokala demobeställningar och 300 000 tecken i det serialiserade lokala minnet.
+Sparande måste klara samma validering som återläsning. Chatt-API tar högst
+128 000 byte per anrop, 30 meddelanden, 600 tecken i senaste kundmeddelandet
+samt 4 000 tecken per historiskt meddelande. Begränsningarna är inte kapacitets-
+eller orderstorleksregler för framtida drift.

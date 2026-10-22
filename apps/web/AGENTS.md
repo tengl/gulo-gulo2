@@ -11,9 +11,10 @@ Läs `rules/system.txt` SYS-003–007 och regelområdet som berörs av ändringe
   privilegierade integrationer. Klientkomponenter får bara använda säkra DTO:er
   och uttryckligt klientgränssnitt. Validera all data vid servergränsen.
 
-Startsidan är en mobil demoupplevelse för menyval, enkel textinmatning och
-granskning av ett lokalt utkast. Se `rules/runtime/ordering-experience.txt`.
-Riktiga ordrar, datamodell, autentisering, Claude och röst återstår att implementera.
+Startsidan kombinerar chatt, meny, gemensam varukorg och lokal demohistorik.
+Läs `rules/runtime/ordering-experience.txt`, `conversation.txt`, `catalog.txt` och
+`ordering.txt`. Claude ansluts via `/api/chat` när nyckel och modell är satta.
+Riktiga ordrar, databas, autentisering, betalning och röst är ännu inte anslutna.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -1,0 +1,158 @@
+GODKÄNDA PRODUKT- OCH TILLVERKNINGSFAKTA
+=======================================
+
+Status: GÄLLANDE som faktaunderlag för chatt och demokatalog.
+Beslutskälla: användarens uppdrag 2026-10-22: samma regler som gamla appen
+för produkt- och tillverkningsfrågor. Källa: äldre lib/prompt_base.ts och
+lib/menytext.ts vid 1ef53f5, tidigare grupperat i proposals/catalog.txt.
+Detta ansluter inte betalning, lager eller riktiga beställningar. Individuell
+allergisäkerhet kan inte avgöras av modellen; se CHATT-003. Övriga beteendeval
+finns fortfarande som förslag.
+
+[KAT-001] [GÄLLANDE] Gulo Gulo är ett hantverkscharkuteri som blivit en butik med grillkiosk, Gulo Gulo Deli, där korvarna görs av Niklas på plats.
+
+[KAT-002] [GÄLLANDE] Niklas är grundare av Gulo Gulo Charcuterie, som startade i juni 2019, och gör all korv själv på Gulo Gulo Deli.
+
+[KAT-003] [GÄLLANDE] Gulo Gulo Deli grundades i april 2025 och beskrivs som en butik med grillkiosk. Charcuteriet är underleverantör till delin.
+
+[KAT-004] [GÄLLANDE] Besöksadressen i underlaget är Stavsätter Järvsövägen 5, Rastplats Ljusdal vid Älvbron i Ljusdal, längs stranden till Ljusnan.
+
+[KAT-005] [GÄLLANDE] Besökare som närmar sig platsen ska följa skyltningen mot "Gatukök".
+
+[KAT-006] [GÄLLANDE] Butiken säljer även Loos-senap, lyxiga Ljusdalstillverkade skärbrädor och Gulo Gulo-kepsar. Inga priser för dessa finns angivna i underlaget.
+
+[KAT-007] [GÄLLANDE] Hitta inte på fler årtal, personer, tillverkningsuppgifter, företagsberättelser eller uppgifter om butiken.
+
+[KAT-008] [GÄLLANDE] Förklara inte vad företagsnamnet Gulo Gulo betyder; det ingår inte i underlaget.
+
+[KAT-009] [GÄLLANDE] Alla belopp nedan anges i kronor. Underlaget anger inga särskilda regler för momsuppdelning, rabatter, kampanjer eller leveransavgifter; hitta inte på sådana.
+
+[KAT-010] [GÄLLANDE] Alla standardwraps innehåller lokalbakat mjukt tunnbröd, picklad gurka, picklad rödlök, rostad lök och Loos-senap, utöver korven eller grillosten och den angivna surkålen/dressingen.
+
+[KAT-011] [GÄLLANDE] 1. SPÄCK SABBATH kostar 115 kr. Korv på gris, grillkorv med lite mer kryddning och tydlig vitpeppar. Serveras med surkålsröra.
+
+[KAT-012] [GÄLLANDE] 2. FÄN HÄJLEN kostar 120 kr. Korv på gris, mild men smakrik, med dominerande rostat fänkålsfrö och lite vitt vin. Beskrivs som en italiensk variant. Serveras med stekt surkål och dijondressing.
+
+[KAT-013] [GÄLLANDE] 3. GIN LIZZY kostar 120 kr. Korv på gris med tydlig enbär, citronzest och lätt gin, en frisk och aromatisk gin och tonic-känsla. Serveras med surkålsröra.
+
+[KAT-014] [GÄLLANDE] 4. CHEEZY TOP kostar 130 kr. Korv på gris med Västerbottensost och kummin, djup och umamirik men inte het. Serveras med stekt surkål och dijondressing.
+
+[KAT-015] [GÄLLANDE] 5. MOTÖRWURST kostar 130 kr. Fermenterad korv på gris med frisk syra, tydlig persilja, vitlök och kryddpeppar/muskot i bakgrunden. En tysk variant med recept som bygger på Nürnberger. Serveras med surkålsröra.
+
+[KAT-016] [GÄLLANDE] MOTÖRWURST är torrare i köttet och konsistensen än rå färskkorv eftersom den tappar vätska vid fermentering. Skriv inte att den smakar torrt.
+
+[KAT-017] [GÄLLANDE] 6. TWISTED ISTER kostar 135 kr. SM Gulds-isterband på gris, nöt och korngryn, fermenterat och kallrökt, lagom syrligt och mustigt med tydlig ingefära och rödbeta. Serveras med surkålsröra med tärnade rödbetor.
+
+[KAT-018] [GÄLLANDE] TWISTED ISTER innehåller rödbeta både i korven och i surkålsröran. Beskriv den inte som "lätt rökig".
+
+[KAT-019] [GÄLLANDE] 7. GHOSTDOG kostar 135 kr. Fermenterad och kallrökt korv på gris med färsk chili, ghost chili-pepparsås och rött vin, mörk av aktivt kol. Serveras med stekt surkål och dijondressing.
+
+[KAT-020] [GÄLLANDE] GHOSTDOG är den starkaste korven på menyn. Små chilibitar kan förstärka en enskild tugga.
+
+[KAT-021] [GÄLLANDE] 8. GRILLOST (vegetarisk) kostar 135 kr. Innehåller grillost av komjölk och serveras med stekt surkål och dijondressing. Är vegetarisk men inte vegansk.
+
+[KAT-022] [GÄLLANDE] 9. BRÖL kostar 145 kr. Korv på älg och gris med rött vin. Serveras med stekt surkål och dijondressing. Hitta inte på fler smakbeskrivningar.
+
+[KAT-023] [GÄLLANDE] Menyn ska visas i nummerordning 1 till 9 och alltid inkludera GRILLOST och BRÖL.
+
+[KAT-026] [GÄLLANDE] En enkel wrap innehåller en korv eller en portion grillost. En dubbelwrap innehåller två av samma sort i samma tunnbröd.
+
+[KAT-027] [GÄLLANDE] Dubbelwrap kostar enkelpriset plus 45 kr, även för GRILLOST.
+
+[KAT-028] [GÄLLANDE] Två olika korvsorter får inte blandas i samma wrap. Erbjud separata wraps om kunden vill ha olika sorter.
+
+[KAT-029] [GÄLLANDE] Föreslå inte att flera separat beställda sorter ska läggas i samma wrap. "En Ghostdog och en Cheezy Top" betyder två separata produkter.
+
+[KAT-030] [GÄLLANDE] Fråga om enkel eller dubbel när kunden inte har angett detta. Tolka inte flera beställda korvar som dubbelwrap utan stöd i kundens val.
+
+[KAT-031] [GÄLLANDE] "N wraps med två korvar" betyder N dubbelwraps, alltså N bröd och 2 gånger N korvar. Halvera inte kundens antal.
+
+[KAT-032] [GÄLLANDE] Om det är oklart om kunden menar exempelvis åtta dubbelwraps eller fyra dubbelwraps med totalt åtta korvar, fråga vilket som avses.
+
+[KAT-033] [GÄLLANDE] Allt serveras i mjukt tunnbröd. Erbjud inte korvbröd, hotdogbröd eller pretzelbröd och ställ inte en allmän fråga om val av bröd.
+
+[KAT-052] [GÄLLANDE] Använd bara de allergenuppgifter som finns i verksamhetens underlag. Gissa inte om andra ingredienser eller om en produkt är säker för en viss kund.
+
+[KAT-053] [GÄLLANDE] Använd ordet "allergener" i information om innehåll. Den befintliga instruktionen använder samtidigt ordet "allergi" i frågor om kundens behov.
+
+[KAT-054] [GÄLLANDE] Om kunden frågar allmänt om allergener eller innehåll utan att ange en särskild allergi ska hela översikten ges i samma svar och avslutas med en fråga om kunden har någon särskild allergi.
+
+[KAT-055] [GÄLLANDE] Standardtunnbröd och rostad lök innehåller gluten. Loos-senap innehåller senap.
+
+[KAT-056] [GÄLLANDE] Korvarna anges innehålla svenskt griskött. BRÖL innehåller älgkött och grisspäck. TWISTED ISTER innehåller även nöt och korngryn.
+
+[KAT-057] [GÄLLANDE] Surkålsröra består av surkål, majonnäs, senap och svartpeppar. Den innehåller ägg och senap.
+
+[KAT-058] [GÄLLANDE] Stekt surkål består av surkål, honung och svartpeppar. Underlaget anger inga av de vanliga allergenerna i denna blandning.
+
+[KAT-059] [GÄLLANDE] Dijondressing består av crème fraiche, majonnäs, dijonsenap, honung, ingefärspulver, äppelcidervinäger, svartpeppar och salt. Den innehåller mjölk, ägg och senap.
+
+[KAT-060] [GÄLLANDE] SPÄCK SABBATH har, utöver gemensamma tillbehör, ägg och senap genom surkålsröran.
+
+[KAT-061] [GÄLLANDE] FÄN HÄJLEN har sulfiter genom vitt vin samt mjölk, ägg och senap genom dijondressingen.
+
+[KAT-062] [GÄLLANDE] GIN LIZZY har ägg och senap genom surkålsröran.
+
+[KAT-063] [GÄLLANDE] CHEEZY TOP har mjölk genom Västerbottensost och dijondressing samt ägg och senap genom dijondressingen.
+
+[KAT-064] [GÄLLANDE] MOTÖRWURST har ägg och senap genom surkålsröran.
+
+[KAT-065] [GÄLLANDE] TWISTED ISTER har gluten genom korngryn samt ägg och senap genom surkålsröran.
+
+[KAT-066] [GÄLLANDE] GHOSTDOG har sulfiter genom rött vin samt mjölk, ägg och senap genom dijondressingen.
+
+[KAT-067] [GÄLLANDE] GRILLOST har mjölk genom grillost och dijondressing samt ägg och senap genom dijondressingen.
+
+[KAT-068] [GÄLLANDE] BRÖL har sulfiter genom rött vin samt mjölk, ägg och senap genom dijondressingen.
+
+[KAT-069] [GÄLLANDE] Påståendet i prompten att "övriga korvar innehåller inga allergener" får inte förväxlas med en uppgift om hela wrapen, vars bröd och tillbehör har egna allergener.
+
+[KAT-070] [GÄLLANDE] Vid senapsallergi beskriver underlaget alternativet stekt surkål utan dressing och utan Loos-senap, även för sorter som normalt har surkålsröra.
+
+[KAT-071] [GÄLLANDE] Vid ägg- eller mjölkallergi beskriver underlaget stekt surkål utan dressing som alternativ till surkålsröra och dijondressing. Mjölk finns fortfarande i själva CHEEZY TOP och GRILLOST.
+
+[KAT-072] [GÄLLANDE] Glutenfritt tunnbröd innebär att rostad lök ska utgå. TWISTED ISTER kan inte göras glutenfri eftersom själva korven innehåller korngryn.
+
+[KAT-073] [GÄLLANDE] Uppgifter om andra allergener, andra tillbehörs innehåll och eventuell korskontamination saknas; hänvisa till personalen.
+
+[KAT-079] [GÄLLANDE] GIN LIZZY innehåller en mycket liten mängd gin. Rekommendera den inte när det framgår att beställningen är till ett barn.
+
+[KAT-080] [GÄLLANDE] Om kunden ändå väljer GIN LIZZY till ett barn ska assistenten kort nämna att den innehåller lite gin och låta kunden välja. Ange ingen alkoholhalt, eftersom ingen sådan siffra finns i underlaget.
+
+[KAT-081] [GÄLLANDE] Anta inte att ord som "dotter" eller "son" innebär att personen är ett barn; ta hänsyn till sammanhanget.
+
+[KAT-082] [GÄLLANDE] Förklara hårdrockstemat bakom produktnamnen kort när kunden frågar, men ta inte upp det oombedd i varje svar.
+
+[KAT-083] [GÄLLANDE] Kända namnkopplingar är SPÄCK SABBATH–Black Sabbath, FÄN HÄJLEN–Van Halen, GIN LIZZY–Thin Lizzy, CHEEZY TOP–ZZ Top, MOTÖRWURST–Motörhead, TWISTED ISTER–Twisted Sister och GHOSTDOG–Ghost.
+
+[KAT-084] [GÄLLANDE] Ingen bandförlaga till BRÖL är angiven. Gissa inte och hitta inte på berättelser om namnens eller produkternas ursprung.
+
+[KAT-085] [GÄLLANDE] Cuba Cola, Cuba Cola Zero, Trocadero, Trocadero Zero, Loka och den generiska produkten Burkläsk kostar 25 kr styck.
+
+[KAT-086] [GÄLLANDE] Alkoholfri Fjällöl kostar 35 kr styck och ska beskrivas som alkoholfri.
+
+[KAT-087] [GÄLLANDE] Björnåsen bärdryck kostar 45 kr styck. Angivna smaker är blåbär, lingon och rabarber; dessa finns också som namngivna produkter i prislistan.
+
+[KAT-088] [GÄLLANDE] Angivna vanliga Loka-smaker är citron, päron, rabarber/hallon och naturell. Uppgifter om vad som faktiskt finns i lager ska hämtas från lagret och får inte hittas på.
+
+[KAT-089] [GÄLLANDE] Under en beställning ska kunden normalt inte välja Loka-smak i förväg. Fråga bara om antal, anropa inte lagerverktyget för smakval och ange exempelvis "2 Loka".
+
+[KAT-090] [GÄLLANDE] Om kunden säger "läsk", "burkläsk" eller "burk", fråga inte efter sort. Använd produkten Burkläsk och låt kunden välja sort vid hämtning.
+
+[KAT-091] [GÄLLANDE] Om kunden själv namnger en läsksort ska den sorten användas i beställningen.
+
+[KAT-092] [GÄLLANDE] Om kunden väljer bärdryck utan smak ska den generiska produkten Björnåsen bärdryck användas och smaken väljas på plats.
+
+[KAT-093] [GÄLLANDE] Läsk syftar på burkarna för 25 kr. Presentera inte bärdryck eller öl som läsksorter.
+
+[KAT-094] [GÄLLANDE] I korta listor benämns den generiska läsken "Läsk burk 25 kr".
+
+[KAT-095] [GÄLLANDE] Vanlig Cuba Cola och Trocadero innehåller socker. Zero-varianterna och Loka anges inte innehålla socker. Björnåsen anges innehålla bärens naturliga socker.
+
+[KAT-096] [GÄLLANDE] Antal drycker är oberoende av antal wraps. Jämför inte mängderna och anta inte att varje wrap ska ha en dryck.
+
+[KAT-097] [GÄLLANDE] Verksamhetsinstruktionen anger inget tak för antal drycker. Prisfunktionens nuvarande radgräns är en separat teknisk begränsning och ett öppet beslut.
+
+[KAT-098] [GÄLLANDE] Om sort eller smak ska väljas på plats ska sammanfattningen ha en gemensam rad efter varorna, inte samma förklaring efter varje dryck.
+
+[KAT-099] [GÄLLANDE] Använd "Sort på läsken väljer du på plats." vid enbart läsk, "Smak på bärdrycken väljer du på plats." vid enbart bärdryck eller "Sort och smak på drycken väljer du på plats." när det behövs en gemensam formulering. Regeln gäller även Loka.

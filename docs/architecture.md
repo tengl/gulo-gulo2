@@ -15,7 +15,7 @@ apps/web/
     conversation/       dialogtillstånd och tillåtna verktygsåtgärder
     staff/              personalens behöriga arbetsflöden
     access/             identitet och behörighetskontroller
-    business-hours/     redigerbara öppettider och publicering
+    business-hours/     gemensam tidsvisning; kommande administration/publicering
   src/server/           adaptrar: Claude, Supabase, Google, meddelanden
   src/shared/           gemensam presentation och tekniska smådelar
   public/               publika statiska filer
@@ -88,13 +88,26 @@ ESLint skyddar domänlagret mot de vanligaste ramverks-/SDK-importerna. Det är
 ett stöd; relativa importer och alla beroenderiktningar verifieras fortfarande
 vid granskning. Utöka maskinkontrollerna när verkliga moduler finns.
 
-Första provbara delen är en nyckelfri mobil demo enligt
-[UX-reglerna](../rules/runtime/ordering-experience.txt): katalog och prisberäkning
-i `catalog/`, gemensamt lokalt utkast i `ordering/` och textförslag/UI-sammansättning
-i `conversation/`. Riktiga ordrar, tabeller och integrationer är ännu inte anslutna.
-Den begränsade textgrammatiken är uttryckligen en demofunktion och ska senare
-kompletteras av Claude via server-use cases. Den får inte utökas till en samling
-specialfall som försöker ersätta fri språkförståelse.
+Den provbara appen kombinerar meny och Claude-chatt enligt
+[UX-reglerna](../rules/runtime/ordering-experience.txt) och
+[chattreglerna](../rules/runtime/conversation.txt). `catalog/` äger meny och
+fakta, `ordering/` äger samma strukturerade varukorg och lokala demohistorik,
+`conversation/` äger dialog och validerade ändringsförslag. `server/claude/`
+anropar Messages API. `/api/chat` kopplar kontextvalidering och adaptern.
+Utan Claude används en uttryckligt begränsad fallback; den ersätter inte fri dialog.
+
+Modellverktyg får föreslå tillägg, ersättning, borttagning, granskning och avbokning.
+De utför inga mutationer. Förslag binds till varukorgens innehåll vid anropet och
+blir ogiltiga om kunden ändrar sina val innan godkännande. Varukorgsfrågor besvaras
+med kodens samtliga aktuella rader och total, inte modellens minne. Sparad demo
+har oföränderlig prisögonblicksbild och referens. `localStorage` synkar flikar och
+rapporterar fel; det ersätter inte behörig serveråtkomst till riktiga ordrar.
+
+Sidhuvudets öppettider och beställningsvyernas egna tidsrader använder samma
+demostandardvecka enligt OPPEN-016–017; samma fakta är tillgängliga för Claude.
+Beställningstider ingår inte i det gemensamma huvudet. När kunden börjat chatta
+krymper mobilhuvudet och introduktionen döljs så att samtalet får mer utrymme.
+Tidsraderna visar inte kapacitet.
 
 Administrationen och Google-integrationen är beslutade nya funktioner i
 [access.txt](../rules/runtime/access.txt) och
@@ -113,9 +126,9 @@ Regelförslag och öppna frågor ligger i `rules/proposals/` och påverkar inte
 deployment. `rules/runtime/` innehåller endast beslutade verksamhetsregler.
 
 Nyare ändringar i det äldre repot vid 1ef53f5 finns som separat
-[underlag](../rules/proposals/legacy-update-2026-10-22.txt). Ingen gammal
-betalnings-, tids- eller kapacitetsregel blir bindande genom att demon använder menyn.
+[underlag](../rules/proposals/legacy-update-2026-10-22.txt). Produkt- och tillverkningsfakta har därefter godkänts i runtime/catalog.txt.
+Betalnings-, tids- och kapacitetsregler blir inte bindande enbart genom demomenyn.
 
-Nästa funktionella del är serverägt beställningsutkast och validerade verktyg för
-Claude. Därefter kopplas beslutade regler för hämtning, orderregistrering och
-betalning. Röstanvändning är en senare inmatningsväg till samma beställningsmodell.
+Nästa funktionella del är serverägt beställningsutkast och säker Supabase-orderlagring.
+Därefter kopplas regler för hämtning, orderregistrering och betalning.
+Kundavbokning före betalning är beslutad i ORD-016; efter betalning kontaktas personalen. Röstanvändning är en senare inmatningsväg till samma beställningsmodell.

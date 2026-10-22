@@ -7,6 +7,7 @@ const paths = {
   bag: "M5 8h14l1 13H4L5 8Zm4 0V6a3 3 0 0 1 6 0v2",
   write: "m16 3 5 5-12 12-6 1 1-6L16 3Zm-9 11 3 3M13 6l5 5",
   menu: "M4 6h16M4 12h16M4 18h10",
+  clock: "M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM12 6v6l4 2",
   trash: "M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7",
 } as const;
 

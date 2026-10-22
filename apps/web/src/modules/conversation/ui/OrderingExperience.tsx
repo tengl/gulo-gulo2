@@ -5,31 +5,58 @@ import { useState } from "react";
 import { ProductMenu } from "@/modules/catalog/ui/ProductMenu";
 import { demoMenu, formatPrice } from "@/modules/catalog";
 import type { Product } from "@/modules/catalog";
+import { HoursOverview } from "@/modules/business-hours/ui/HoursOverview";
+import { OrderingHours } from "@/modules/business-hours/ui/OrderingHours";
 import {
   addSelections,
   setQuantity,
   removeLine,
   cartCount,
   cartTotalOre,
+  cartFingerprint,
+  saveDemoOrder,
+  cancelDemoOrder,
 } from "@/modules/ordering";
 import type { Cart, Selection } from "@/modules/ordering";
 import { OrderSummary } from "@/modules/ordering/ui/OrderSummary";
 import { Icon } from "@/shared/Icon";
-import { Sheet } from "@/shared/Sheet";
+import {
+  ReviewOrder,
+  CancelOrder,
+  ForgetMemory,
+} from "@/modules/ordering/ui/OrderDialogs";
 import { ConfigureProduct } from "./ConfigureProduct";
-import { WriteOrder } from "./WriteOrder";
+import { Chat } from "./Chat";
+import { applyCartProposal } from "../index";
+import type { ChatAction } from "../index";
+import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
+import { SavedOrders } from "@/modules/ordering/ui/SavedOrders";
 
 export function OrderingExperience() {
-  const [view, setView] = useState<"menu" | "write" | "cart">("menu");
-  const [cart, setCart] = useState<Cart>([]);
+  const [view, setView] = useState<"menu" | "chat" | "cart" | "orders">("chat");
+  const {
+    memory,
+    error: memoryError,
+    ready,
+    updateMemory,
+    forgetMemory,
+  } = useOrderMemory();
+  const cart = memory.cart;
+  const [sessionKey, setSessionKey] = useState(0);
+  const [chatStarted, setChatStarted] = useState(false);
+  const [cancelReference, setCancelReference] = useState<string | null>(null);
+  const [forget, setForget] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
-  const [review, setReview] = useState(false);
+  const [reviewCart, setReviewCart] = useState<Cart | null>(null);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const count = cartCount(cart);
   function add(items: Selection[]): boolean {
     try {
-      setCart(addSelections(cart, items));
+      updateMemory((current) => ({
+        ...current,
+        cart: addSelections(current.cart, items),
+      }));
       setError("");
       setNotice("Dina val har lagts till i beställningen.");
       return true;
@@ -44,7 +71,10 @@ export function OrderingExperience() {
   }
   function changeQuantity(key: string, quantity: number) {
     try {
-      setCart(setQuantity(cart, key, quantity));
+      updateMemory((current) => ({
+        ...current,
+        cart: setQuantity(current.cart, key, quantity),
+      }));
       setError("");
       setNotice("Antalet är uppdaterat.");
     } catch (cause) {
@@ -53,11 +83,37 @@ export function OrderingExperience() {
       );
     }
   }
+  function applyAction(action: ChatAction, base: string): string | undefined {
+    try {
+      updateMemory((current) => ({
+        ...current,
+        cart: applyCartProposal(current.cart, action, base),
+      }));
+      return undefined;
+    } catch (cause) {
+      return cause instanceof Error
+        ? cause.message
+        : "Kunde inte ändra varukorgen.";
+    }
+  }
+  function navigate(action: ChatAction) {
+    if (action.kind === "menu") setView("menu");
+    if (action.kind === "orders") setView("orders");
+    if (action.kind === "review") {
+      if (cart.length) setReviewCart(cart);
+      else setNotice("Din varukorg är tom. Välj något innan du granskar.");
+    }
+    if (action.kind === "cancel") setCancelReference(action.reference);
+  }
+  const cancelOrder = memory.orders.find(
+    (order) => order.reference === cancelReference,
+  );
   return (
-    <div className="ordering-app">
+    <div
+      className={`ordering-app ${view === "chat" ? `has-chat${chatStarted ? " chat-started" : ""}` : ""}`}
+    >
       <div className="demo-banner">
         <span className="tiny-dot" />
-        <strong>Prova vår nya beställning</strong>
         <span>Demoläge · Ingen riktig order skickas</span>
       </div>
       <header className="site-header">
@@ -69,21 +125,12 @@ export function OrderingExperience() {
           <Image
             src="/logo-light.png"
             alt="Gulo Gulo Deli"
-            width={88}
-            height={88}
+            width={56}
+            height={56}
             loading="eager"
           />
-          <span>
-            HANTVERKSDELI
-            <br />
-            <small>LJUSDAL</small>
-          </span>
         </a>
-        <span className="header-note">
-          Gjord med omsorg.
-          <br />
-          <strong>Beställd på ditt sätt.</strong>
-        </span>
+        <HoursOverview />
         <button
           type="button"
           className="header-cart"
@@ -104,23 +151,41 @@ export function OrderingExperience() {
         </button>
         <button
           type="button"
-          aria-pressed={view === "write"}
-          onClick={() => setView("write")}
+          aria-pressed={view === "chat"}
+          onClick={() => setView("chat")}
         >
-          <Icon name="write" size={18} /> Skriv din beställning
+          <Icon name="write" size={18} /> Chatta med oss
         </button>
-        <span>En meny. Ditt sätt att beställa.</span>
+        <button
+          type="button"
+          aria-pressed={view === "orders"}
+          onClick={() => setView("orders")}
+        >
+          <Icon name="bag" size={18} /> Mina beställningar
+        </button>
       </nav>
       <main id="main-content" className={`experience-layout view-${view}`}>
         <div className="experience-main">
-          <div hidden={view !== "write"}>
-            <WriteOrder
-              onAdd={add}
-              onMenu={() => setView("menu")}
-              onCart={() => setView("cart")}
+          <div hidden={view !== "chat"}>
+            <Chat
+              key={sessionKey}
+              cart={cart}
+              orders={memory.orders}
+              onApply={applyAction}
+              onNavigate={navigate}
+              onStarted={() => setChatStarted(true)}
             />
           </div>
-          <div hidden={view === "write"}>
+          <div hidden={view !== "orders"}>
+            <SavedOrders
+              orders={memory.orders}
+              onCancel={setCancelReference}
+              onForget={() => setForget(true)}
+              onMenu={() => setView("menu")}
+            />
+          </div>
+          <div hidden={view === "chat" || view === "orders"}>
+            <OrderingHours />
             <section className="menu-hero">
               <div className="hero-copy">
                 <span className="eyebrow">Gulo Gulo Deli</span>
@@ -156,15 +221,30 @@ export function OrderingExperience() {
             cart={cart}
             onQuantity={changeQuantity}
             onRemove={(key) => {
-              setCart(removeLine(cart, key));
+              updateMemory((current) => ({
+                ...current,
+                cart: removeLine(current.cart, key),
+              }));
               setNotice("Varan är borttagen.");
               setError("");
             }}
-            onReview={() => setReview(true)}
+            onReview={() => setReviewCart(cart)}
             onBrowse={() => setView("menu")}
           />
         </aside>
       </main>
+      {memoryError && (
+        <div className="memory-error" role="alert">
+          {memoryError}
+          <button
+            type="button"
+            className="text-button"
+            onClick={() => setForget(true)}
+          >
+            Rensa lokalt minne
+          </button>
+        </div>
+      )}
       <div className="status-announcement" role="status">
         {notice}
       </div>
@@ -192,8 +272,8 @@ export function OrderingExperience() {
         <button
           type="button"
           className="dock-write"
-          aria-label="Skriv din beställning"
-          onClick={() => setView("write")}
+          aria-label="Chatta med oss"
+          onClick={() => setView("chat")}
         >
           <Icon name="write" />
         </button>
@@ -216,26 +296,57 @@ export function OrderingExperience() {
           onAdd={add}
         />
       )}
-      {review && (
-        <Sheet
-          title="Granska din demobeställning"
-          onClose={() => setReview(false)}
-        >
-          <span className="eyebrow">Allt på ett ställe</span>
-          <h2 className="sheet-title review-title">Ser det gott ut?</h2>
-          <p className="sheet-description">
-            Här är dina val. Det här är en demo, så ingen beställning skickas
-            och ingen betalning görs.
-          </p>
-          <OrderSummary cart={cart} />
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => setReview(false)}
-          >
-            Fortsätt prova <Icon name="check" />
-          </button>
-        </Sheet>
+      {reviewCart && (
+        <ReviewOrder
+          cart={reviewCart}
+          currentCart={cart}
+          storageError={memoryError}
+          ready={ready}
+          onClose={() => setReviewCart(null)}
+          onSave={() => {
+            updateMemory((current) => {
+              if (cartFingerprint(current.cart) !== cartFingerprint(reviewCart))
+                throw new Error("Varukorgen har ändrats. Granska den igen.");
+              return saveDemoOrder(
+                current,
+                crypto.randomUUID(),
+                new Date().toISOString(),
+              );
+            }, true);
+            setReviewCart(null);
+            setView("orders");
+            setNotice("Demobeställningen är sparad på enheten.");
+            setError("");
+          }}
+        />
+      )}
+      {cancelReference && (
+        <CancelOrder
+          order={cancelOrder}
+          onClose={() => setCancelReference(null)}
+          onConfirm={() => {
+            updateMemory(
+              (current) => cancelDemoOrder(current, cancelReference),
+              true,
+            );
+            setCancelReference(null);
+            setNotice("Demobeställningen är avbokad.");
+            setError("");
+          }}
+        />
+      )}
+      {forget && (
+        <ForgetMemory
+          onClose={() => setForget(false)}
+          onConfirm={() => {
+            forgetMemory();
+            setSessionKey((key) => key + 1);
+            setChatStarted(false);
+            setForget(false);
+            setNotice("Det lokala minnet är rensat.");
+            setError("");
+          }}
+        />
       )}
     </div>
   );

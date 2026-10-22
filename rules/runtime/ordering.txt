@@ -1,0 +1,11 @@
+AVBOKNING AV BESTÄLLNINGAR
+==========================
+
+Beslutskälla: användarens uttryckliga svar 2026-10-22.
+
+[ORD-016] [GÄLLANDE] Kunden kan avboka sin beställning före betalning via
+GUI eller chatt. Efter betalning ska kunden kontakta personalen. Avbokade
+eller hämtade beställningar får inte avbokas igen. Samma kontroll ska användas
+av båda vägarna. För riktiga beställningar avgör serverns aktuella status och
+behörighetskontroll; ett lokalt minne eller kundens påstående är inte tillräckligt.
+Ingen automatisk återbetalning utlovas. Ersätter det gamla kundförbudet.

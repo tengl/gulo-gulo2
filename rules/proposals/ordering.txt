@@ -27,7 +27,6 @@ Sammanfattning och kundens godkännande
 [ORD-013] [FÖRSLAG] Bortval, surkålsbyten, ketchup, glutenfritt bröd och eventuell folie ska framgå.
 [ORD-014] [FÖRSLAG] Sammanfattningen ska ange "Hämtning:" med dag och tid och "Totalt:" med det beräknade beloppet i kronor.
 [ORD-015] [FÖRSLAG] Eventuell gemensam information om val av drycksort eller smak på plats ska stå efter varorna.
-[ORD-016] [FÖRSLAG] Den befintliga kundinstruktionen säger att beställningar inte kan avbokas och att det ska anges före betalning. Personalens rätt att avboka beskrivs separat och förhållandet är ett öppet beslut.
 [ORD-017] [FÖRSLAG] Sammanfattningen ska avslutas med "Stämmer det?" och invänta kundens uttryckliga godkännande.
 [ORD-018] [FÖRSLAG] Vid ett nej ska assistenten fråga vad som ska ändras, rätta beställningen och låta kunden bekräfta den rättade versionen.
 [ORD-019] [FÖRSLAG] Ordern får registreras först när kunden har godkänt sammanställningen och priset och nödvändigt namn och vald hämtning finns.

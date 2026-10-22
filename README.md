@@ -6,13 +6,16 @@ Pris, kapacitet, lager och ordrar avgörs av vanlig programkod och databas.
 Administrationen ska även kunna uppdatera öppettider i Google och skydda
 vissa funktioner med superadmin-kod eller inloggning.
 
-Startsidan innehåller en mobil demoversion: välj från menyn eller skriv en enkel
-beställning, justera antal/variant/bortval och granska samma beställningsutkast.
-Menyn och priserna är godkända demodata från det äldre repot. Ingen riktig order
-skickas, ingen betalning görs och ingen kapacitet reserveras.
+Startsidan kombinerar en mobil chatt, meny och gemensam varukorg. Fråga om
+produkter och tillverkning, välj via båda vyerna och granska alla val tillsammans.
+Öppettider syns i det kompakta sidhuvudet. Beställningstider visas i chatt och meny;
+på mobil krymper huvudet ytterligare när samtalet börjar. Snabbval finns kvar
+under samtalet, chattmenyn är klickbar och skrivfältet växer med texten.
+Spara lokala demobeställningar som finns kvar efter omladdning och prova avbokning
+via chatt eller GUI. Ingen riktig order skickas, betalning görs eller tid reserveras.
 
 - Börja i [regelregistret](rules/index.txt): beslutade textregler är facit.
-  Äldre verksamhetsregler är grupperade förslag, inte bindande krav.
+  Regler som beslutats finns i `rules/runtime/`; återstående äldre förslag har egen status.
 - [Arkitektur och kodkarta](docs/architecture.md).
 - [Lokal utveckling och deployment](docs/deployment.md).
 - [Instruktioner för agenter](AGENTS.md).
@@ -28,8 +31,10 @@ npm ci
 npm run dev
 ```
 
-Grundsidan fungerar utan API-nycklar. När integrationer införs används
-`apps/web/.env.example` som hemlighetsfri mall.
+Meny och begränsat chattdemoläge fungerar utan API-nycklar. För fri Claude-dialog:
+kopiera `apps/web/.env.example` till `apps/web/.env.local`, fyll i
+`ANTHROPIC_API_KEY` och `ANTHROPIC_MODEL` och starta om utvecklingsservern.
+Välj ett modell-ID som ditt Anthropic-konto har tillgång till. Nyckeln stannar på servern.
 
 ```sh
 npm run check
@@ -45,8 +50,8 @@ npm run test:browser
 
 Om Google Chrome redan är installerat kan du i stället köra
 `PLAYWRIGHT_CHANNEL=chrome npm run test:browser`. Testerna startar en egen
-testserver på port 3100. Ingen extern tjänst behövs. Fri Claude-dialog,
-röst, hämtningstider, inskick och betalning återstår att bygga.
+testserver på port 3100. Ingen extern tjänst behövs för testerna. Röst, hämtningstider,
+riktig orderlagring i Supabase, betalning och säker orderåtkomst återstår att ansluta.
 
 GitHub Actions skiljer kontroller från deployment. App-/driftregeländringar
 kan släppa webben; SQL-migrationer kan släppa databasen. Dokumentation,

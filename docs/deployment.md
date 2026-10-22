@@ -9,13 +9,18 @@ reporoten om inget annat anges.
 Använd Node 24 enligt `.node-version`, kör `npm ci` och `npm run dev`.
 Appen finns på `http://localhost:3000`. Kör `npm run check` och `npm run build`
 före kodändringar släpps. Inga externa nycklar behövs för grundsidan.
-Startsidan är nu en demomeny med lokalt utkast och enkel texttolkning. Ingen
-riktig order skickas och utkastet finns bara i den öppna sidan, inte på servern.
+Startsidan har en chatt, meny, gemensamt utkast och lokalt sparade demobeställningar.
+Utkast och historik finns i `localStorage` på enheten. Ingen riktig order skickas.
+Fri Claude-dialog aktiveras när både `ANTHROPIC_API_KEY` och `ANTHROPIC_MODEL`
+sätts i `apps/web/.env.local` (starta sedan om servern). Utan dessa visas begränsat
+lägesstöd med enkla val och utvalda faktasvar. Nyckeln skickas aldrig till klienten.
 Webbläsartester körs med `npm run test:browser` efter
 `npm exec -- playwright install chromium`. De startar en separat lokal server
-på port 3100. CI verifierar samma flöden före release.
+på port 3100 med egen `.next-e2e`-katalog och testkonfiguration, så att en
+utvecklingsserver på port 3000 kan fortsätta köra. Testservern stänger uttryckligen
+av Claude-nyckeln. CI verifierar samma flöden före release.
 
-När serverintegrationer införs: kopiera `apps/web/.env.example` till
+För serverintegrationer: kopiera `apps/web/.env.example` till
 `apps/web/.env.local` och fyll i den lokala miljöns uppgifter. Använd inte
 produktionsnycklar för lokal utveckling eller preview.
 
@@ -137,3 +142,29 @@ miljö. CLI använder `--prebuilt` så att Vercel inte gör ytterligare ett fjä
 Tekniska referenser: [Vercels Git-konfiguration](https://vercel.com/docs/project-configuration/git-configuration),
 [Vercel CLI med förbyggt resultat](https://vercel.com/docs/cli/deploying-from-cli)
 och [Supabases miljö-/migrationsflöde](https://supabase.com/docs/guides/deployment/managing-environments).
+
+
+## Chatt och lokalt minne
+
+`GET /api/chat` visar om Claude är konfigurerad. `POST /api/chat` validerar
+meddelanden, aktuell varukorg och lokala DEMO-referenser. Verktygen ger enbart
+förslag; kunden godkänner dem i gränssnittet. Servern tar inte emot egna priser,
+betalningsstatusar eller roller i klienthistoriken. Claude felar tydligt utan att
+byta till ett påhittat AI-svar. Tidsgränsen för modellen är 25 sekunder.
+
+`gulo-order-memory-v1` lagrar versionerat demoinnehåll, referenser, prisögonblicks-
+bilder och avbokningsstatus. Inga kontaktuppgifter sparas. Det fungerar på samma
+webbläsare och ursprung; annan port, inkognitoläge och rensad lagring har eget minne.
+Mina beställningar kan rensa minnet, med uttrycklig information om att det inte
+avbokar riktiga ordrar. Blockerad/trasig lagring ger fel och inga falska sparbesked.
+Samtalet bevaras över vybyten men återställs vid omladdning; utkast och demohistorik
+återställs från minnet. Flikar tar emot ändringar genom webbläsarens storage-event.
+
+Det finns ännu inga ordertabeller, riktig orderregistrering eller betalning i denna
+version. Innan publik drift behövs serverägt utkast, Supabase-lagring med kontrollerad
+åtkomst, atomär order-/betalningskontroll och en gemensam beständig begränsning av
+API-anrop. Chattroutens begränsade räknare gäller endast per serverinstans i demon.
+Referenser från localStorage får aldrig ensamma ge åtkomst till riktiga ordrar.
+
+Claude-adaptern följer [Anthropics Messages-verktyg](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools).
+Modell-ID är konfiguration; verktygsförslag valideras mot appens katalog och regler.
