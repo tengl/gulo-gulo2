@@ -5,6 +5,7 @@ Läs SYS-001, SYS-004–007 och relevanta integrations-/verksamhetsförslag.
 - `claude/`: modellklient, driftprompter och översättning från modellverktyg
   till validerade use cases. Modellnamn är konfiguration.
 - `supabase/`: klienter, repository-adaptrar och genererade databastyper.
+- `access/`: serverkonfigurerad superadmin-kod och signerad sessionscookie.
 - `notifications/`: mejl-/pushadaptrar när dessa införs.
 - `google-business/`: OAuth och Business Profile API för öppettider. Appens
   inloggning och Googles kontokoppling är separata behörighetsgränser.

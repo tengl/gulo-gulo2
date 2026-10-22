@@ -11,3 +11,11 @@ inom projektets omfattning; interna funktioner skiljs från kundgränssnittet.
 
 [BEH-002] [GÄLLANDE] Vissa interna funktioner ska endast kunna nås efter
 verifiering med superadmin-kod eller inloggning med rätt behörighet.
+
+[BEH-005] [GÄLLANDE] Första administrationsversionen använder superadmin-kod.
+Beslutskälla: användarens val 2026-10-22, "Superadmin-kod som första steg".
+Koden verifieras på servern; utan konfigurerad kod är administrationen låst.
+Koden får inte förekomma i URL, klientkod eller webbläsarens lokala lagring.
+Tekniskt utförande: minst 16 tecken, signerad HttpOnly-session med åtta timmars
+giltighet, SameSite Strict och Secure i produktion. Kodbyte ogiltigförklarar
+befintliga sessioner. Inloggningsförsök begränsas per serverinstans.

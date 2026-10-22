@@ -13,5 +13,10 @@ Regelunderlag: `rules/runtime/business-hours.txt`. Läs status på varje post in
 `ui/OrderingHours.tsx` visar beställningsfönstret inne i chatt och meny enligt
 OPPEN-016; det får döljas när kunden börjat chatta på mobil. Samma fakta ges till
 Claude. Detta är inte kapacitetskontroll eller redigerbar driftkonfiguration.
-Administration, datumundantag och Google-publicering är ännu inte implementerade.
-Följ `../AGENTS.md` när de införs; UI får inte skapa egna tider.
+`domain/schedule.ts` äger standardvecka, datumundantag, validering och effektiv
+avvikelse enligt OPPEN-004–009 / ADM-003. `ui/HoursAdmin.tsx` är veckovyn;
+`HoursEditor.tsx` redigerar, `useSchedulePreview.ts` hanterar lokal lagring.
+Adminschemat är en uttrycklig lokal förhandsvisning enligt ADM-002, frikopplad
+från kunddemon. Google-publicering och Supabase-lagring är inte implementerade.
+Byt inte ut kundens tider mot webbläsarens schema vid senare serveranslutning.
+UI får inte skapa egna tider eller påstå att lokal lagring är publicering.

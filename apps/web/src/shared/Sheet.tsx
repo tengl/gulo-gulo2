@@ -37,7 +37,11 @@ export function Sheet({
       className="sheet"
       ref={ref}
       aria-label={title}
-      onCancel={onClose}
+      onCancel={(event) => {
+        // Let the caller keep the dialog open when discarding edits is declined.
+        event.preventDefault();
+        onClose();
+      }}
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}

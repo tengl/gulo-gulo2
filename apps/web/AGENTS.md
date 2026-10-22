@@ -14,7 +14,9 @@ Läs `rules/system.txt` SYS-003–007 och regelområdet som berörs av ändringe
 Startsidan kombinerar chatt, meny, gemensam varukorg och lokal demohistorik.
 Läs `rules/runtime/ordering-experience.txt`, `conversation.txt`, `catalog.txt` och
 `ordering.txt`. Claude ansluts via `/api/chat` när nyckel och modell är satta.
-Riktiga ordrar, databas, autentisering, betalning och röst är ännu inte anslutna.
+`/admin` använder serververifierad superadmin-kod. Läs runtime/access.txt och
+administration.txt. Tidsredigeringen är en lokal förhandsvisning. Riktiga ordrar,
+databas, personliga konton, Google-publicering, betalning och röst återstår.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

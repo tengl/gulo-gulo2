@@ -14,7 +14,7 @@
     "start": "npm run start --workspace @gulo/web",
     "lint": "npm run lint --workspace @gulo/web",
     "typecheck": "npm run typecheck --workspace @gulo/web",
-    "test": "node --test \"tooling/*.test.mjs\" \"apps/web/src/**/*.test.ts\"",
+    "test": "node --test \"tooling/*.test.mjs\" \"apps/web/src/**/*.test.ts\" && node --conditions=react-server --test \"tests/security/*.test.mjs\"",
     "test:browser": "playwright test",
     "check:rules": "node tooling/check-rules.mjs",
     "check": "npm run check:rules && npm run lint && npm run typecheck && npm test",

@@ -13,5 +13,5 @@ läsas in. Textfilerna bestämmer beteendet; faktiska redigerbara tider är drif
 Regler för konflikt, synkfel och återförsök behöver beslutas före implementation.
 
 [OPPEN-012] [ÖPPET] Precisera hur helt stängda datum, flera tidsintervall samma
-dag, tider över midnatt och exakt gränsminut ska hanteras. Bestäm tidszon och
-veckogräns innan datumvalidering och innevarande vecka implementeras.
+dag, tider över midnatt och exakt gränsminut ska hanteras i drift. Första lokala
+adminförhandsvisningens tidszon, veckogräns och intervallomfång finns i ADM-003.

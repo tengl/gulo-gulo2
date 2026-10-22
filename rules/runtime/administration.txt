@@ -1,0 +1,21 @@
+FÖRSTA ADMINISTRATIONSGRÄNSSNITTET
+================================
+
+Beslutskälla: användarens uppdrag att börja med administration 2026-10-22.
+Följande beskriver den första implementationens avgränsning, inte färdig drift.
+
+[ADM-001] [GÄLLANDE] /admin skyddas enligt BEH-005 och börjar med öppettider,
+standardvecka och datumundantag enligt OPPEN-004–009. Orderhantering och
+personliga personalkonton införs senare.
+
+[ADM-002] [GÄLLANDE] Före anslutning till Supabase sparas ändrade scheman endast
+som lokal förhandsvisning på aktuell webbläsare. Detta ska framgå tydligt före
+redigering och vid sparande. Kundens tider och Google påverkas inte. Lagringsfel
+ska visas som fel, aldrig som lyckat sparande. Google visas som ej anslutet.
+
+[ADM-003] [GÄLLANDE] Tekniskt omfång för första förhandsvisningen: datum och
+innevarande vecka beräknas i Europe/Stockholm, veckan börjar måndag. Varje dag
+och tidstyp har ett intervall inom samma kalenderdag eller är stängd. Från-tiden
+måste vara före till-tiden. Ett datumundantag kan självständigt ärva standarden,
+ange eget intervall eller stänga respektive tidstyp. Flera intervall, nattöppet
+och exakt tidsgränskontroll för orderregistrering återstår enligt OPPEN-012.

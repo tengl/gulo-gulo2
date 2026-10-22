@@ -14,6 +14,11 @@ under samtalet, chattmenyn är klickbar och skrivfältet växer med texten.
 Spara lokala demobeställningar som finns kvar efter omladdning och prova avbokning
 via chatt eller GUI. Ingen riktig order skickas, betalning görs eller tid reserveras.
 
+`/admin` har kodinloggning, veckovy, standardvecka och datumundantag. Sätt en
+separat slumpmässig `ADMIN_ACCESS_CODE` (minst 16 tecken) i `apps/web/.env.local`
+och starta om servern. Utan kod är administrationen låst. Tider sparas tills
+vidare endast som lokal förhandsvisning; kundvyn och Google påverkas inte.
+
 - Börja i [regelregistret](rules/index.txt): beslutade textregler är facit.
   Regler som beslutats finns i `rules/runtime/`; återstående äldre förslag har egen status.
 - [Arkitektur och kodkarta](docs/architecture.md).

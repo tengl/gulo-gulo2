@@ -64,6 +64,7 @@ appens gränssnitt vid 1ef53f5: öppet torsdag–söndag 11:00–15:00; mottagni
 sammadagsbeställningar torsdag–söndag 10:30–14:00. Källa: användarens uppdrag
 2026-10-22 om samma regler som gamla appen och synliga tider. Det är en
 demopresentation av standardtider, utan besked om faktisk dagskapacitet,
-datumundantag eller bokningsbara tider. Detta implementerar inte administration,
-Google-synk eller exakt tidsgränskontroll för riktig orderregistrering (OPP-001).
+datumundantag eller bokningsbara tider. Kunddemon använder inte den lokala
+adminförhandsvisningen (ADM-002), Google-synk eller exakt tidsgränskontroll
+för riktig orderregistrering (OPP-001).
 Vid drift ska redigerbara scheman och datumundantag enligt OPPEN-004–010 användas.

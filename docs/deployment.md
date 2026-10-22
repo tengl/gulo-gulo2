@@ -144,6 +144,42 @@ Tekniska referenser: [Vercels Git-konfiguration](https://vercel.com/docs/project
 och [Supabases miljö-/migrationsflöde](https://supabase.com/docs/guides/deployment/managing-environments).
 
 
+## Administration
+
+Sätt `ADMIN_ACCESS_CODE` i `apps/web/.env.local` och starta om servern. Använd en
+separat slumpmässig kod eller lång lösenfras med minst 16 tecken (högst 512).
+Öppna `http://localhost:3000/admin`. Tom, kort eller saknad kod håller sidan låst.
+I Vercel sätts koden separat för preview och produktion; miljöbyten kräver
+deployment enligt releaseflödet ovan. Det finns ingen förvald inloggningskod.
+
+Koden kontrolleras på servern. Sessionscookien är signerad med HMAC-SHA256,
+HttpOnly, SameSite Strict och Secure i produktion, med åtta timmars giltighet.
+En kodändring ogiltigförklarar tidigare sessioner. Utloggning raderar cookien på
+den aktuella webbläsaren; individuell serveråterkallelse och personliga konton
+ingår ännu inte. Koden får aldrig läggas i URL, localStorage eller Git.
+Felaktiga inloggningsförsök begränsas till åtta per 15 minuter och IP/serverinstans.
+Detta är ingen gemensam spärr mellan Vercel-instanser; publik drift behöver en
+beständig gemensam begränsning och betrodda proxyuppgifter för klient-IP.
+
+Veckovyn använder Stockholmstid, måndag–söndag och en tid per dag/tidstyp eller
+stängt. Ett datum kan ärva standard, ange egna tider eller stänga respektive
+tidstyp oberoende. Ändrad-markering visar faktisk skillnad mot standardveckan.
+För att ta bort ett undantag: välj Standard för båda tidstyperna och spara.
+
+`gulo-hours-preview-v1` innehåller endast ett lokalt förhandsvisningsschema i
+webbläsaren. Sparande kontrollerar sessionen igen, validerar hela schemat och
+avvisar överskrivning om en annan flik ändrat det under redigering. Felaktig eller
+blockerad lagring visas som fel. Återställning tar endast bort adminschemat;
+kundens varukorg/historik påverkas inte. Utloggning rensar inte förhandsvisningen.
+Kundsidans demotider ändras inte, och inga tider skickas till Google.
+
+Supabase-repository, åtkomstkontrollerad serverlagring och kundsidans läsning av
+samma schema är nästa steg. Google behöver därefter separat kontokoppling,
+beslutad synkriktning och hantering av publiceringsfel enligt OPPEN-003.
+Anslutningsvyn visar uttryckligen att dessa integrationer inte är anslutna.
+
+Sessionens tekniska skydd följer [OWASP:s sessionsråd](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html).
+
 ## Chatt och lokalt minne
 
 `GET /api/chat` visar om Claude är konfigurerad. `POST /api/chat` validerar

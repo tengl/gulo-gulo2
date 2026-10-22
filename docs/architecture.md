@@ -15,7 +15,7 @@ apps/web/
     conversation/       dialogtillstånd och tillåtna verktygsåtgärder
     staff/              personalens behöriga arbetsflöden
     access/             identitet och behörighetskontroller
-    business-hours/     gemensam tidsvisning; kommande administration/publicering
+    business-hours/     tidsdomän, kundvisning och lokal adminförhandsvisning
   src/server/           adaptrar: Claude, Supabase, Google, meddelanden
   src/shared/           gemensam presentation och tekniska smådelar
   public/               publika statiska filer
@@ -24,6 +24,7 @@ rules/                  facit med uttrycklig status och stabila ID:n
 docs/                   förklaringar, historik och driftinstruktioner
 tooling/                ändringsklassificering och releaseverktyg
 tests/e2e/              hela kund- och personalflöden
+tests/security/         serveradapterns sessionskontroller
 evals/                  modellberoende dialog- och verktygsscenarier
 ```
 
@@ -111,8 +112,10 @@ Tidsraderna visar inte kapacitet.
 
 Administrationen och Google-integrationen är beslutade nya funktioner i
 [access.txt](../rules/runtime/access.txt) och
-[business-hours.txt](../rules/runtime/business-hours.txt). Val av login/kod,
-detaljerad behörighetsmatris och synkriktning är ännu öppna.
+[business-hours.txt](../rules/runtime/business-hours.txt). `/admin` använder
+serververifierad superadmin-kod enligt BEH-005. `server/access/` signerar och
+validerar sessionscookies, `/api/admin/session` hanterar login och logout.
+Personliga konton, detaljerad behörighetsmatris och Googles synkriktning är öppna.
 
 Tidsmodulen ska hålla öppettider och beställningsfönster för samma dag åtskilda. Varje
 tidstyp har standardvecka och datumundantag. En gemensam beräkning av effektiva
@@ -122,6 +125,10 @@ innevarande vecka och markerar verkliga skillnader mot standardveckan.
 Hämtning följer samma schema som öppettiderna. Beställningsfönstret styr när
 sammadagsbeställningar tas emot; utanför fönstret används förbeställningsflödet.
 Scheman och undantag lagras som redigerbara driftdata; de ändras utan deployment.
+Första adminversionens avgränsning finns i runtime/administration.txt: tidsdomänen
+och redigeringen finns, men schemat sparas endast som lokal förhandsvisning.
+Det påverkar ännu inte kunder eller Google. Supabase-lagring ska senare ersätta
+previewlagringen via en servergräns som kontrollerar behörighet vid varje anrop.
 Regelförslag och öppna frågor ligger i `rules/proposals/` och påverkar inte
 deployment. `rules/runtime/` innehåller endast beslutade verksamhetsregler.
 

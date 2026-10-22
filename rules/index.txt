@@ -26,6 +26,7 @@ i runtime/access.txt och runtime/business-hours.txt.
 Filkarta
 system.txt                       SYS  Teknik, arkitektur och arbetssätt
 runtime/access.txt               BEH  Intern administration och behörighet
+runtime/administration.txt       ADM  Första adminversionens omfång
 runtime/business-hours.txt       OPPEN  Öppettider i Google och synkronisering
 runtime/ordering-experience.txt  UX  Mobil beställning och första demoversion
 runtime/conversation.txt         CHATT  Chatt, gemensam varukorg och lokalt minne
