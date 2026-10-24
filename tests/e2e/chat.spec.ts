@@ -457,6 +457,7 @@ test("OPPEN-016/017 / CHATT-001: the header scrolls away while ordering hours st
         ),
     )
     .toBeLessThan(2);
+  await page.locator(".chat-log").dispatchEvent("wheel", { deltaY: -600 });
   await page.locator(".chat-log").evaluate((element) => {
     element.scrollTop = 0;
   });
@@ -603,6 +604,7 @@ test("CHATT-016: disappearing shortcuts animate and the scroll header respects r
         ),
     )
     .toBeLessThan(2);
+  await page.locator(".chat-log").dispatchEvent("wheel", { deltaY: -600 });
   await page.locator(".chat-log").evaluate((element) => {
     const intro = element.querySelector<HTMLElement>(".chat-intro")!;
     element.scrollTo({ top: intro.offsetHeight / 3, behavior: "instant" });
@@ -916,7 +918,7 @@ test("UX-011/012: names and info icons open animated facts without changing the 
       if (!(event.target instanceof HTMLElement)) return;
       const key = event.target.matches("dialog.sheet")
         ? "dialogMotion"
-        : event.target.matches(".cart-pane")
+        : event.animationName === "view-in"
           ? "cartMotion"
           : null;
       if (key)

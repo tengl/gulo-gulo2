@@ -1,8 +1,38 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import type { ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import type { ReactElement, ReactNode } from "react";
 import { Icon } from "./Icon";
+
+const ExitContext = createContext<(() => void) | null>(null);
+
+// Retain only the presentation after its owner has accepted a close.
+// Business callbacks have already run; Sheet makes the retained UI inert.
+export function SheetPresence({
+  children,
+}: {
+  children: ReactElement | false | null;
+}) {
+  const [retained, setRetained] = useState<ReactElement | null>(
+    children || null,
+  );
+  if (children && children !== retained) setRetained(children);
+  const closing = !children && retained !== null;
+  return (
+    retained && (
+      <ExitContext value={closing ? () => setRetained(null) : null}>
+        {retained}
+      </ExitContext>
+    )
+  );
+}
 
 export function Sheet({
   title,
@@ -14,6 +44,21 @@ export function Sheet({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const finishExit = useContext(ExitContext);
+  const closing = finishExit !== null;
+  useLayoutEffect(() => {
+    if (!finishExit || !ref.current) return;
+    let current = true;
+    const animations = ref.current.getAnimations();
+    void Promise.allSettled(
+      animations.map((animation) => animation.finished),
+    ).then(() => {
+      if (current) finishExit();
+    });
+    return () => {
+      current = false;
+    };
+  }, [finishExit]);
   useEffect(() => {
     const dialog = ref.current;
     const opener =
@@ -34,16 +79,18 @@ export function Sheet({
   }, []);
   return (
     <dialog
-      className="sheet"
+      className={`sheet${closing ? " is-closing" : ""}`}
       ref={ref}
       aria-label={title}
+      aria-hidden={closing}
+      inert={closing}
       onCancel={(event) => {
         // Let the caller keep the dialog open when discarding edits is declined.
         event.preventDefault();
-        onClose();
+        if (!closing) onClose();
       }}
       onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
+        if (!closing && event.target === event.currentTarget) onClose();
       }}
     >
       <div className="sheet-body">

@@ -27,13 +27,17 @@ import {
 import { ConfigureProduct } from "./ConfigureProduct";
 import { Chat } from "./Chat";
 import { StoreHeader } from "./StoreHeader";
+import { useOrderingView } from "./useOrderingView";
+import { SheetPresence } from "@/shared/Sheet";
+import { useHydrated } from "@/shared/useHydrated";
 import { applyCartProposal } from "../index";
 import type { ChatAction } from "../index";
 import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
 import { SavedOrders } from "@/modules/ordering/ui/SavedOrders";
 
 export function OrderingExperience() {
-  const [view, setView] = useState<"menu" | "chat" | "cart" | "orders">("chat");
+  const { view, setView, root } = useOrderingView();
+  const hydrated = useHydrated();
   const {
     memory,
     error: memoryError,
@@ -120,7 +124,11 @@ export function OrderingExperience() {
     </button>
   );
   return (
-    <div className={`ordering-app${view === "chat" ? " has-chat" : ""}`}>
+    <div
+      ref={root}
+      inert={!hydrated}
+      className={`ordering-app${view === "chat" ? " has-chat" : ""}`}
+    >
       {view !== "chat" && <StoreHeader>{cartButton}</StoreHeader>}
       <nav className="experience-nav" aria-label="Beställningssätt">
         <button
@@ -271,65 +279,75 @@ export function OrderingExperience() {
           <Icon name="arrow" size={18} />
         </button>
       </div>
-      {product && (
-        <ConfigureProduct
-          key={product.id}
-          product={product}
-          onClose={() => setProduct(null)}
-          onAdd={add}
-        />
-      )}
-      {reviewCart && (
-        <ReviewOrder
-          cart={reviewCart}
-          currentCart={cart}
-          storageError={memoryError}
-          ready={ready}
-          onClose={() => setReviewCart(null)}
-          onSave={() => {
-            updateMemory((current) => {
-              if (cartFingerprint(current.cart) !== cartFingerprint(reviewCart))
-                throw new Error("Varukorgen har ändrats. Granska den igen.");
-              return saveDemoOrder(
-                current,
-                crypto.randomUUID(),
-                new Date().toISOString(),
+      <SheetPresence>
+        {product && (
+          <ConfigureProduct
+            key={product.id}
+            product={product}
+            onClose={() => setProduct(null)}
+            onAdd={add}
+          />
+        )}
+      </SheetPresence>
+      <SheetPresence>
+        {reviewCart && (
+          <ReviewOrder
+            cart={reviewCart}
+            currentCart={cart}
+            storageError={memoryError}
+            ready={ready}
+            onClose={() => setReviewCart(null)}
+            onSave={() => {
+              updateMemory((current) => {
+                if (
+                  cartFingerprint(current.cart) !== cartFingerprint(reviewCart)
+                )
+                  throw new Error("Varukorgen har ändrats. Granska den igen.");
+                return saveDemoOrder(
+                  current,
+                  crypto.randomUUID(),
+                  new Date().toISOString(),
+                );
+              }, true);
+              setReviewCart(null);
+              setView("orders");
+              setNotice("Demobeställningen är sparad på enheten.");
+              setError("");
+            }}
+          />
+        )}
+      </SheetPresence>
+      <SheetPresence>
+        {cancelReference ? (
+          <CancelOrder
+            order={cancelOrder}
+            onClose={() => setCancelReference(null)}
+            onConfirm={() => {
+              updateMemory(
+                (current) => cancelDemoOrder(current, cancelReference),
+                true,
               );
-            }, true);
-            setReviewCart(null);
-            setView("orders");
-            setNotice("Demobeställningen är sparad på enheten.");
-            setError("");
-          }}
-        />
-      )}
-      {cancelReference && (
-        <CancelOrder
-          order={cancelOrder}
-          onClose={() => setCancelReference(null)}
-          onConfirm={() => {
-            updateMemory(
-              (current) => cancelDemoOrder(current, cancelReference),
-              true,
-            );
-            setCancelReference(null);
-            setNotice("Demobeställningen är avbokad.");
-            setError("");
-          }}
-        />
-      )}
-      {forget && (
-        <ForgetMemory
-          onClose={() => setForget(false)}
-          onConfirm={() => {
-            forgetMemory();
-            setSessionKey((key) => key + 1);
-            setForget(false);
-            setNotice("Det lokala minnet är rensat.");
-            setError("");
-          }}
-        />
-      )}
+              setCancelReference(null);
+              setNotice("Demobeställningen är avbokad.");
+              setError("");
+            }}
+          />
+        ) : null}
+      </SheetPresence>
+      <SheetPresence>
+        {forget && (
+          <ForgetMemory
+            onClose={() => setForget(false)}
+            onConfirm={() => {
+              forgetMemory();
+              setSessionKey((key) => key + 1);
+              setForget(false);
+              setNotice("Det lokala minnet är rensat.");
+              setError("");
+            }}
+          />
+        )}
+      </SheetPresence>
     </div>
   );
 }

@@ -58,8 +58,15 @@ bakgrundsfärg och rund kant utan chattbubblor (användarens korrigering 2026-10
 Plusset väljer produkten i båda menyerna. Produktnamnet med ett info-i efter öppnar katalogfakta,
 priser och wraparnas tillbehör i en dialog (UX-011). Den skickar inget till
 chatten och påbörjar inget produktval. Stängning återställer fokus till info-knappen.
-Dialoger och varukorg har korta öppningsanimationer via gemensam CSS, med
-glidning för mobilens bottenpaneler och stöd för minskad rörelse (UX-012).
+Dialoger har öppnings- och stängningsanimationer via gemensam CSS, med glidning
+för mobilens bottenpaneler och stöd för minskad rörelse (UX-012). SheetPresence
+behåller bara den inaktiva presentationen under godkänd stängning; kontroller
+och mutationer sker direkt. Fokus/scrollås återställs när panelen försvunnit.
+Meny, chatt, varukorg och historik får en gemensam ut-/inövergång (UX-013),
+med native View Transitions och en Web Animations-fallback. React-vyerna
+behålls monterade; snabba vyval landar i senast begärda vy.
+Kundkontroller och skrivfält är inaktiva tills Reacts händelsehanterare är redo,
+så att tidig inmatning inte tappas vid hydrering.
 Varukorgssvar har platta Ändra-/Granska-knappar direkt under texten, utan
 inramad navigationsruta eller extra modellfråga (CHATT-015). Granska är borttaget
 från snabbvalen. Mina beställningar är snabbval enbart för obetalda/betalda

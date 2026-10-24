@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Icon } from "@/shared/Icon";
+import { SheetPresence } from "@/shared/Sheet";
 import {
   weekdays,
   timeKinds,
@@ -255,14 +256,16 @@ export function HoursAdmin({ today }: { today: string }) {
           Återställ lokal förhandsvisning
         </button>
       </div>
-      {editor && (
-        <HoursEditor
-          schedule={schedule}
-          date={editor.date}
-          save={saveEditor}
-          onClose={() => setEditor(null)}
-        />
-      )}
+      <SheetPresence>
+        {editor && (
+          <HoursEditor
+            schedule={schedule}
+            date={editor.date}
+            save={saveEditor}
+            onClose={() => setEditor(null)}
+          />
+        )}
+      </SheetPresence>
     </>
   );
 }

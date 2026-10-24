@@ -72,3 +72,16 @@ krav, stängning eller fokusåterställning, och ska stängas av när användare
 föredrar minskad rörelse. Beslutskälla: användarens tillägg 2026-10-23 om
 animerade informationsrutor, varukorg och andra rutor som kommer upp.
 Reviderad genom användarens önskemål 2026-10-24 om långsammare animationer.
+Även stängning ska animeras. Anroparens kontroll av osparade ändringar eller
+pågående åtgärd sker direkt; bara en godkänd stängning tonas ut. Under
+uttoningen är innehållet inaktivt och fokus återställs när dialogen har stängts.
+Bekräftade ändringar utförs en gång utan att vänta på animationen.
+Förtydligande från användaren 2026-10-24 om dialoger och info-rutor som stängs.
+
+[UX-013] [GÄLLANDE] Navigering mellan meny, chatt, varukorg och Mina
+beställningar ska ha en lugn, mjuk övergång, både från den gamla och till den
+nya vyn. Samtal, oskickad text, utkast och beställningar bevaras; återgång till
+chatten följer CHATT-016. Snabba upprepade vyval ska landa i senast valda vy.
+Animationen får inte skapa extra chattanrop eller dubbla beställningsändringar.
+Minskad rörelse innebär omedelbart vybyte. Beslutskälla: användarens
+förtydligande 2026-10-24 att animationerna också ska omfatta navigering.

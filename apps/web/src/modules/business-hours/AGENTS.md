@@ -21,3 +21,5 @@ Adminschemat är en uttrycklig lokal förhandsvisning enligt ADM-002, frikopplad
 från kunddemon. Google-publicering och Supabase-lagring är inte implementerade.
 Byt inte ut kundens tider mot webbläsarens schema vid senare serveranslutning.
 UI får inte skapa egna tider eller påstå att lokal lagring är publicering.
+HoursAdmin behåller stängande redigerare via SheetPresence (UX-012).
+Kontroll av osparade ändringar och pågående sparande ska ske före uttoning.

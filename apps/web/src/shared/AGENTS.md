@@ -2,6 +2,9 @@ Delad presentation och små tekniska hjälpfunktioner utan verksamhetsregler.
 Lägg domänbegrepp i den modul som äger dem. Skapa inte ett allmänt `utils`-lager.
 
 `Sheet` äger native dialog, scrollås och fokusåterställning (UX-010–012).
-Öppningsanimation och backdrop ligger i globals.css och respekterar minskad
-rörelse. Lägg inte fördröjningar runt stängning eller bekräftelse som kan ändra
-anroparens behörighets-/ändringskontroller.
+Öppnings-/stängningsanimation och backdrop ligger i globals.css och respekterar
+minskad rörelse. Omslut villkorligt renderade dialoger med `SheetPresence`:
+anroparens onClose/bekräftelse körs direkt och får neka stängning. Bara efter
+godkänd stängning behålls presentationen inert tills CSS-animationen avslutats.
+Skjut aldrig upp behörighets-/ändringskontroller eller mutationer till efter
+animationen. Sheet städar scrollås och återställer fokus vid avmontering.

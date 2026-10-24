@@ -23,3 +23,4 @@ enligt CHATT-014.
 produkttexter. Info-knappen är syskon till produktvalet, aldrig en nästlad knapp.
 Dialogen använder Sheet/fokusåterställning och renderas i body så att chattmenyns
 stilar inte spiller över. Den ska varken skicka meddelanden eller ändra utkastet.
+SheetPresence behåller portalen inert under stängningsanimationen (UX-012).

@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { Icon } from "@/shared/Icon";
+import { useHydrated } from "@/shared/useHydrated";
 
 export function ChatComposer({
   text,
@@ -17,6 +18,7 @@ export function ChatComposer({
   onStop: () => void;
 }) {
   const input = useRef<HTMLTextAreaElement>(null);
+  const hydrated = useHydrated();
   const [focused, setFocused] = useState(false);
   useLayoutEffect(() => {
     const element = input.current;
@@ -53,6 +55,7 @@ export function ChatComposer({
       </label>
       <textarea
         id="chat-message"
+        disabled={!hydrated}
         ref={input}
         value={text}
         maxLength={600}
@@ -86,7 +89,7 @@ export function ChatComposer({
           type="submit"
           className="chat-send"
           aria-label="Skicka meddelande"
-          disabled={!text.trim()}
+          disabled={!hydrated || !text.trim()}
         >
           <Icon name="arrow" />
         </button>

@@ -13,6 +13,7 @@ import {
 } from "@/modules/ordering";
 import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
 import { Icon } from "@/shared/Icon";
+import { SheetPresence } from "@/shared/Sheet";
 import {
   filterAdminOrders,
   summarizeAdminOrders,
@@ -316,14 +317,16 @@ export function OrdersAdmin({ today }: { today: string }) {
           </section>
         </>
       )}
-      {selected && (
-        <OrderAdminDetails
-          order={selectedOrder}
-          storageError={storageError}
-          onChange={changeOrder}
-          onClose={() => setSelected(null)}
-        />
-      )}
+      <SheetPresence>
+        {Boolean(selected) && (
+          <OrderAdminDetails
+            order={selectedOrder}
+            storageError={storageError}
+            onChange={changeOrder}
+            onClose={() => setSelected(null)}
+          />
+        )}
+      </SheetPresence>
     </>
   );
 }
