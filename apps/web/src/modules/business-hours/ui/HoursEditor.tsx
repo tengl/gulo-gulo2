@@ -156,13 +156,21 @@ export function HoursEditor({
             ? "Gäller dagar som saknar ett eget datumundantag."
             : "Välj vad som ska avvika. De två tidstyperna kan ändras var för sig."}
         </p>
-        <form onSubmit={submit} onChange={() => setDirty(true)}>
+        <form
+          onSubmit={submit}
+          onChange={(event) => {
+            // Choosing which date to edit is not itself an unsaved edit.
+            if ((event.target as HTMLElement).dataset.selectsDate === undefined)
+              setDirty(true);
+          }}
+        >
           <fieldset disabled={busy} className="admin-form-body">
             {!isStandard && (
               <label className="admin-date-input">
                 Datum
                 <input
                   type="date"
+                  data-selects-date=""
                   value={selectedDate}
                   min="2000-01-01"
                   max="2199-12-31"

@@ -29,6 +29,7 @@ import { Chat } from "./Chat";
 import { StoreHeader } from "./StoreHeader";
 import { useOrderingView } from "./useOrderingView";
 import { SheetPresence } from "@/shared/Sheet";
+import { createId } from "@/shared/create-id";
 import { useHydrated } from "@/shared/useHydrated";
 import { applyCartProposal } from "../index";
 import type { ChatAction } from "../index";
@@ -36,7 +37,7 @@ import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
 import { SavedOrders } from "@/modules/ordering/ui/SavedOrders";
 
 export function OrderingExperience() {
-  const { view, setView, root } = useOrderingView();
+  const { view, setView: changeView, root } = useOrderingView();
   const hydrated = useHydrated();
   const {
     memory,
@@ -51,25 +52,32 @@ export function OrderingExperience() {
   const [forget, setForget] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [reviewCart, setReviewCart] = useState<Cart | null>(null);
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useState({ text: "", count: 0 });
   const [error, setError] = useState("");
+  // UX-010: a repeated status must still change the live region to be read again.
+  function announce(text: string) {
+    setNotice((current) => ({ text, count: current.count + 1 }));
+  }
+  // An error belongs to the view where it happened and must not cover the next one.
+  function setView(next: Parameters<typeof changeView>[0]) {
+    setError("");
+    changeView(next);
+  }
   const count = cartCount(cart);
-  function add(items: Selection[]): boolean {
+  // The product dialog shows its own error, so nothing is repeated behind it.
+  function add(items: Selection[]): string | undefined {
     try {
       updateMemory((current) => ({
         ...current,
         cart: addSelections(current.cart, items),
       }));
       setError("");
-      setNotice("Dina val har lagts till i beställningen.");
-      return true;
+      announce("Dina val har lagts till i beställningen.");
+      return undefined;
     } catch (cause) {
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : "Kunde inte lägga till dina val.",
-      );
-      return false;
+      return cause instanceof Error
+        ? cause.message
+        : "Kunde inte lägga till dina val.";
     }
   }
   function changeQuantity(key: string, quantity: number) {
@@ -79,7 +87,7 @@ export function OrderingExperience() {
         cart: setQuantity(current.cart, key, quantity),
       }));
       setError("");
-      setNotice("Antalet är uppdaterat.");
+      announce("Antalet är uppdaterat.");
     } catch (cause) {
       setError(
         cause instanceof Error ? cause.message : "Kunde inte ändra antalet.",
@@ -105,7 +113,7 @@ export function OrderingExperience() {
     if (action.kind === "orders") setView("orders");
     if (action.kind === "review") {
       if (cart.length) setReviewCart(cart);
-      else setNotice("Din varukorg är tom. Välj något innan du granskar.");
+      else announce("Din varukorg är tom. Välj något innan du granskar.");
     }
     if (action.kind === "cancel") setCancelReference(action.reference);
   }
@@ -220,7 +228,7 @@ export function OrderingExperience() {
                 ...current,
                 cart: removeLine(current.cart, key),
               }));
-              setNotice("Varan är borttagen.");
+              announce("Varan är borttagen.");
               setError("");
             }}
             onReview={() => setReviewCart(cart)}
@@ -241,7 +249,8 @@ export function OrderingExperience() {
         </div>
       )}
       <div className="status-announcement" role="status">
-        {notice}
+        {notice.text}
+        {notice.count % 2 ? "\u00a0" : ""}
       </div>
       {error && (
         <div className="error-toast" role="alert">
@@ -309,13 +318,13 @@ export function OrderingExperience() {
                   throw new Error("Varukorgen har ändrats. Granska den igen.");
                 return saveDemoOrder(
                   current,
-                  crypto.randomUUID(),
+                  createId(),
                   new Date().toISOString(),
                 );
               }, true);
               setReviewCart(null);
               setView("orders");
-              setNotice("Demobeställningen är sparad på enheten.");
+              announce("Demobeställningen är sparad på enheten.");
               setError("");
             }}
           />
@@ -332,7 +341,7 @@ export function OrderingExperience() {
                 true,
               );
               setCancelReference(null);
-              setNotice("Demobeställningen är avbokad.");
+              announce("Demobeställningen är avbokad.");
               setError("");
             }}
           />
@@ -346,7 +355,7 @@ export function OrderingExperience() {
               forgetMemory();
               setSessionKey((key) => key + 1);
               setForget(false);
-              setNotice("Det lokala minnet är rensat.");
+              announce("Det lokala minnet är rensat.");
               setError("");
             }}
           />

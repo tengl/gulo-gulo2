@@ -9,14 +9,22 @@ type Snapshot = { memory: OrderMemory; error: string; ready: boolean };
 const initial: Snapshot = { memory: EMPTY_MEMORY, error: "", ready: false };
 let snapshot = initial;
 let lastRaw: string | null | undefined;
+// A failed write keeps the newer choices in this view; a later read of the older
+// stored value must not silently replace them. Another tab's write still wins.
+let unsaved = false;
 const listeners = new Set<() => void>();
 
 function getSnapshot(): Snapshot {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw !== lastRaw || !snapshot.ready || snapshot.error) {
+    if (
+      raw !== lastRaw ||
+      !snapshot.ready ||
+      (snapshot.error && !unsaved)
+    ) {
       const memory = parseMemory(raw);
       lastRaw = raw;
+      unsaved = false;
       snapshot = { memory, ready: true, error: "" };
     }
   } catch {
@@ -64,15 +72,18 @@ function updateMemory(
   // A successful write must be readable after a reload, including format/size limits.
   parseMemory(raw);
   try {
-    if (current.error) throw new Error("Storage unavailable");
+    // Unreadable stored data is never overwritten; failed writes are retried.
+    if (current.error && !unsaved) throw new Error("Storage unavailable");
     localStorage.setItem(STORAGE_KEY, raw);
     lastRaw = raw;
+    unsaved = false;
     snapshot = { memory: next, error: "", ready: true };
   } catch {
     if (mustPersist)
       throw new Error(
         "Beställningen kunde inte sparas. Tillåt webbplatslagring eller frigör utrymme och försök igen. Inget har ändrats.",
       );
+    unsaved = true;
     snapshot = {
       memory: next,
       ready: true,
@@ -87,6 +98,7 @@ function forgetMemory() {
   try {
     localStorage.removeItem(STORAGE_KEY);
     lastRaw = null;
+    unsaved = false;
     snapshot = { memory: EMPTY_MEMORY, error: "", ready: true };
     notify();
   } catch {

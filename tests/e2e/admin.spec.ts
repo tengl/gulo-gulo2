@@ -320,3 +320,26 @@ test("ADM-002/003: invalid interval and broken local data give errors, no false 
     "återställd",
   );
 });
+
+test("ADM-002: choosing another date is not an unsaved edit", async ({
+  page,
+}) => {
+  const prompts: string[] = [];
+  page.on("dialog", (prompt) => {
+    prompts.push(prompt.message());
+    void prompt.dismiss();
+  });
+  await login(page);
+  await page.locator(".admin-day").first().getByRole("button").click();
+  const dialog = page.getByRole("dialog", {
+    name: "Datumundantag",
+    exact: true,
+  });
+  const date = dialog.getByLabel("Datum", { exact: true });
+  await date.fill("2030-01-07");
+  await date.fill("2030-01-08");
+  await expect(date).toHaveValue("2030-01-08");
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  expect(prompts).toEqual([]);
+});

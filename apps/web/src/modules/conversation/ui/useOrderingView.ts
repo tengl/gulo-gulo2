@@ -29,7 +29,7 @@ const ENTER: Record<Direction, Keyframe> = {
 };
 
 function hiddenOrDetached(element: HTMLElement | null) {
-  return !element?.isConnected || element.closest("[hidden]") !== null;
+  return !element?.isConnected || !element.checkVisibility();
 }
 
 // UX-013: animate the visual change without remounting the conversation.

@@ -1254,3 +1254,111 @@ test("CHATT-013: composer grows beyond two lines while focused and preserves tex
     .toBeGreaterThan(double + 20);
   await expect(input).toHaveValue(text);
 });
+
+test("CHATT-008: a double click on send sends once and is not cancelled by the stop button", async ({
+  page,
+}) => {
+  let posts = 0;
+  await page.route("**/api/chat", async (route) => {
+    if (route.request().method() !== "POST") return route.continue();
+    posts++;
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await route.continue();
+  });
+  await page.goto("/");
+  await page
+    .getByRole("textbox", { name: "Meddelande till Gulo Gulo" })
+    .fill("Vem gör korven?");
+  await page
+    .getByRole("button", { name: "Skicka meddelande", exact: true })
+    .dblclick();
+  await expect(page.getByRole("log")).toContainText("Niklas på plats");
+  await expect(page.getByText("Svaret avbröts")).toHaveCount(0);
+  expect(posts).toBe(1);
+});
+
+test("CHATT-008: an HTML error page from the host gives a Swedish retry message", async ({
+  page,
+}) => {
+  await page.route("**/api/chat", (route) =>
+    route.request().method() === "POST"
+      ? route.fulfill({
+          status: 502,
+          contentType: "text/html",
+          body: "<!DOCTYPE html><title>Bad gateway</title>",
+        })
+      : route.continue(),
+  );
+  await page.goto("/");
+  await page
+    .getByRole("textbox", { name: "Meddelande till Gulo Gulo" })
+    .fill("Vem gör korven?");
+  await page
+    .getByRole("button", { name: "Skicka meddelande", exact: true })
+    .click();
+  await expect(
+    page.getByText("Chatten svarar inte just nu. Dina val är kvar, försök igen."),
+  ).toBeVisible();
+  await expect(page.getByText(/not valid JSON|Unexpected token/)).toHaveCount(0);
+});
+
+test("CHATT-006: choices kept after a failed local write are not replaced by the older stored cart", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await addFromMenu(page);
+  await expect(
+    page.getByRole("button", { name: "Visa beställning, 1 varor", exact: true }),
+  ).toBeVisible();
+  await page.evaluate(() => {
+    Storage.prototype.setItem = () => {
+      throw new DOMException("Quota exceeded", "QuotaExceededError");
+    };
+  });
+  await addFromMenu(page);
+  const warning = page.getByRole("alert").filter({
+    hasText: "Dina val finns bara kvar i den här vyn",
+  });
+  await expect(warning).toBeVisible();
+  await view(page, "Chatta med oss");
+  await view(page, "Välj från menyn");
+  await expect(
+    page.getByRole("button", { name: "Visa beställning, 2 varor", exact: true }),
+  ).toBeVisible();
+  await expect(warning).toBeVisible();
+});
+
+test("CHATT-013: a growing composer keeps the latest message in view", async ({
+  page,
+}) => {
+  await page.goto("/");
+  for (const text of [
+    "Vem gör korven?",
+    "Berätta om Ghostdog",
+    "Vem gör korven?",
+  ]) {
+    await page
+      .getByRole("textbox", { name: "Meddelande till Gulo Gulo" })
+      .fill(text);
+    await page
+      .getByRole("button", { name: "Skicka meddelande", exact: true })
+      .click();
+    await expect(
+      page.getByRole("button", { name: "Skicka meddelande", exact: true }),
+    ).toBeVisible();
+  }
+  const log = page.locator(".chat-log");
+  const gap = () =>
+    log.evaluate(
+      (element) => element.scrollHeight - element.scrollTop - element.clientHeight,
+    );
+  // Let the automatic scroll to the latest reply finish first.
+  await expect.poll(gap).toBeLessThanOrEqual(2);
+  const input = page.getByRole("textbox", { name: "Meddelande till Gulo Gulo" });
+  await input.focus();
+  await input.fill("rad 1\nrad 2\nrad 3\nrad 4\nrad 5\nrad 6");
+  await expect
+    .poll(() => input.evaluate((element) => element.clientHeight))
+    .toBeGreaterThan(60);
+  await expect.poll(gap).toBeLessThanOrEqual(2);
+});

@@ -12,6 +12,7 @@ import type { ReactElement, ReactNode } from "react";
 import { Icon } from "./Icon";
 
 const ExitContext = createContext<(() => void) | null>(null);
+const OPEN_MS = 420;
 
 // Retain only the presentation after its owner has accepted a close.
 // Business callbacks have already run; Sheet makes the retained UI inert.
@@ -46,10 +47,16 @@ export function Sheet({
   const ref = useRef<HTMLDialogElement>(null);
   const finishExit = useContext(ExitContext);
   const closing = finishExit !== null;
+  const opened = useRef(0);
   useLayoutEffect(() => {
     if (!finishExit || !ref.current) return;
     let current = true;
     const animations = ref.current.getAnimations();
+    // UX-012: closing during the opening continues from about where the dialog
+    // is, instead of first jumping to fully visible.
+    const elapsed = performance.now() - opened.current;
+    if (elapsed < OPEN_MS)
+      for (const animation of animations) animation.currentTime = OPEN_MS - elapsed;
     void Promise.allSettled(
       animations.map((animation) => animation.finished),
     ).then(() => {
@@ -66,14 +73,21 @@ export function Sheet({
         ? document.activeElement
         : null;
     dialog?.showModal();
+    opened.current = performance.now();
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       dialog?.close();
       document.body.style.overflow = overflow;
       // UX-010: removal of an open dialog can otherwise leave focus on <body>.
+      // If the opener was hidden meanwhile (a view change), use the main region.
       requestAnimationFrame(() => {
-        if (opener?.isConnected) opener.focus({ preventScroll: true });
+        if (opener?.isConnected && opener.checkVisibility())
+          opener.focus({ preventScroll: true });
+        else
+          document
+            .querySelector<HTMLElement>("main[tabindex]")
+            ?.focus({ preventScroll: true });
       });
     };
   }, []);

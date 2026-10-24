@@ -50,6 +50,10 @@ export function addSelections(
     const existing = result.findIndex((line) => line.key === key);
     const previous = result[existing];
     if (previous) {
+      if (previous.quantity + selection.quantity > MAX_DEMO_QUANTITY)
+        throw new Error(
+          `Demon stöder högst ${MAX_DEMO_QUANTITY} av samma val. Du kan ändra antalet i beställningen.`,
+        );
       const updated = normalize({
         ...previous,
         quantity: previous.quantity + selection.quantity,

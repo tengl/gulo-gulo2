@@ -15,6 +15,7 @@ import { ChatProposal } from "./ChatProposal";
 import { ChatAvatar } from "./ChatAvatar";
 import { ChatComposer } from "./ChatComposer";
 import { ChatShortcuts } from "./ChatShortcuts";
+import { createId } from "@/shared/create-id";
 import { scrollChat } from "./scroll-chat";
 import { OrderingHours } from "@/modules/business-hours/ui/OrderingHours";
 
@@ -77,6 +78,23 @@ export function Chat({
       controller.current?.abort();
     };
   }, []);
+  // A growing composer shrinks the log from below; keep the latest message in
+  // view when the customer was reading at the bottom.
+  useEffect(() => {
+    const container = log.current;
+    if (!container) return;
+    let height = container.clientHeight;
+    const observer = new ResizeObserver(() => {
+      const previous = height;
+      height = container.clientHeight;
+      const shrink = previous - height;
+      const gap = container.scrollHeight - container.scrollTop - height;
+      if (shrink > 0 && gap <= shrink + 2)
+        container.scrollTo({ top: container.scrollHeight, behavior: "instant" });
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
   useLayoutEffect(() => {
     const returning = active && !previousActive.current;
     previousActive.current = active;
@@ -131,12 +149,13 @@ export function Chat({
           })),
         }),
       });
-      const data = await response.json();
-      if (!response.ok)
+      // A proxy or timeout can answer with an HTML error page instead of JSON.
+      const data = await response.json().catch(() => null);
+      if (!response.ok || data === null)
         throw new Error(
-          typeof data.error === "string"
+          typeof data?.error === "string"
             ? data.error
-            : "Kunde inte hämta svar.",
+            : "Chatten svarar inte just nu. Dina val är kvar, försök igen.",
         );
       if (
         typeof data.text !== "string" ||
@@ -148,7 +167,7 @@ export function Chat({
       setMessages((current) => [
         ...current,
         {
-          id: crypto.randomUUID(),
+          id: createId(),
           role: "assistant",
           content: reply.text,
           action: reply.action,
@@ -173,7 +192,7 @@ export function Chat({
     if (!value.trim() || busy || controller.current) return;
     const next = [
       ...messages,
-      { id: crypto.randomUUID(), role: "user" as const, content: value.trim() },
+      { id: createId(), role: "user" as const, content: value.trim() },
     ];
     setMessages(next);
     if (clearDraft) setText("");
@@ -241,7 +260,7 @@ export function Chat({
                         setMessages((current) => [
                           ...current,
                           {
-                            id: crypto.randomUUID(),
+                            id: createId(),
                             role: "assistant",
                             content: describeCartChange(cart, action),
                           },

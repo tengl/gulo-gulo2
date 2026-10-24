@@ -19,7 +19,7 @@ export function ConfigureProduct({
 }: {
   product: Product;
   onClose: () => void;
-  onAdd: (items: Selection[]) => boolean;
+  onAdd: (items: Selection[]) => string | undefined;
 }) {
   const [variant, setVariant] = useState<WrapVariant>();
   const [quantity, setAmount] = useState(1);
@@ -128,12 +128,11 @@ export function ConfigureProduct({
         className="primary-button"
         disabled={!ready}
         onClick={() => {
-          if (onAdd([{ productId: product.id, quantity, variant, omissions }]))
-            onClose();
-          else
-            setAddError(
-              `Demon stöder högst ${MAX_DEMO_QUANTITY} av samma val. Inget har lagts till. Du kan ändra antalet i beställningen.`,
-            );
+          const failure = onAdd([
+            { productId: product.id, quantity, variant, omissions },
+          ]);
+          if (failure) setAddError(`Inget har lagts till. ${failure}`);
+          else onClose();
         }}
       >
         <span>

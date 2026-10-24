@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Icon } from "@/shared/Icon";
 import { useHydrated } from "@/shared/useHydrated";
 
@@ -20,6 +20,12 @@ export function ChatComposer({
   const input = useRef<HTMLTextAreaElement>(null);
   const hydrated = useHydrated();
   const [focused, setFocused] = useState(false);
+  // The send button turns into the stop button in the same place; the second
+  // click of a double click must not cancel the message that was just sent.
+  const busySince = useRef(0);
+  useEffect(() => {
+    if (busy) busySince.current = performance.now();
+  }, [busy]);
   useLayoutEffect(() => {
     const element = input.current;
     if (!element) return;
@@ -77,15 +83,19 @@ export function ChatComposer({
       />
       {busy ? (
         <button
+          key="stop"
           type="button"
           className="chat-send"
           aria-label="Avbryt svar"
-          onClick={onStop}
+          onClick={() => {
+            if (performance.now() - busySince.current >= 400) onStop();
+          }}
         >
           <span className="stop-icon" />
         </button>
       ) : (
         <button
+          key="send"
           type="submit"
           className="chat-send"
           aria-label="Skicka meddelande"

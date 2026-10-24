@@ -51,7 +51,9 @@ test("UX-007/008: reject decimals, negative quantities, unknown products and ove
       { ...wrap, productId: "unknown" },
     ]),
   );
-  assert.throws(() => addSelections(original, [{ ...wrap, quantity: 98 }]));
+  assert.throws(() => addSelections(original, [{ ...wrap, quantity: 98 }]), {
+    message: /högst 99 av samma val/,
+  });
   assert.equal(original[0]!.quantity, 2);
   assert.equal(original.length, 1);
 });

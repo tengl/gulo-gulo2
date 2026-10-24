@@ -165,3 +165,91 @@ test("UX-010: narrow viewports and keyboard dismissal", async ({ page }) => {
   await expect(page.getByRole("dialog")).not.toBeVisible();
   await expect(choose).toBeFocused();
 });
+
+async function addGhostdog(page: import("@playwright/test").Page) {
+  await page
+    .getByRole("button", { name: "Välj GHOSTDOG", exact: true })
+    .click();
+  const product = page.getByRole("dialog", {
+    name: "Välj GHOSTDOG",
+    exact: true,
+  });
+  await product.getByRole("radio", { name: /Enkel wrap/ }).check();
+  await product
+    .getByRole("button", { name: /Lägg till i beställningen/ })
+    .click();
+  return product;
+}
+
+test("UX-010: repeated statuses are announced again and the category switch is a labelled group", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("navigation", { name: "Beställningssätt" })
+    .getByRole("button", { name: "Välj från menyn", exact: true })
+    .click();
+  await expect(
+    page.getByRole("group", { name: "Produktkategori", exact: true }),
+  ).toBeVisible();
+  const status = page.locator(".status-announcement");
+  await expect(await addGhostdog(page)).not.toBeVisible();
+  const first = await status.textContent();
+  await expect(await addGhostdog(page)).not.toBeVisible();
+  await expect(status).toContainText("Dina val har lagts till");
+  expect(await status.textContent()).not.toBe(first);
+});
+
+test("UX-008: the product dialog reports the real limit once, without a toast behind it", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("navigation", { name: "Beställningssätt" })
+    .getByRole("button", { name: "Välj från menyn", exact: true })
+    .click();
+  await expect(await addGhostdog(page)).not.toBeVisible();
+  await page.evaluate(() => {
+    const key = "gulo-order-memory-v1";
+    const memory = JSON.parse(localStorage.getItem(key)!);
+    memory.cart[0].quantity = 99;
+    localStorage.setItem(key, JSON.stringify(memory));
+  });
+  await page.reload();
+  await page
+    .getByRole("navigation", { name: "Beställningssätt" })
+    .getByRole("button", { name: "Välj från menyn", exact: true })
+    .click();
+  const product = await addGhostdog(page);
+  await expect(product.getByRole("alert")).toHaveText(
+    "Inget har lagts till. Demon stöder högst 99 av samma val. Du kan ändra antalet i beställningen.",
+  );
+  await expect(page.locator(".error-toast")).toHaveCount(0);
+});
+
+test("UX-010: focus lands in the new view after saving from a panel that becomes hidden", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("navigation", { name: "Beställningssätt" })
+    .getByRole("button", { name: "Välj från menyn", exact: true })
+    .click();
+  await expect(await addGhostdog(page)).not.toBeVisible();
+  await page
+    .getByRole("button", { name: "Visa beställning, 1 varor", exact: true })
+    .first()
+    .click();
+  await page
+    .getByRole("complementary", { name: "Beställningsöversikt" })
+    .getByRole("button", { name: "Granska beställningen", exact: true })
+    .click();
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name: "Spara demobeställning", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Mina beställningar", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator("#main-content")).toBeFocused();
+});

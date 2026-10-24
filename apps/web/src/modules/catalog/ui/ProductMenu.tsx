@@ -21,7 +21,11 @@ export function ProductMenu({
         </div>
         <span className="menu-note">Alla priser i kr</span>
       </div>
-      <div className="category-switch" aria-label="Produktkategori">
+      <div
+        className="category-switch"
+        role="group"
+        aria-label="Produktkategori"
+      >
         <button
           type="button"
           aria-pressed={category === "wrap"}

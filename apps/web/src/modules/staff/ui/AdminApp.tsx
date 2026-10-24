@@ -2,16 +2,34 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@/shared/Icon";
 import { HoursAdmin } from "@/modules/business-hours/ui/HoursAdmin";
+import { stockholmDate } from "@/modules/business-hours";
 import { useHydrated } from "@/shared/useHydrated";
 import { OrdersAdmin } from "./OrdersAdmin";
 import { AdminOrderSound } from "./AdminOrderSound";
 
 export type AdminView = "hours" | "orders" | "connections";
 
-export function AdminApp({ today, view }: { today: string; view: AdminView }) {
+export function AdminApp({
+  today: serverToday,
+  view,
+}: {
+  today: string;
+  view: AdminView;
+}) {
+  // A tab left open overnight must move "today" to the new Stockholm date.
+  const [today, setToday] = useState(serverToday);
+  useEffect(() => {
+    const update = () => setToday(stockholmDate());
+    const timer = window.setInterval(update, 60_000);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, []);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const ready = useHydrated();
