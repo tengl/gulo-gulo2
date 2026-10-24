@@ -14,6 +14,7 @@ import {
   canCancelDemoOrder,
 } from "@/modules/ordering";
 import type { ChatAction } from "../index";
+import { describeCartChange } from "../index";
 import { ChatMenu } from "@/modules/catalog/ui/ChatMenu";
 import { Icon } from "@/shared/Icon";
 
@@ -39,7 +40,7 @@ export function ChatProposal({
   const [items, setItems] = useState(
     action.kind === "add" || action.kind === "replace" ? action.items : [],
   );
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState("");
   const [error, setError] = useState("");
   const applied = useRef(false);
   const onlyItem = items.length === 1 ? items[0] : undefined;
@@ -52,7 +53,7 @@ export function ChatProposal({
     action.kind === "add" ||
     action.kind === "replace" ||
     action.kind === "remove";
-  if (done) return <p className="proposal-done">✓ Varukorgen är uppdaterad.</p>;
+  if (done) return <p className="proposal-done chat-prose">✓ {done}</p>;
   if (changesCart && stale)
     return (
       <p className="proposal-stale">
@@ -72,15 +73,15 @@ export function ChatProposal({
   function apply(nextItems = items) {
     if (applied.current) return;
     applied.current = true;
-    const result = onApply(
+    const approvedAction =
       action.kind === "add" || action.kind === "replace"
         ? { ...action, items: nextItems }
-        : action,
-    );
+        : action;
+    const result = onApply(approvedAction);
     if (result) {
       applied.current = false;
       setError(result);
-    } else setDone(true);
+    } else setDone(describeCartChange(cart, approvedAction));
   }
   if (action.kind === "menu")
     return (

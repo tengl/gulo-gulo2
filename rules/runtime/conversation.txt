@@ -132,6 +132,17 @@ Beslutskälla: användarens önskemål 2026-10-23 om senaste meddelandet vid
 återgång till chatten och mjukare övergångar för knappar och huvud.
 Reviderad genom användarens önskemål 2026-10-24 om långsammare animationer.
 
+[CHATT-017] [GÄLLANDE] Efter en godkänd ändring i chatten ska bekräftelsen
+visa vad kunden valde: produkt, antal, enkel/dubbel för wraps och eventuella
+bortval. Det gäller både återkopplingen vid förslaget och det nya meddelandet.
+Beskriv just de tillagda, ersättande eller borttagna valen, inte hela den
+aktuella varukorgen som om den vore ändringen. Bekräftelsen är en historisk
+ögonblicksbild som ligger kvar även när kunden fortsätter ändra varukorgen.
+Visa bara en lyckad bekräftelse efter genomförd, validerad ändring. Befintliga
+versions- och dubbelklicksskydd gäller fortsatt enligt CHATT-004 och CHATT-014.
+Beslutskälla: användarens önskemål 2026-10-24 att det bekräftade valet ska stå
+kvar i stället för bara "Varukorgen är uppdaterad".
+
 Tekniska demogränser för CHATT-005/009: högst 50 unika rader i ett utkast,
 30 lokala demobeställningar och 300 000 tecken i det serialiserade lokala minnet.
 Sparande måste klara samma validering som återläsning. Chatt-API tar högst

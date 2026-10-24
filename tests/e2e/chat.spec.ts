@@ -1040,7 +1040,7 @@ test("UX-011/012: names and info icons open animated facts without changing the 
   ).toBeLessThanOrEqual(page.viewportSize()!.width);
 });
 
-test("CHATT-014: either direct variant adds exactly once, preserves the draft and sends no message", async ({
+test("CHATT-014/017: either direct variant confirms the selected choices exactly once and preserves them", async ({
   page,
 }, testInfo) => {
   if (testInfo.project.name === "mobile")
@@ -1096,6 +1096,20 @@ test("CHATT-014: either direct variant adds exactly once, preserves the draft an
     ).toBeVisible();
     await expect(input).toHaveValue("Min nästa fråga");
     expect(posts).toBe(before);
+    const receipt = page.locator(".proposal-done").first();
+    const confirmed = page
+      .getByRole("log")
+      .getByRole("article", { name: "Gulo Gulo", exact: true })
+      .last();
+    for (const message of [receipt, confirmed]) {
+      await expect(message).toContainText("Lagt till i varukorgen:");
+      await expect(message).toContainText(
+        `2 × GHOSTDOG · ${choice.label} wrap · utan senap`,
+      );
+      await expect(message).not.toContainText(
+        `${choice.label === "enkel" ? "dubbel" : "enkel"} wrap`,
+      );
+    }
     await page
       .getByRole("group", { name: "Snabbval i chatten", exact: true })
       .getByRole("button", { name: "Visa varukorg", exact: true })
@@ -1113,6 +1127,13 @@ test("CHATT-014: either direct variant adds exactly once, preserves the draft an
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBeLessThanOrEqual(page.viewportSize()!.width);
+    await addFromMenu(page, "BRÖL");
+    await view(page, "Chatta med oss");
+    await expect(receipt).toContainText(
+      `2 × GHOSTDOG · ${choice.label} wrap · utan senap`,
+    );
+    await expect(receipt).not.toContainText("BRÖL");
+    await expect(input).toHaveValue("Min nästa fråga");
   }
 });
 
@@ -1154,6 +1175,12 @@ test("CHATT-004/014: multiple variants prepare one shared change and stale direc
       exact: true,
     }),
   ).toBeVisible();
+  const confirmation = page
+    .getByRole("log")
+    .getByRole("article", { name: "Gulo Gulo", exact: true })
+    .last();
+  await expect(confirmation).toContainText("1 × GHOSTDOG · enkel wrap");
+  await expect(confirmation).toContainText("1 × BRÖL · dubbel wrap");
   await ask(page, "Vad har jag i varukorgen?");
   const answer = page
     .getByRole("log")

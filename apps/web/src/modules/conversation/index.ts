@@ -6,6 +6,7 @@ export {
   toolReply,
   limitedReply,
   applyCartProposal,
+  describeCartChange,
   interpretModelReply,
 } from "./domain/chat.ts";
 export type {

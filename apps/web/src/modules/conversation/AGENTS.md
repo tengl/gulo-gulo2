@@ -46,3 +46,6 @@ Mörka knappar ändrar varukorgen; ljusa snabbval med rund kant skickar meddelan
 Lägg inte till chattbubblor; menyn har separata plus för produktval och namn/info-i
 för information enligt UX-011.
 Behåll versionskontrollen och skyddet mot dubbla godkännanden även i snabbflödet.
+`describeCartChange` ger bekräftelsens val från den godkända ändringen (CHATT-017),
+även för borttagning/ersättning. Både förslaget och senaste meddelandet sparar
+texten som en ögonblicksbild; räkna inte om den från en senare varukorg.

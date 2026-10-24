@@ -53,7 +53,10 @@ avbryter automatiken; återgång till chatten visar slutet omedelbart.
 Meny- och chattval använder samma utkast. Se UX- och CHATT-reglerna.
 Enkel/dubbel i chattförslag visas som två knappar (CHATT-014). En ensam rad
 utan variant har två mörka direkta lägg-till-val med pris; flera rader och
-ersättning godkänns gemensamt efter variantval. Ljusa meddelandeknappar behåller
+ersättning godkänns gemensamt efter variantval. Godkända ändringar visar sina
+produkter, antal, varianter och bortval både vid förslaget och i det nya svaret
+(CHATT-017). Texten beskriver ändringen och bevaras när varukorgen ändras senare.
+Ljusa meddelandeknappar behåller
 bakgrundsfärg och rund kant utan chattbubblor (användarens korrigering 2026-10-23).
 Plusset väljer produkten i båda menyerna. Produktnamnet med ett info-i efter öppnar katalogfakta,
 priser och wraparnas tillbehör i en dialog (UX-011). Den skickar inget till

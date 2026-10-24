@@ -9,6 +9,7 @@ import {
 } from "@/modules/ordering";
 import type { Cart, SavedOrder } from "@/modules/ordering";
 import type { ChatAction, ChatMessage, ChatReply } from "../index";
+import { describeCartChange } from "../index";
 import { Icon } from "@/shared/Icon";
 import { ChatProposal } from "./ChatProposal";
 import { ChatAvatar } from "./ChatAvatar";
@@ -242,8 +243,7 @@ export function Chat({
                           {
                             id: crypto.randomUUID(),
                             role: "assistant",
-                            content:
-                              "Varukorgen är uppdaterad. Du kan fråga vad du har i varukorgen eller fortsätta välja från menyn.",
+                            content: describeCartChange(cart, action),
                           },
                         ]);
                       return result;

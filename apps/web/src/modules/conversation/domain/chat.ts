@@ -4,6 +4,8 @@ import {
   productFacts,
   formatPrice,
   DOUBLE_SURCHARGE_ORE,
+  getProduct,
+  omissionLabels,
 } from "../../catalog/index.ts";
 import {
   describeCart,
@@ -59,6 +61,39 @@ export function applyCartProposal(
   )
     return cart.filter((line) => !action.keys.includes(line.key));
   throw new Error("Det förslaget går inte att använda här.");
+}
+
+// CHATT-017: describe the approved delta, independently of later cart changes.
+export function describeCartChange(cart: Cart, action: ChatAction): string {
+  if (
+    action.kind !== "add" &&
+    action.kind !== "replace" &&
+    action.kind !== "remove"
+  )
+    throw new Error("Det förslaget ändrar inte varukorgen.");
+  const lines =
+    action.kind === "remove"
+      ? cart.filter((line) => action.keys.includes(line.key))
+      : addSelections([], readSelections(action.items));
+  const heading =
+    action.kind === "add"
+      ? "Lagt till i varukorgen:"
+      : action.kind === "replace"
+        ? "Varukorgen ersatt med:"
+        : "Tagit bort från varukorgen:";
+  return `${heading}\n${lines
+    .map((line) => {
+      const product = getProduct(line.productId);
+      const variant =
+        product.category === "wrap"
+          ? ` · ${line.variant === "double" ? "dubbel" : "enkel"} wrap`
+          : "";
+      const omissions = line.omissions.length
+        ? ` · utan ${line.omissions.map((id) => omissionLabels[id]).join(", ")}`
+        : "";
+      return `${line.quantity} × ${product.name}${variant}${omissions}`;
+    })
+    .join("\n")}`;
 }
 
 export function interpretModelReply(
