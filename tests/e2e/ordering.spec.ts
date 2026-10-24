@@ -124,7 +124,12 @@ test("UX-008 / CHATT-001: safe text proposals and conversation survive view swit
     .getByRole("button", { name: /^Dubbel/ })
     .click();
   await add.click();
-  await expect(page.getByRole("log")).toContainText("Varukorgen är uppdaterad");
+  const confirmed = page
+    .getByRole("log")
+    .getByRole("article", { name: "Gulo Gulo", exact: true })
+    .last();
+  await expect(confirmed).toContainText("Lagt till i varukorgen:");
+  await expect(confirmed).toContainText("2 × GHOSTDOG · dubbel wrap · utan senap");
   await page
     .getByRole("button", { name: "Visa beställning, 3 varor", exact: true })
     .click();

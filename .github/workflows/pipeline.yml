@@ -115,10 +115,13 @@ jobs:
           [[ "$CHECKS" == "success" || "$CHECKS" == "skipped" ]]
           [[ "$DATABASE_CHECKS" == "success" || "$DATABASE_CHECKS" == "skipped" ]]
 
+  # Vercel deployment is off until the repository variable VERCEL_DEPLOY_ENABLED
+  # is set to true (SYS-015). Without it these jobs are skipped, not failed.
   preview:
     needs: [changes, verified]
     if: >-
       always() && needs.verified.result == 'success' &&
+      vars.VERCEL_DEPLOY_ENABLED == 'true' &&
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       needs.changes.outputs.web == 'true'
@@ -146,6 +149,7 @@ jobs:
     needs: [changes, verified]
     if: >-
       always() && needs.verified.result == 'success' &&
+      vars.VERCEL_DEPLOY_ENABLED == 'true' &&
       github.ref == 'refs/heads/main' && github.event_name != 'pull_request' &&
       (needs.changes.outputs.web == 'true' || needs.changes.outputs.database == 'true')
     runs-on: ubuntu-latest

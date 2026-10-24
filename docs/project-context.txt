@@ -200,8 +200,9 @@ installation. Första bygget eller cachetömt ombygge granskar hela trädet.
 Git-fel stoppar publicering i byggkommandots verifieringssteg. Playwright körs
 separat i Actions; demowebben väntar inte på den körningen. Se SYS-014.
 Admin- och Claude-variabler sätts separat i Netlify för Builds och Functions;
-Supabase och riktiga betalningar behövs inte för denna demo. Vercel är kvar som
-planerad produktionsplattform, med ett separat releaseflöde och egna hemligheter.
+Supabase och riktiga betalningar behövs inte för denna demo. Vercel Pro är vald
+produktionsplattform (SYS-001), men pipelinens Vercel-/migrationsjobb är avstängda
+enligt SYS-015 tills användaren sätter repovariabeln VERCEL_DEPLOY_ENABLED.
 
 tooling/changes.mjs skiljer kontroller, webbdeployment och databasmigrationer.
 Dokument, AGENTS.md, enbart tester/evals och icke-runtime-regler deployar inte.

@@ -5,9 +5,11 @@ Status: GÄLLANDE för denna grundstruktur.
 Beslutskälla: användarens uppdrag 2026-10-18 och initiala arkitekturval i repot.
 Inga verksamhetsbeslut från den tidigare implementationen ingår här.
 
-[SYS-001] [GÄLLANDE] Vercel används för webb/server, Supabase för databas och
-Claude för språkmodellen. Integrationerna anropas från servern. Arkitekturen ger
-plats för Supabase Auth om kontoinloggning väljs; se BEH-003–004.
+[SYS-001] [GÄLLANDE] Vercel Pro med serverfunktioner i Stockholm (arn1) används
+för webb/server i produktion, Supabase i regionen eu-north-1 för databas, Brevo
+för nyhetsbrev och mejl, och Claude för språkmodellen. Integrationerna anropas
+från servern. Arkitekturen ger plats för Supabase Auth om kontoinloggning väljs;
+se BEH-003–004. Reviderad genom användarens plattformsval 2026-10-24.
 
 [SYS-002] [GÄLLANDE] Regler för det nya systemet skrivs i grupperade textfiler
 i rules/ med stabila ID:n och tydlig status. Gällande regeltext är facit för
@@ -80,3 +82,10 @@ Ett ogiltigt Git-intervall ska stoppa publicering, inte tolkas som oförändrat.
 Netlify kör regelkontroll, lint, typer och Node-tester före appbygget. Webbläsar-
 tester körs separat i GitHub Actions; Netlify inväntar inte det jobbets resultat.
 Demowebben använder lokal demodata och får inte migrera produktionsdatabasen.
+
+[SYS-015] [GÄLLANDE] Deployment till Vercel är avstängd tills användaren
+uttryckligen aktiverar den. Pipelinens preview- och produktionsjobb, inklusive
+produktionsmigrationer, körs bara när GitHub-repovariabeln VERCEL_DEPLOY_ENABLED
+är true; annars hoppas de över utan att kontrollerna fallerar. Till dess är
+Netlifydemon enligt SYS-014 den enda publika webben. Beslutskälla: användaren
+2026-10-24, "Den ska inte deploya till Vercel än".

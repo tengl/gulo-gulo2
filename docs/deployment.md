@@ -115,7 +115,9 @@ välj ombygge utan cache om Netlify annars återanvänder en jämförelse utan �
 Netlify kör sina egna `check`-kontroller före appbygget och publicerar inte vid
 fel. Playwright körs fortsatt i GitHub Actions; Netlify väntar inte på Actions.
 Denna demoväg kör inga databasreleaser. GitHub Actions Vercel-/databasjobb är ett
-separat flöde som kräver sina egna miljöer och hemligheter enligt nedan.
+separat flöde som kräver sina egna miljöer och hemligheter enligt nedan. Det är
+avstängt enligt SYS-015 tills repovariabeln `VERCEL_DEPLOY_ENABLED` sätts till
+`true`; utan den hoppas jobben `preview` och `production` över.
 
 Sätt `ADMIN_ACCESS_CODE` (separat slumpmässig kod om minst 16 tecken) i Netlifys
 miljövariabler med tillgång för **Functions** samt **Builds**. Ingen kod är förvald;
@@ -153,6 +155,9 @@ och [miljövariabler](https://docs.netlify.com/build/configure-builds/environmen
    databasuppgifterna i `production`.
 5. Skydda `main` med obligatorisk kontroll **verified** från Pipeline.
    Den slutförs även för rena dokumentationsändringar.
+6. Aktivera flödet först när användaren beslutat det (SYS-015): sätt
+   repovariabeln `VERCEL_DEPLOY_ENABLED` till `true` under
+   Settings → Secrets and variables → Actions → Variables.
 
 | GitHub-hemlighet | Användning |
 | --- | --- |
