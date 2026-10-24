@@ -3,3 +3,5 @@ export { SiteHeader } from "./ui/SiteHeader";
 export { SiteFooter } from "./ui/SiteFooter";
 export { ContentPage } from "./ui/ContentPage";
 export { Prose, JsonLd } from "./ui/Prose";
+export { TextsAdmin } from "./ui/TextsAdmin";
+export type { TextFile } from "./ui/TextsAdmin";

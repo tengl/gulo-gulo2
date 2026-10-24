@@ -39,6 +39,13 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
   redirects: async () => legacyRedirects(),
+  // WEBB-016: admin's text editor reads the deployed texts and images at run time
+  // to list the files and check links and images before saving.
+  outputFileTracingIncludes: {
+    "/admin/texter": ["./content/**/*"],
+    "/api/admin/content": ["./content/**/*", "./public/bilder/**/*"],
+    "/api/admin/content/history": ["./content/**/*"],
+  },
   ...(process.env.GULO_BROWSER_TEST === "1"
     ? {
         distDir: ".next-e2e",

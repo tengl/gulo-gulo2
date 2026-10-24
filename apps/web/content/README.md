@@ -1,7 +1,8 @@
 # Webbplatsens texter
 
-Här ligger texterna på gulogulo.se. Du kan ändra dem direkt här på GitHub, eller
-be en agent göra det.
+Här ligger texterna på gulogulo.se. Enklast ändrar du dem i administrationen på
+`/admin/texter`: logga in med ditt GitHub-konto, välj text, ändra och spara. Du
+kan också ändra dem direkt här på GitHub, eller be en agent göra det.
 
 ## Ändra en text på GitHub
 

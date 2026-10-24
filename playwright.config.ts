@@ -19,12 +19,32 @@ export default defineConfig({
     },
     { name: "desktop", use: { viewport: { width: 1280, height: 900 } } },
   ],
-  webServer: {
-    command:
-      "npm run dev --workspace @gulo/web -- --hostname 127.0.0.1 --port 3100",
-    env: { ANTHROPIC_API_KEY: "", ANTHROPIC_MODEL: "", GULO_BROWSER_TEST: "1", ADMIN_ACCESS_CODE: "browser-test-admin-code-only" },
-    url: "http://127.0.0.1:3100",
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
-  },
+  webServer: [
+    {
+      command:
+        "npm run dev --workspace @gulo/web -- --hostname 127.0.0.1 --port 3100",
+      env: {
+        ANTHROPIC_API_KEY: "",
+        ANTHROPIC_MODEL: "",
+        GULO_BROWSER_TEST: "1",
+        ADMIN_ACCESS_CODE: "browser-test-admin-code-only",
+        // WEBB-015–018: text editing talks to tests/fakes/github.mjs, never GitHub.
+        GITHUB_CLIENT_ID: "browser-test-client",
+        GITHUB_CLIENT_SECRET: "browser-test-github-secret-only",
+        GITHUB_CONTENT_REPO: "gulo/test",
+        GITHUB_CONTENT_BRANCH: "main",
+        GITHUB_WEB_URL: "http://127.0.0.1:3101",
+        GITHUB_API_URL: "http://127.0.0.1:3101",
+      },
+      url: "http://127.0.0.1:3100",
+      reuseExistingServer: !process.env.CI,
+      timeout: 60_000,
+    },
+    {
+      command: "node tests/fakes/github.mjs",
+      url: "http://127.0.0.1:3101/__health",
+      reuseExistingServer: !process.env.CI,
+      timeout: 10_000,
+    },
+  ],
 });

@@ -7,6 +7,10 @@ Läs SYS-001, SYS-004–007 och relevanta integrations-/verksamhetsförslag.
 - `supabase/`: planerad plats för klienter, repository-adaptrar och genererade
   databastyper; de är ännu inte implementerade.
 - `access/`: serverkonfigurerad superadmin-kod och signerad sessionscookie.
+- `github/`: GitHub App-inloggning för textredaktörer, krypterad sessionscookie
+  med deras token och läs/skriv av `apps/web/content/` via GitHubs API
+  (WEBB-015–018). Varje anrop görs med personens egen token.
+- `content/`: läser webbplatsens texter och kontrollerar en ändrad fil.
 - `notifications/` / `brevo/`: planerade mejl-, nyhetsbrevs- och pushadaptrar.
   Brevo är valt för nyhetsbrev och mejl enligt SYS-001.
 - `google-business/`: OAuth och Business Profile API för öppettider. Appens

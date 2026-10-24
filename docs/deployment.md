@@ -173,6 +173,30 @@ projekt, hemligheter eller releasejobb är aktiverade just nu. Kontrollera fakti
 konfiguration i GitHub/Vercel separat; en lyckad push betyder inte att releasen
 har lyckats. Releasejobben kräver att motsvarande miljö är konfigurerad.
 
+## Koppla textredigeringen i admin (WEBB-015–018)
+
+`/admin/texter` låter personal med GitHub-konto ändra webbplatsens texter. Varje
+sparning blir en commit på `main` i personens namn. Konfigurera en gång:
+
+1. GitHub → Settings → Developer settings → **GitHub Apps** → New GitHub App,
+   ägd av kontot eller organisationen som äger repot.
+   - Callback URL: `https://<webbplatsens adress>/api/admin/github/callback`.
+     Lägg till en rad per miljö som ska kunna redigera (till exempel Netlify-demon).
+   - Kryssa i **Expire user authorization tokens**. Ingen webhook.
+   - Repository permissions: **Contents: Read and write** (Metadata: Read följer med).
+2. Installera appen på enbart `gulo-gulo2`.
+3. Skapa en client secret. Sätt i servermiljön `GITHUB_CLIENT_ID`,
+   `GITHUB_CLIENT_SECRET` och `GITHUB_CONTENT_REPO=tengl/gulo-gulo2`
+   (`GITHUB_CONTENT_BRANCH` är `main` om den inte anges).
+4. Ge textredaktörerna skrivrätt till repot (Settings → Collaborators). Konton
+   utan skrivrätt släpps inte in.
+
+En sparning startar pipelinen som vanligt; webbplatsen visar ändringen efter
+nästa bygge. Skyddas `main` senare med obligatoriska kontroller tar GitHub inte
+emot direkta commits. Admin säger då att grenen är skyddad; ge redaktörerna rätt
+att gå förbi skyddet, eller bygg om flödet till pull requests med automatisk
+sammanslagning innan skyddet slås på.
+
 ## Flytta gulogulo.se från Squarespace (WEBB-001–014)
 
 Görs först när användaren beslutat att produktionen ska gå live; inget av detta

@@ -124,6 +124,8 @@ Administrationen och Google-integrationen är beslutade nya funktioner i
 serververifierad superadmin-kod enligt BEH-005. `server/access/` signerar och
 validerar sessionscookies, `/api/admin/session` hanterar login och logout.
 `app/admin/AdminScreen.tsx` återkontrollerar sessionen på varje adminsida.
+`/admin/texter` har en egen behörighetsgräns: GitHub-inloggning med skrivrätt
+till repot (WEBB-018) via `server/github/`, oberoende av superadmin-koden.
 Beställningsvyn på `/admin/bestallningar` läser samma lokala historik som kunden;
 ordering äger demoövergångarna och staff äger filter, summeringar och ljud.
 Nya referenser upptäcks oberoende av listfilter. Web Audio aktiveras uttryckligen

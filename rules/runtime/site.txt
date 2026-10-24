@@ -65,10 +65,11 @@ bekräftat via mejl (dubbel bekräftelse). Brevo håller listan och avregistreri
 appen sparar inga adresser själv. Utan konfigurerad tjänst säger formuläret
 ärligt att anmälan inte är öppen ännu.
 
-Redigering i admin (beslutat 2026-10-24, inte byggt ännu)
+Redigering i admin (beslutat och byggt 2026-10-24, /admin/texter)
 Beslutskälla: användarens fråga om texter i admingränssnittet, beslut "Lägg in
 det" och upplysningen att personalen som administrerar texter har GitHub-konton,
-alla 2026-10-24. Kräver inte Supabase och kan byggas före lanseringen.
+alla 2026-10-24, och "Då kan du bygga det nu då?" samma dag. Kräver inte
+Supabase. Fungerar när Gulo Gulos GitHub App är konfigurerad (docs/deployment.md).
 [WEBB-015] [GÄLLANDE] Personalen ska kunna ändra webbplatsens texter i admin.
 Repot förblir enda källan: admin sparar ändringen som en commit i
 apps/web/content/ via GitHub, så att agenter alltid ser den publicerade texten.
@@ -90,4 +91,5 @@ GitHub enligt WEBB-006 fortsätter att fungera parallellt.
 [WEBB-019] [GÄLLANDE] Uppgifter som måste synas direkt eller ändras ofta,
 som öppettider, avvikelser och korta tillfälliga meddelanden, hör till
 databasen och redigeras i admin med omedelbar verkan, inte via innehållsfilerna.
-Priser och meny styrs fortsatt av katalogen enligt WEBB-007.
+Priser och meny styrs fortsatt av katalogen enligt WEBB-007. Tillfälliga
+meddelanden är ännu inte byggda; de kräver gemensam lagring.

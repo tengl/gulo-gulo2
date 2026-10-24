@@ -80,6 +80,10 @@ export function AdminApp({
             <Icon name="menu" />
             Anslutningar
           </Link>
+          <Link href="/admin/texter" prefetch={false}>
+            <Icon name="write" />
+            Texter
+          </Link>
         </nav>
         <div className="admin-sidebar-bottom">
           <span className="admin-role">● Superadmin</span>

@@ -3,7 +3,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import { parseContent, ContentError } from "./domain/content.ts";
-import { referencesIn } from "./domain/markdown.ts";
+import { referenceProblems, renderMarkdown } from "./domain/markdown.ts";
 import { sitePaths } from "./domain/site.ts";
 
 // WEBB-006: the same check runs for agents and for people editing on GitHub.
@@ -40,16 +40,12 @@ test("WEBB-006: every content file is valid and its links and images exist", () 
   }
   for (const document of [...pages, ...products]) {
     const file = `${products.includes(document as never) ? "produkter" : "sidor"}/${document.slug}.md`;
-    const { links, images } = referencesIn(document.body);
     const front = document.data as { bild?: string };
-    for (const image of [...images, ...(front.bild ? [front.bild] : [])])
-      if (!existsSync(join(web, "public", image)))
-        problems.push(`${file}: bilden ${image} finns inte i apps/web/public`);
-    for (const link of links) {
-      if (/^(https:|mailto:|tel:)/.test(link)) continue;
-      if (!paths.has(link.split("#")[0]!))
-        problems.push(`${file}: länken ${link} leder inte till någon sida`);
-    }
+    problems.push(
+      ...referenceProblems(file, document.body, front.bild, paths, (image) =>
+        existsSync(join(web, "public", image)),
+      ),
+    );
   }
   assert.deepEqual(problems, []);
 });
@@ -70,5 +66,13 @@ test("WEBB-006: content errors name the file and field in Swedish", () => {
   assert.throws(
     () => parseContent("page", "sidor/x.md", "---\ntitel: X\n---\n"),
     /beskrivning saknas/,
+  );
+});
+
+test("WEBB-006: a heading with an anchor keeps the paragraphs and images after it", () => {
+  const html = renderMarkdown("## Järven {#jarven}\n\n![En järv](/bilder/jarv.jpg)\n\nText.");
+  assert.equal(
+    html.trim(),
+    '<h2 id="jarven">Järven</h2><p><img src="/bilder/jarv.jpg" alt="En järv"></p>\n<p>Text.</p>',
   );
 });

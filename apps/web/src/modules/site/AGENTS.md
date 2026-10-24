@@ -1,6 +1,6 @@
 # Webbplatsen
 
-Den publika webbplatsen enligt `rules/runtime/site.txt` (WEBB-001–014).
+Den publika webbplatsen enligt `rules/runtime/site.txt` (WEBB-001–019).
 Routes ligger i `src/app/(site)/`, texterna i `apps/web/content/` (läs
 `content/AGENTS.md`) och laddas av `src/server/content/load.ts` vid bygget.
 
@@ -9,7 +9,11 @@ Routes ligger i `src/app/(site)/`, texterna i `apps/web/content/` (läs
 - `domain/site.ts`: sidornas adresser, menyuppställning, schema.org-data och
   `/llms.txt`. Allt byggs från samma källor som sidorna (WEBB-010); skriv inte
   egna kopior av priser eller tider.
-- `ui/`: sidhuvud, sidfot, nyhetsbrevsformulär och innehållssida.
+- `domain/content-edit.ts`: fälten som admin visar och ändringar som skrivs in
+  på plats, utan att resten av filen formateras om (WEBB-015).
+- `ui/`: sidhuvud, sidfot, nyhetsbrevsformulär, innehållssida och admins
+  textredigering `TextsAdmin` (route `app/admin/texter`, server i
+  `server/github/` och `server/content/editable.ts`).
 
 `ORDERING_IS_DEMO` säger på webbplatsen och i `/llms.txt` att beställningen är
 en demo. Ändra den först när riktiga beställningar tas emot.

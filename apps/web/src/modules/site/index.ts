@@ -9,7 +9,14 @@ export {
   renderMarkdown,
   plainMarkdown,
   referencesIn,
+  referenceProblems,
 } from "./domain/markdown.ts";
+export {
+  editableContent,
+  applyContentEdits,
+  ContentEditError,
+} from "./domain/content-edit.ts";
+export type { ContentField, EditableContent } from "./domain/content-edit.ts";
 export {
   ORDERING_IS_DEMO,
   sitePaths,

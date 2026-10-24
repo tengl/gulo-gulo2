@@ -1,7 +1,7 @@
 import { Marked } from "marked";
 
 // Content may set a heading anchor with "## Rubrik {#ankare}" (used by /om#niklas).
-const anchoredHeading = /^(#{1,6}) (.+?)\s*\{#([a-z0-9-]+)\}\s*$/gm;
+const anchoredHeading = /^(#{1,6}) (.+?)[ \t]*\{#([a-z0-9-]+)\}[ \t]*$/gm;
 
 const marked = new Marked({
   gfm: true,
@@ -43,4 +43,26 @@ export function referencesIn(source: string): {
     if (token.type === "image") images.push(token.href);
   });
   return { links, images };
+}
+
+// WEBB-006/016: internal links must lead to a page and images must exist. Used by
+// the content check and before admin saves an edited file.
+export function referenceProblems(
+  file: string,
+  body: string,
+  image: string | undefined,
+  paths: ReadonlySet<string>,
+  imageExists: (path: string) => boolean,
+): string[] {
+  const problems: string[] = [];
+  const { links, images } = referencesIn(body);
+  for (const path of [...images, ...(image ? [image] : [])])
+    if (!imageExists(path))
+      problems.push(`${file}: bilden ${path} finns inte i apps/web/public`);
+  for (const link of links) {
+    if (/^(https:|mailto:|tel:)/.test(link)) continue;
+    if (!paths.has(link.split("#")[0]!))
+      problems.push(`${file}: länken ${link} leder inte till någon sida`);
+  }
+  return problems;
 }

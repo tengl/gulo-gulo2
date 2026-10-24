@@ -1,4 +1,4 @@
-import { renderMarkdown } from "../index";
+import { renderMarkdown } from "../domain/markdown";
 
 // Content files are part of this repository; their Markdown is trusted.
 export function Prose({ markdown }: { markdown: string }) {

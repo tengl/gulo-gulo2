@@ -19,3 +19,6 @@ Enbart teständringar ska köra kontroller utan att skapa en deployment.
 `site.spec.ts` provar webbplatsen (WEBB-001–014): sidor, meny som text, 301 från
 gamla adresser, schema.org/llms-filer, noindex i testmiljön, djuplänk och nyhetsbrev.
 Beställningen ligger på `/bestall`; `/` är webbplatsen.
+`texts.spec.ts` provar textredigeringen (WEBB-015–018) mot `tests/fakes/github.mjs`,
+som Playwright startar på port 3101. Varje test väljer egen inloggningskod med
+kakan `fake-github-code` och får då en egen kopia av repot i attrappen.
