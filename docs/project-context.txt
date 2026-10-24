@@ -182,8 +182,10 @@ npm run test:browser kör Playwright på mobil och dator. Installera Chromium me
 npm exec -- playwright install chromium, eller använd PLAYWRIGHT_CHANNEL=chrome
 om Chrome finns. Testservern använder port 3100, .next-e2e och syntetisk adminkod;
 den stänger av Claude så att inga riktiga modell-/betalningsanrop behövs.
-Behåll användarens utvecklingsserver på port 3000. Genererade next-env.d.ts kan
-växla typsökväg under test/bygge; granska diffen så att tillfällig sökväg inte följer med.
+Behåll användarens utvecklingsserver på port 3000. next-env.d.ts genereras av
+Next.js (även av `npm run typecheck`) och är inte versionshanterad.
+En kvarlämnad server på 3100 återanvänds av Playwright lokalt; stoppa egna
+felsökningsservrar där innan testerna körs, annars saknas testets adminkod.
 
 Funktionsbasen 989b4f6 verifierades med check, produktionsbygge och 64
 webbläsartester; detta är historiskt verifieringsunderlag, inte resultat för
