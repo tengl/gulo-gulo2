@@ -6,6 +6,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Icon } from "@/shared/Icon";
 import { useHydrated } from "@/shared/useHydrated";
 import type { ContentField } from "../domain/content-edit";
+import type { LinkTarget } from "../domain/site";
+import { LinkInserter } from "./LinkInserter";
 import { Prose } from "./Prose";
 
 // WEBB-015–018: staff edit the site's texts here. A save is a commit in the
@@ -58,10 +60,12 @@ export function TextsAdmin({
   editor,
   files,
   githubFiles,
+  links,
 }: {
   editor: { login: string; name: string };
   files: readonly TextFile[];
   githubFiles: string;
+  links: readonly LinkTarget[];
 }) {
   const ready = useHydrated();
   const [opened, setOpened] = useState<Opened | null>(null);
@@ -74,6 +78,7 @@ export function TextsAdmin({
   const [versions, setVersions] = useState<Version[] | null>(null);
   const [leaving, setLeaving] = useState<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
+  const bodyField = useRef<HTMLTextAreaElement>(null);
   const changed =
     opened !== null &&
     (body !== opened.body ||
@@ -318,8 +323,22 @@ export function TextsAdmin({
                 })}
                 {opened.file !== "webbplats.md" && (
                   <div className="texts-field">
-                    <label htmlFor="text-body">Brödtext</label>
+                    <div className="texts-body-head">
+                      <label htmlFor="text-body">Brödtext</label>
+                      <LinkInserter
+                        targets={links}
+                        field={bodyField}
+                        onInsert={(next, cursor) => {
+                          setBody(next);
+                          requestAnimationFrame(() => {
+                            bodyField.current?.focus();
+                            bodyField.current?.setSelectionRange(cursor, cursor);
+                          });
+                        }}
+                      />
+                    </div>
                     <textarea
+                      ref={bodyField}
                       id="text-body"
                       className="texts-body"
                       rows={16}
@@ -328,8 +347,8 @@ export function TextsAdmin({
                       onChange={(event) => setBody(event.target.value)}
                     />
                     <small id="text-body-help">
-                      Tom rad mellan stycken. ## före en rubrik, - före en punkt,
-                      **fet text** och [länktext](/om) för en länk.
+                      Tom rad mellan stycken. ## före en rubrik, - före en punkt och
+                      **fet text**. Markera text och välj Infoga länk för att länka.
                     </small>
                   </div>
                 )}
@@ -426,7 +445,17 @@ export function TextsAdmin({
                   <h2 id="texts-preview">Förhandsvisning</h2>
                   <h3 className="texts-preview-title">{title}</h3>
                   {lead && <p className="texts-preview-lead">{lead}</p>}
-                  <Prose markdown={body} />
+                  {/* Links open in a new tab so the edit is not left by mistake. */}
+                  <div
+                    onClickCapture={(event) => {
+                      const link = (event.target as Element).closest("a");
+                      if (!link) return;
+                      event.preventDefault();
+                      window.open(link.href, "_blank", "noopener");
+                    }}
+                  >
+                    <Prose markdown={body} />
+                  </div>
                 </section>
               )}
             </form>

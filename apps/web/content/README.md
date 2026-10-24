@@ -33,7 +33,12 @@ Bilder ligger i `../public/bilder/` och anges som `/bilder/namn.jpg`.
 
 - `## Rubrik` ger en mellanrubrik, `**fet**` ger fetstil och en rad som börjar
   med `- ` blir en punktlista.
-- En länk skrivs `[text](/meny)`. Interna länkar måste leda till en sida som finns.
+- En länk skrivs `[text](/meny)`. I admin gör knappen **Infoga länk** det åt dig:
+  markera texten och välj sidan i listan.
+- Interna länkar börjar med `/` och måste leda till en sida som finns. En länk
+  till ett ställe på en sida skrivs `/om#niklas`, där `niklas` är ankaret från
+  rubriken `## Niklas Bonnevier {#niklas}`. Byter du eller tar bort ett ankare
+  stoppar kontrollen länkar som pekar dit. Externa länkar börjar med `https://`.
 - En ny produkt: kopiera en befintlig fil i `produkter/`, byt filnamn (små
   bokstäver, siffror och bindestreck) och ge den ett eget `ordning`-nummer.
 

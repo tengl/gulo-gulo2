@@ -3,8 +3,8 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import { parseContent, ContentError } from "./domain/content.ts";
-import { referenceProblems, renderMarkdown } from "./domain/markdown.ts";
-import { sitePaths } from "./domain/site.ts";
+import { anchorsIn, referenceProblems, renderMarkdown } from "./domain/markdown.ts";
+import { linkTargets, pagePath, sitePaths } from "./domain/site.ts";
 
 // WEBB-006: the same check runs for agents and for people editing on GitHub.
 const web = join(import.meta.dirname, "../../..");
@@ -25,6 +25,12 @@ test("WEBB-006: every content file is valid and its links and images exist", () 
     "content/sidor ska innehålla exakt start, event, om, swish och integritet",
   );
   const paths = new Set(sitePaths(products));
+  const anchors = new Map(
+    pages.map((page) => [
+      pagePath(page.slug),
+      new Set(["innehall", ...anchorsIn(page.body).map((anchor) => anchor.id)]),
+    ]),
+  );
   const problems: string[] = [];
   const orders = new Set<number>();
   const legacy = new Set<string>();
@@ -42,8 +48,13 @@ test("WEBB-006: every content file is valid and its links and images exist", () 
     const file = `${products.includes(document as never) ? "produkter" : "sidor"}/${document.slug}.md`;
     const front = document.data as { bild?: string };
     problems.push(
-      ...referenceProblems(file, document.body, front.bild, paths, (image) =>
-        existsSync(join(web, "public", image)),
+      ...referenceProblems(
+        file,
+        document.body,
+        front.bild,
+        paths,
+        (image) => existsSync(join(web, "public", image)),
+        anchors,
       ),
     );
   }
@@ -75,4 +86,46 @@ test("WEBB-006: a heading with an anchor keeps the paragraphs and images after i
     html.trim(),
     '<h2 id="jarven">Järven</h2><p><img src="/bilder/jarv.jpg" alt="En järv"></p>\n<p>Text.</p>',
   );
+});
+
+test("WEBB-006/016: link problems say what to write instead", () => {
+  const paths = new Set(["/", "/om", "/meny"]);
+  const anchors = new Map([["/om", new Set(["niklas", "jarven"])]]);
+  const check = (link: string) =>
+    referenceProblems("sidor/x.md", `[a](${link})`, undefined, paths, () => true, anchors);
+  assert.deepEqual(check("/om#niklas"), []);
+  assert.deepEqual(check("/meny#menu-wraps"), [], "anchors on pages built in code are not known");
+  assert.deepEqual(check("/om#nikals"), [
+    "sidor/x.md: länken /om#nikals leder till ett ställe som inte finns på /om; menade du /om#niklas?",
+  ]);
+  assert.deepEqual(check("/om#kontakt"), [
+    "sidor/x.md: länken /om#kontakt leder till ett ställe som inte finns på /om",
+  ]);
+  assert.deepEqual(check("http://example.com"), [
+    "sidor/x.md: länken http://example.com börjar med http://; skriv https:// i stället",
+  ]);
+  assert.deepEqual(check("om"), [
+    "sidor/x.md: länken om ska börja med / för en egen sida (till exempel /om) eller med https://",
+  ]);
+  assert.deepEqual(check("/omm"), ["sidor/x.md: länken /omm leder inte till någon sida"]);
+});
+
+test("WEBB-016: admin offers every page, product and heading anchor as a link target", () => {
+  const raw = (path: string) => readFileSync(join(content, path), "utf8");
+  const pages = Object.fromEntries(
+    ["start", "event", "om", "swish", "integritet"].map((slug) => [
+      slug,
+      parseContent("page", `sidor/${slug}.md`, raw(`sidor/${slug}.md`)),
+    ]),
+  );
+  const targets = linkTargets({
+    settings: parseContent("settings", "webbplats.md", raw("webbplats.md")).data,
+    pages: pages as never,
+    products: [parseContent("product", "produkter/brewurst.md", raw("produkter/brewurst.md"))],
+  });
+  const find = (href: string) => targets.find((target) => target.href === href);
+  assert.equal(find("/")?.label, "Startsidan");
+  assert.equal(find("/om#niklas")?.label, "Om oss › Niklas Bonnevier");
+  assert.equal(find("/produkter/brewurst")?.label, "Brewurst");
+  assert.ok(find("/meny") && find("/bestall"));
 });

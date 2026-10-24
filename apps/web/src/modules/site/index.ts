@@ -10,6 +10,7 @@ export {
   plainMarkdown,
   referencesIn,
   referenceProblems,
+  anchorsIn,
 } from "./domain/markdown.ts";
 export {
   editableContent,
@@ -20,6 +21,10 @@ export type { ContentField, EditableContent } from "./domain/content-edit.ts";
 export {
   ORDERING_IS_DEMO,
   sitePaths,
+  pageNames,
+  pagePath,
+  pageAnchors,
+  linkTargets,
   menuSections,
   hoursText,
   businessJsonLd,
@@ -28,4 +33,4 @@ export {
   llmsText,
   llmsFullText,
 } from "./domain/site.ts";
-export type { SiteContent } from "./domain/site.ts";
+export type { SiteContent, LinkTarget } from "./domain/site.ts";

@@ -5,7 +5,7 @@ import {
 } from "../../catalog/index.ts";
 import { demoHours } from "../../business-hours/index.ts";
 import type { ContentProduct, Page, SiteSettings } from "./content.ts";
-import { plainMarkdown } from "./markdown.ts";
+import { anchorsIn, plainMarkdown } from "./markdown.ts";
 
 export type SiteContent = {
   settings: SiteSettings;
@@ -29,6 +29,52 @@ export function sitePaths(products: readonly ContentProduct[]): string[] {
     "/swish",
     "/integritet",
     "/bestall",
+  ];
+}
+
+// Names of the content pages for people, by file name in content/sidor.
+export const pageNames: Record<keyof SiteContent["pages"], string> = {
+  start: "Startsidan",
+  event: "Event",
+  om: "Om oss",
+  swish: "Swish-butiken",
+  integritet: "Integritet",
+};
+
+export const pagePath = (slug: string) => (slug === "start" ? "/" : `/${slug}`);
+
+// The anchors on each content page; every page also has the skip link target.
+export function pageAnchors(content: SiteContent): Map<string, Set<string>> {
+  return new Map(
+    Object.entries(content.pages).map(([slug, page]) => [
+      pagePath(slug),
+      new Set(["innehall", ...anchorsIn(page.body).map((anchor) => anchor.id)]),
+    ]),
+  );
+}
+
+export type LinkTarget = { href: string; label: string; group: string };
+
+// WEBB-016: the pages and places admin offers when a link is inserted.
+export function linkTargets(content: SiteContent): LinkTarget[] {
+  const pages = Object.entries(content.pages) as [keyof SiteContent["pages"], Page][];
+  return [
+    ...pages.flatMap(([slug, page]) => [
+      { href: pagePath(slug), label: pageNames[slug], group: "Sidor" },
+      ...anchorsIn(page.body).map((anchor) => ({
+        href: `${pagePath(slug)}#${anchor.id}`,
+        label: `${pageNames[slug]} › ${anchor.title}`,
+        group: "Sidor",
+      })),
+    ]),
+    { href: "/meny", label: "Menyn med priser", group: "Sidor" },
+    { href: "/bestall", label: "Beställ (chatten och menyn)", group: "Sidor" },
+    { href: "/produkter", label: "Alla produkter", group: "Produkter" },
+    ...content.products.map((product) => ({
+      href: `/produkter/${product.slug}`,
+      label: product.data.namn,
+      group: "Produkter",
+    })),
   ];
 }
 

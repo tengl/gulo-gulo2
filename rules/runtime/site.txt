@@ -77,7 +77,11 @@ Texterna läggs inte i databasen eller i någon annan parallell lagring.
 [WEBB-016] [GÄLLANDE] Admin validerar med samma innehållsschema som bygget och
 visar felen i formuläret innan något sparas. Tidigare versioner kan visas och
 återställas. Admin säger ärligt att ändringen publiceras efter nästa bygge,
-inom några minuter, inte direkt.
+inom några minuter, inte direkt. Länkar infogas genom att välja bland
+webbplatsens sidor, produkter och rubrikankare. Kontrollen stoppar länkar till
+sidor eller ankare som inte finns, föreslår närmaste ankare vid felstavning,
+kräver https:// för externa länkar och stoppar en ändring som tar bort ett
+ankare som en annan sida länkar till (användarens "Japp, gör det" 2026-10-24).
 [WEBB-017] [GÄLLANDE] En sparning skriver bara över den version personalen
 öppnade. Har filen ändrats under tiden, av en agent eller en annan person,
 stoppas sparningen med ett tydligt besked i stället för att ändringen skrivs över.

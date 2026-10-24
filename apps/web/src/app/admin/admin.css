@@ -877,6 +877,40 @@
   line-height: 1.55;
   resize: vertical;
 }
+.texts-body-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+}
+.admin-scope .texts-link-button {
+  min-height: 40px;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+.texts-link {
+  flex-basis: 100%;
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #eceee3;
+  padding: 16px;
+  margin-bottom: 4px;
+}
+.texts-link .admin-actions {
+  justify-content: flex-start;
+}
+.texts-field select {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #c6cbb9;
+  border-radius: 5px;
+  padding: 10px 12px;
+  background: #fffefa;
+  font: inherit;
+}
 .texts-field .texts-body {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 13px;

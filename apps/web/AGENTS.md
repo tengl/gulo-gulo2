@@ -22,6 +22,8 @@ databas, personliga konton, Google-publicering, betalning och röst återstår.
 `/admin/bestallningar` visar lokal demohistorik med bekräftade statusändringar.
 Alla adminsidor kontrollerar sessionen via `app/admin/AdminScreen.tsx`;
 flytta inte åtkomstkontrollen till enbart layouten. Orderljudet ägs av staff.
+Undantag: `/admin/texter` kräver GitHub-inloggning i stället (WEBB-018) och
+kontrollerar den i sin page och i varje `/api/admin/content`-anrop.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

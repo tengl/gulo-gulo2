@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { TextsAdmin } from "@/modules/site/ui";
-import { editableFiles } from "@/server/content/editable";
+import { editableFiles, editorLinks } from "@/server/content/editable";
 import { contentRoot, githubConfig } from "@/server/github/config";
 import { currentEditor } from "@/server/github/current";
 
@@ -28,6 +28,7 @@ export default async function TextsPage({
       <TextsAdmin
         editor={{ login: session.editor.login, name: session.editor.name }}
         files={editableFiles()}
+        links={editorLinks()}
         githubFiles={`${config.webUrl}/${config.repo}/blob/${config.branch}/${contentRoot}`}
       />
     );

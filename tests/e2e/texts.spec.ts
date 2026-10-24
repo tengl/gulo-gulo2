@@ -155,3 +155,43 @@ test("WEBB-015: unsaved changes are kept until the editor chooses to discard the
   await page.getByRole("button", { name: "Ångra ändringarna" }).click();
   await expect(page.getByLabel("Rubrik", { exact: true })).toHaveValue("Om oss");
 });
+
+test("WEBB-016: links are chosen from the site's pages and checked before saving", async ({ page }, info) => {
+  const code = codeFor(info);
+  await signIn(page, code);
+  await openText(page, "Event");
+  const body = page.getByLabel("Brödtext");
+  await body.fill("Läs om Niklas här.");
+  await body.evaluate((area: HTMLTextAreaElement) => area.setSelectionRange(7, 13));
+  await page.getByRole("button", { name: "Infoga länk" }).click();
+  const panel = page.getByRole("group", { name: "Infoga länk" });
+  await expect(panel.getByLabel("Länktext")).toHaveValue("Niklas");
+  await panel.getByLabel("Länka till").selectOption({ label: "Om oss › Niklas Bonnevier" });
+  await panel.getByRole("button", { name: "Infoga" }).click();
+  await expect(body).toHaveValue("Läs om [Niklas](/om#niklas) här.");
+  await expect(body).toBeFocused();
+  // An external address must be complete and use https.
+  await page.getByRole("button", { name: "Infoga länk" }).click();
+  await panel.getByLabel("Länktext").fill("Instagram");
+  await panel.getByLabel("Länka till").selectOption({ label: "En annan webbplats…" });
+  await panel.getByLabel("Webbadress").fill("http://instagram.com/gulogulo");
+  await panel.getByRole("button", { name: "Infoga" }).click();
+  await expect(panel.getByRole("alert")).toContainText("Skriv hela adressen");
+  await panel.getByLabel("Webbadress").fill("https://www.instagram.com/gulogulo");
+  await panel.getByRole("button", { name: "Infoga" }).click();
+  await expect(body).toHaveValue(/\[Instagram\]\(https:\/\/www\.instagram\.com\/gulogulo\)/);
+  // Preview links open in a new tab and the editor stays.
+  const preview = page.getByRole("region", { name: "Förhandsvisning" });
+  const [tab] = await Promise.all([
+    page.waitForEvent("popup"),
+    preview.getByRole("link", { name: "Niklas" }).click(),
+  ]);
+  await expect(tab).toHaveURL(/\/om#niklas$/);
+  await tab.close();
+  await expect(page.getByRole("heading", { level: 1, name: "Event" })).toBeVisible();
+  // A mistyped place on a page is stopped with a suggestion.
+  await body.fill("Läs om [Niklas](/om#nikals).");
+  await page.getByRole("button", { name: "Spara och publicera" }).click();
+  await expect(alert(page, "Rätta texten")).toContainText("menade du /om#niklas?");
+  expect(await commits(page, code)).toHaveLength(0);
+});
