@@ -154,7 +154,11 @@ export function OrderingExperience() {
         </button>
         {view === "chat" && cartButton}
       </nav>
-      <main id="main-content" className={`experience-layout view-${view}`}>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className={`experience-layout view-${view}`}
+      >
         <div className="experience-main">
           <div hidden={view !== "chat"}>
             <Chat

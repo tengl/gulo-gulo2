@@ -11,36 +11,48 @@ async function counts(page: Page) {
   return page.evaluate(() => ({
     enter: Number(document.documentElement.dataset.viewEnter ?? 0),
     exit: Number(document.documentElement.dataset.viewExit ?? 0),
+    direction: document.documentElement.dataset.viewLast ?? "",
   }));
 }
 
 for (const mode of ["native", "fallback"] as const) {
-  test(`UX-013 / CHATT-016: ${mode} view transitions preserve state and the latest navigation wins`, async ({
+  test(`UX-013 / CHATT-016: ${mode} view transitions move in the navigation direction, preserve state and the latest navigation wins`, async ({
     page,
   }) => {
     await page.addInitScript((fallback) => {
-      const record = (key: "viewEnter" | "viewExit") => {
+      const record = (key: "viewEnter" | "viewExit", direction: string) => {
         const data = document.documentElement.dataset;
         data[key] = String(Number(data[key] ?? 0) + 1);
+        data.viewLast = direction;
       };
       if (fallback) {
         Object.defineProperty(document, "startViewTransition", {
           value: undefined,
         });
+        const directions: Record<string, string> = {
+          "translateX(30%)": "forward",
+          "translateX(-30%)": "back",
+          "translateY(40px)": "up",
+          "translateY(-16px)": "down",
+        };
         const original = Element.prototype.animate;
         Element.prototype.animate = function (
           ...args: Parameters<Element["animate"]>
         ) {
-          if (this.matches(".ordering-app")) {
+          if (this.matches(".experience-main, .cart-pane")) {
             const frames = args[0] as Keyframe[];
-            record(frames[0]?.opacity === 0 ? "viewEnter" : "viewExit");
+            record(
+              "viewEnter",
+              directions[String(frames[0]?.transform)] ?? "continued",
+            );
           }
           return original.apply(this, args);
         };
       } else {
         document.addEventListener("animationstart", (event) => {
-          if (event.animationName === "view-in") record("viewEnter");
-          if (event.animationName === "view-out") record("viewExit");
+          const match = /^view-(in|out)-(\w+)$/.exec(event.animationName);
+          if (match)
+            record(match[1] === "in" ? "viewEnter" : "viewExit", match[2]!);
         });
       }
     }, mode === "fallback");
@@ -50,6 +62,7 @@ for (const mode of ["native", "fallback"] as const) {
         posts++;
     });
     await page.goto("/");
+    const wide = (page.viewportSize()?.width ?? 0) > 760;
     const input = page.getByRole("textbox", {
       name: "Meddelande till Gulo Gulo",
     });
@@ -59,13 +72,15 @@ for (const mode of ["native", "fallback"] as const) {
       .click();
     await expect(page.getByRole("log")).toContainText("Niklas på plats");
     await input.fill("Min påbörjade fråga");
-    for (const name of [
-      "Välj från menyn",
-      "Mina beställningar",
-      "Chatta med oss",
-      "varukorg",
-      "Chatta med oss",
-    ]) {
+    for (const [name, direction] of [
+      ["Välj från menyn", "back"],
+      ["Mina beställningar", "forward"],
+      ["Chatta med oss", "back"],
+      // The cart rises as its own view on phones; on wide screens it is the
+      // side panel next to the menu, which lies before the chat.
+      ["varukorg", wide ? "back" : "up"],
+      ["Chatta med oss", wide ? "forward" : "down"],
+    ] as const) {
       const before = await counts(page);
       if (name === "varukorg") {
         await page
@@ -75,25 +90,35 @@ for (const mode of ["native", "fallback"] as const) {
           })
           .click();
       } else await navigate(page, name);
-      await expect
-        .poll(async () => (await counts(page)).exit)
-        .toBeGreaterThan(before.exit);
+      if (mode === "native")
+        await expect
+          .poll(async () => (await counts(page)).exit)
+          .toBeGreaterThan(before.exit);
       await expect
         .poll(async () => (await counts(page)).enter)
         .toBeGreaterThan(before.enter);
+      expect((await counts(page)).direction).toBe(direction);
+      await page.evaluate(() =>
+        Promise.allSettled(
+          document.getAnimations().map((animation) => animation.finished),
+        ),
+      );
     }
     await expect(input).toHaveValue("Min påbörjade fråga");
     await expect(page.getByRole("log")).toContainText("Niklas på plats");
     expect(posts).toBe(1);
-    await page
-      .getByRole("navigation", { name: "Beställningssätt" })
-      .evaluate((element) => {
-        const buttons = element.querySelectorAll("button");
-        for (const index of [0, 1, 2]) buttons[index]!.click();
-      });
+    // Real pointer clicks during a running transition reach the page.
+    await navigate(page, "Välj från menyn");
+    await navigate(page, "Chatta med oss");
+    await navigate(page, "Mina beställningar");
     await expect(
       page.getByRole("heading", { name: "Mina beställningar", exact: true }),
     ).toBeVisible();
+    await expect(
+      page
+        .getByRole("navigation", { name: "Beställningssätt" })
+        .getByRole("button", { name: "Mina beställningar", exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
     await page.evaluate(() =>
       Promise.allSettled(
         document.getAnimations().map((animation) => animation.finished),
@@ -109,6 +134,26 @@ for (const mode of ["native", "fallback"] as const) {
     expect(posts).toBe(1);
   });
 }
+
+test("UX-013: each view keeps its own scroll position and new views start at the top", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await navigate(page, "Välj från menyn");
+  await page.evaluate(() => window.scrollTo(0, 600));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(600);
+  // Dispatch the clicks so Playwright does not scroll the page to the button first.
+  const nav = page.getByRole("navigation", { name: "Beställningssätt" });
+  await nav
+    .getByRole("button", { name: "Mina beställningar", exact: true })
+    .dispatchEvent("click");
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await nav
+    .getByRole("button", { name: "Välj från menyn", exact: true })
+    .dispatchEvent("click");
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(600);
+});
 
 test("UX-011/012: button, Escape and backdrop close info with an inert exit and restored focus", async ({
   page,

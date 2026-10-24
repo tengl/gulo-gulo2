@@ -5,8 +5,8 @@ Kör `npm run test:browser`; `playwright.config.ts` startar testserver på port 
 Installera Chromium med `npm exec -- playwright install chromium`, eller använd
 `PLAYWRIGHT_CHANNEL=chrome` när Chrome redan finns. CI installerar Chromium.
 De ska verifiera beslutade regel-ID:n från `rules/`, inklusive felvägar.
-`motion.spec.ts` provar UX-012–013: ut-/inövergångar, native/fallback, snabba
-vyval, minskad rörelse och dialogstängning med fokus- och scrollåterställning.
+`motion.spec.ts` provar UX-012–013: glidriktning, native/fallback, riktiga klick
+under övergången, scrollposition per vy, minskad rörelse och dialogstängning med fokus- och scrollåterställning.
 `admin.spec.ts` provar serverns kodskydd, session, standardvecka och datumundantag.
 Testservern använder en separat syntetisk admin-kod från playwright.config.ts;
 återanvänd aldrig en riktig kod.

@@ -65,9 +65,10 @@ Dialoger har öppnings- och stängningsanimationer via gemensam CSS, med glidnin
 för mobilens bottenpaneler och stöd för minskad rörelse (UX-012). SheetPresence
 behåller bara den inaktiva presentationen under godkänd stängning; kontroller
 och mutationer sker direkt. Fokus/scrollås återställs när panelen försvunnit.
-Meny, chatt, varukorg och historik får en gemensam ut-/inövergång (UX-013),
-med native View Transitions och en Web Animations-fallback. React-vyerna
-behålls monterade; snabba vyval landar i senast begärda vy.
+Vybyten mellan meny, chatt och historik glider i navigeringsriktningen och
+varukorgen glider upp på mobil (UX-013, reviderad 2026-10-24), med native View
+Transitions och en Web Animations-fallback. React-vyerna behålls monterade,
+varje vy behåller sin scrollposition och snabba vyval landar i senast begärda vy.
 Kundkontroller och skrivfält är inaktiva tills Reacts händelsehanterare är redo,
 så att tidig inmatning inte tappas vid hydrering.
 Varukorgssvar har platta Ändra-/Granska-knappar direkt under texten, utan

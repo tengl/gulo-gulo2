@@ -918,7 +918,7 @@ test("UX-011/012: names and info icons open animated facts without changing the 
       if (!(event.target instanceof HTMLElement)) return;
       const key = event.target.matches("dialog.sheet")
         ? "dialogMotion"
-        : event.animationName === "view-in"
+        : event.animationName.startsWith("view-in-")
           ? "cartMotion"
           : null;
       if (key)

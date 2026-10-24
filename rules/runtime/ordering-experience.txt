@@ -85,3 +85,10 @@ chatten följer CHATT-016. Snabba upprepade vyval ska landa i senast valda vy.
 Animationen får inte skapa extra chattanrop eller dubbla beställningsändringar.
 Minskad rörelse innebär omedelbart vybyte. Beslutskälla: användarens
 förtydligande 2026-10-24 att animationerna också ska omfatta navigering.
+Övergången är en rörelse, inte en toning: vyerna ligger i navigeringens ordning
+Meny, Chatt, Mina beställningar och innehållet glider åt det håll kunden går.
+På mobil glider varukorgen upp underifrån; på bred skärm, där varukorgen redan
+syns bredvid menyn, sker ingen sidövergång mellan dem. Navigering, tidsbanner
+och varukorgspanel ligger kvar eller glider till sin nya plats. Varje vy
+behåller sin scrollposition och en ny vy börjar överst. Reviderad genom
+användarens önskemål 2026-10-24 om rörelse i stället för toning.
