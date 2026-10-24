@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import { AdminLogin } from "@/modules/access/ui/AdminLogin";
-import { AdminApp, type AdminView } from "@/modules/staff/ui/AdminApp";
+import { AdminLogin } from "@/modules/access/ui";
+import { AdminApp, type AdminView } from "@/modules/staff/ui";
 import {
   configuredCode,
   validSession,

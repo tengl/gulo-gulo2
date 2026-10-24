@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
-import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
+import { useOrderMemory } from "@/modules/ordering/ui";
 import {
   getSoundState,
   getServerSoundState,

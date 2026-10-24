@@ -151,7 +151,7 @@ ordering/domain/cart.ts              Det gemensamma beställningsutkastet.
 ordering/domain/saved-orders.ts      Validering, snapshots, demoövergångar/versioner.
 ordering/ui/useOrderMemory.ts        Delad lokal orderlagring och storage-event.
 conversation/domain/chat.ts         Kontext, verktygsvalidering, begränsad fallback.
-conversation/ui/OrderingExperience.tsx Kundvyerna och deras gemensamma tillstånd.
+storefront/ui/OrderingExperience.tsx  Kundvyerna och deras gemensamma tillstånd.
 conversation/ui/Chat.tsx             Meddelanden och aktuellt order-/utkastunderlag.
 conversation/ui/ChatShortcuts.tsx    Snabbval med mjuk in-/utfällning och inert läge.
 conversation/ui/ChatProposal.tsx     Variantknappar och versionsbundet godkännande.

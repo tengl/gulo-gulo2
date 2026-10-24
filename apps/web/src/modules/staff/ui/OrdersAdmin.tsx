@@ -11,7 +11,7 @@ import {
   demoOrderStatusLabels,
   type SavedOrder,
 } from "@/modules/ordering";
-import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
+import { useOrderMemory } from "@/modules/ordering/ui";
 import { Icon } from "@/shared/Icon";
 import { SheetPresence } from "@/shared/Sheet";
 import {

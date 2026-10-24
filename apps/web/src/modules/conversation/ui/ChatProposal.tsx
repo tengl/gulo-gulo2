@@ -15,7 +15,7 @@ import {
 } from "@/modules/ordering";
 import type { ChatAction } from "../index";
 import { describeCartChange } from "../index";
-import { ChatMenu } from "@/modules/catalog/ui/ChatMenu";
+import { ChatMenu } from "@/modules/catalog/ui";
 import { Icon } from "@/shared/Icon";
 
 export function ChatProposal({

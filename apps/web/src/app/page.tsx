@@ -1,4 +1,4 @@
-import { OrderingExperience } from "@/modules/conversation/ui/OrderingExperience";
+import { OrderingExperience } from "@/modules/storefront/ui";
 
 export default function HomePage() {
   return <OrderingExperience />;

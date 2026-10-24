@@ -1,0 +1,225 @@
+.sheet {
+  border: 0;
+  border-radius: 12px;
+  padding: 0;
+  width: min(560px, calc(100% - 32px));
+  max-height: 90dvh;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 20px 70px #0003;
+  overscroll-behavior: contain;
+}
+.sheet::backdrop {
+  background: #20261cd9;
+  backdrop-filter: blur(4px);
+}
+/* UX-012: shared motion for info, configuration and review dialogs. */
+.sheet[open] {
+  animation: sheet-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sheet[open]::backdrop {
+  animation: backdrop-in 320ms ease-out;
+}
+.sheet[open].is-closing {
+  animation: sheet-out 420ms ease-in forwards;
+}
+.sheet[open].is-closing::backdrop {
+  animation: backdrop-out 420ms ease-in forwards;
+}
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--sheet-rise, 12px))
+      scale(var(--sheet-scale, 0.98));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes sheet-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--sheet-rise, 12px))
+      scale(var(--sheet-scale, 0.98));
+  }
+}
+/* UX-013: only the view content moves, in the direction of navigation. The
+   navigation, opening-hours banner, cart panel and dock keep their own
+   snapshots so they stay in place or glide to their new position. The rest of
+   the page (root) switches at once instead of fading. */
+.experience-main {
+  view-transition-name: ordering-view;
+}
+.experience-nav {
+  view-transition-name: ordering-nav;
+}
+.ordering-hours {
+  view-transition-name: ordering-hours;
+}
+.cart-pane {
+  view-transition-name: ordering-cart;
+}
+.mobile-dock {
+  view-transition-name: ordering-dock;
+}
+.error-toast {
+  view-transition-name: ordering-toast;
+}
+/* Real clicks reach the page during a transition, so the latest choice wins. */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* Persistent parts glide to their new place without a blurry cross-fade. */
+::view-transition-old(ordering-nav),
+::view-transition-old(ordering-hours) {
+  animation: none;
+  opacity: 0;
+}
+::view-transition-new(ordering-nav),
+::view-transition-new(ordering-hours) {
+  animation: none;
+}
+::view-transition-old(ordering-hours):only-child {
+  animation: view-fade-out 420ms ease both;
+  opacity: 1;
+}
+::view-transition-new(ordering-hours):only-child {
+  animation: view-fade-in 420ms ease both;
+}
+@keyframes view-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes view-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+::view-transition-old(ordering-view),
+::view-transition-new(ordering-view),
+html[data-nav-direction="up"]::view-transition-new(ordering-cart),
+html[data-nav-direction="down"]::view-transition-old(ordering-cart) {
+  /* Views differ in width on wide screens; keep each snapshot at its own size. */
+  inline-size: auto;
+  mix-blend-mode: normal;
+  animation: 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nav-direction="forward"]::view-transition-old(ordering-view) {
+  animation-name: view-out-forward;
+}
+html[data-nav-direction="forward"]::view-transition-new(ordering-view) {
+  animation-name: view-in-forward;
+}
+html[data-nav-direction="back"]::view-transition-old(ordering-view) {
+  animation-name: view-out-back;
+}
+html[data-nav-direction="back"]::view-transition-new(ordering-view) {
+  animation-name: view-in-back;
+}
+html[data-nav-direction="up"]::view-transition-old(ordering-view) {
+  animation-name: view-out-up;
+}
+/* On phones the cart replaces the view content and rises from below. */
+html[data-nav-direction="up"]::view-transition-new(ordering-view),
+html[data-nav-direction="up"]::view-transition-new(ordering-cart) {
+  animation-name: view-in-up;
+}
+html[data-nav-direction="down"]::view-transition-old(ordering-view),
+html[data-nav-direction="down"]::view-transition-old(ordering-cart) {
+  animation-name: view-out-down;
+}
+html[data-nav-direction="down"]::view-transition-new(ordering-view) {
+  animation-name: view-in-down;
+}
+/* The old view has left before the new one appears, so they never blur into
+   each other; the distance is capped on wide screens. */
+@keyframes view-out-forward {
+  40%,
+  to {
+    opacity: 0;
+  }
+  to {
+    transform: translateX(max(-30%, -120px));
+  }
+}
+@keyframes view-in-forward {
+  from,
+  40% {
+    opacity: 0;
+  }
+  from {
+    transform: translateX(min(30%, 120px));
+  }
+}
+@keyframes view-out-back {
+  40%,
+  to {
+    opacity: 0;
+  }
+  to {
+    transform: translateX(min(30%, 120px));
+  }
+}
+@keyframes view-in-back {
+  from,
+  40% {
+    opacity: 0;
+  }
+  from {
+    transform: translateX(max(-30%, -120px));
+  }
+}
+@keyframes view-out-up {
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+@keyframes view-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+@keyframes view-out-down {
+  to {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+@keyframes view-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}

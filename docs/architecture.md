@@ -11,10 +11,12 @@ den planerade produktionsplattformen. Byggfilter och instruktioner finns i
 ```text
 apps/web/
   src/app/              kund-/adminroutes och sammansättning
-  src/modules/          verksamhetsområden
+    styles/             globala stilar i kaskadordning, importeras av globals.css
+  src/modules/          verksamhetsområden; publikt API i index.ts och ui.ts
+    storefront/         kundens beställningsvy: sammansättning, vyer, sidhuvud
     catalog/            fakta, produkter, priser, ingredienser
     ordering/           utkast, godkännande, order, förfrågan, betalningsstatus
-    availability/       kalender, tider, kapacitet, reservation
+    availability/       planerad: kalender, kapacitet, reservation
     conversation/       dialogtillstånd och tillåtna verktygsåtgärder
     staff/              personalens behöriga arbetsflöden
     access/             identitet och behörighetskontroller

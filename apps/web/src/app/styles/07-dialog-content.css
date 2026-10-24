@@ -1,0 +1,316 @@
+.sheet-body {
+  position: relative;
+  padding: 38px 32px 24px;
+}
+.close-sheet {
+  position: absolute;
+  right: 18px;
+  top: 16px;
+  background: #fafbf3;
+}
+.sheet .eyebrow {
+  margin: 5px 50px 16px 0;
+  color: #727b63;
+}
+.sheet-title {
+  font-size: 31px;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+  margin-bottom: 13px;
+}
+.sheet-description {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.product-info-description,
+.product-info-accompaniments p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+.product-info-prices {
+  display: grid;
+  gap: 12px;
+  margin: 24px 0;
+  padding: 16px 0;
+  border-block: 1px solid var(--line);
+  font-size: 14px;
+}
+.product-info-prices > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.product-info-prices dd {
+  margin: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.product-info-accompaniments h3 {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+.product-info-back {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffefa;
+  font-size: 13px;
+}
+.variant-options {
+  border: 0;
+  padding: 0;
+  margin: 0 0 20px;
+}
+.variant-options legend {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 13px;
+}
+.variant-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 15px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin-bottom: 9px;
+  cursor: pointer;
+  min-height: 74px;
+}
+.variant-option.is-selected {
+  border-color: var(--green);
+  background: #e9edde;
+}
+.variant-option input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  accent-color: var(--green);
+}
+.variant-option strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.variant-option small {
+  font-size: 10px;
+  color: var(--muted);
+  display: block;
+}
+.variant-option b {
+  margin-left: auto;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.customize {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.customize summary {
+  padding: 18px 0;
+  cursor: pointer;
+  font-size: 12px;
+}
+.customize summary span {
+  float: right;
+  font-size: 10px;
+  color: var(--muted);
+}
+.omission-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 15px;
+  padding-bottom: 14px;
+}
+.omission-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.omission-options input {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--green);
+}
+.quantity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.sheet-footnote {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 13px 0 0;
+  line-height: 1.7;
+  text-align: center;
+}
+.review-title {
+  font-family: Georgia, serif;
+  font-size: 36px;
+  font-weight: 400;
+}
+.sheet .order-summary {
+  padding: 0;
+}
+.sheet .order-summary .eyebrow {
+  margin: 0 0 4px;
+}
+.sheet .order-summary .summary-heading {
+  padding-top: 12px;
+}
+.sheet .order-summary .summary-hint {
+  margin-bottom: 22px;
+}
+.write-order {
+  border: 1px solid var(--line);
+  background: #fffefa;
+  border-radius: 8px;
+  padding: 36px 32px;
+}
+.write-order > .eyebrow {
+  color: #7c866c;
+  margin-bottom: 20px;
+}
+.write-order h2 {
+  font-size: 39px;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+.write-order > p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.example-order {
+  padding: 18px;
+  background: #eeefe3;
+  border-radius: 6px;
+  margin: 25px 0;
+}
+.example-order > span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #707a60;
+  margin-bottom: 9px;
+}
+.example-order > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 3px 0;
+  min-height: 44px;
+  text-align: left;
+  background: none;
+  border: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.write-order form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.write-order textarea {
+  resize: vertical;
+  display: block;
+  width: 100%;
+  min-height: 125px;
+  background: var(--paper);
+  border: 1px solid #c9cebb;
+  border-radius: 5px;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.write-order textarea::placeholder {
+  color: #8a8f80;
+}
+.write-order > .text-demo-note {
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 17px 0 0;
+}
+.interpretation-message {
+  font-size: 12px;
+  line-height: 1.7;
+  background: #eeefe3;
+  border-radius: 5px;
+  padding: 14px;
+  margin: 22px 0 0;
+}
+.suggestion {
+  border: 1px solid #cbd3bc;
+  border-radius: 6px;
+  padding: 20px;
+  margin-top: 15px;
+}
+.suggestion h3 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.suggestion-line {
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.suggestion-line small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+}
+.suggestion-line select {
+  display: block;
+  margin-top: 12px;
+  width: 100%;
+  border: 1px solid #b3bba3;
+  border-radius: 4px;
+  background: #fffefa;
+  padding: 12px;
+  min-height: 44px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.suggestion .primary-button {
+  margin-top: 20px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet[open],
+  .sheet[open]::backdrop,
+  .sheet[open].is-closing,
+  .sheet[open].is-closing::backdrop {
+    animation: none;
+  }
+  /* Keep unsupported view-transition selectors separate from dialog rules. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

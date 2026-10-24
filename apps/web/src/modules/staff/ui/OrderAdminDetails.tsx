@@ -8,7 +8,7 @@ import {
   demoOrderStatusLabels,
   type SavedOrder,
 } from "@/modules/ordering";
-import { SavedOrderDetails } from "@/modules/ordering/ui/SavedOrders";
+import { SavedOrderDetails } from "@/modules/ordering/ui";
 import { Sheet } from "@/shared/Sheet";
 
 const actions = {

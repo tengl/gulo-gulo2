@@ -14,19 +14,7 @@ Huvudets toning följer scrollningen utan att ta bort dess plats i dokumentet.
 `ui/scroll-chat.ts` ger nya meddelanden en lugn scrollning som kan avbrytas med
 egna gester; städa alltid animationen vid vybyte, nytt svar eller avmontering.
 Återgång till chatten och minskad rörelse använder fortsatt omedelbar scrollning.
-`ui/OrderingExperience.tsx` sätter samman samma varukorg, historik och vyer.
-`ui/useOrderingView.ts` sköter vybyten (UX-013): riktningen kommer från vyordningen
-och sätts som `data-nav-direction` på `<html>`; CSS:en i globals.css låter bara
-`.experience-main` glida och ger navigering, tidsbanner, varukorg och dock egna
-`view-transition-name`. Utan View Transitions glider bara den inkommande vyn via
-Web Animations, utan `inert`. Varje vy får tillbaka sin scrollposition. Chat
-monteras inte om, senast begärda vy vinner även för riktiga klick under
-övergången och minskad rörelse byter direkt. Ett namn får bara finnas på ett
-synligt element åt gången, annars hoppar webbläsaren över övergången. Dialogernas SheetPresence behåller
-bara en inaktiv presentation efter godkänd stängning (UX-012).
-`ui/StoreHeader.tsx` visas inne i chattens scrollområde tillsammans med
-introduktionen (OPPEN-016); tidsbannern ligger kvar ovanför samtalet. Varukorgen
-är fortsatt nåbar från navigationen. Dölj inte tiderna när första meddelandet skickas.
+Kundappens sammansättning (vyer, navigering, sidhuvud) ligger i `storefront/`.
 Fri dialog går via server/claude; bygg inte en egen växande språkparser.
 Lokala demostatusar från admin kan vara betald/hämtad enligt ADM-006. De accepteras
 endast i den begränsade DEMO-kontexten, blockerar avbokningsförslag och ger inga

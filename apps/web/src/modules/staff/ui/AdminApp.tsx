@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Icon } from "@/shared/Icon";
-import { HoursAdmin } from "@/modules/business-hours/ui/HoursAdmin";
+import { HoursAdmin } from "@/modules/business-hours/ui";
 import { stockholmDate } from "@/modules/business-hours";
 import { useHydrated } from "@/shared/useHydrated";
 import { OrdersAdmin } from "./OrdersAdmin";

@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { ProductMenu } from "@/modules/catalog/ui/ProductMenu";
+import { ProductMenu } from "@/modules/catalog/ui";
 import { demoMenu, formatPrice } from "@/modules/catalog";
 import type { Product } from "@/modules/catalog";
-import { OrderingHours } from "@/modules/business-hours/ui/OrderingHours";
+import { OrderingHours } from "@/modules/business-hours/ui";
 import {
   addSelections,
   setQuantity,
@@ -17,24 +17,24 @@ import {
   cancelDemoOrder,
 } from "@/modules/ordering";
 import type { Cart, Selection } from "@/modules/ordering";
-import { OrderSummary } from "@/modules/ordering/ui/OrderSummary";
 import { Icon } from "@/shared/Icon";
 import {
+  OrderSummary,
   ReviewOrder,
   CancelOrder,
   ForgetMemory,
-} from "@/modules/ordering/ui/OrderDialogs";
+  SavedOrders,
+  useOrderMemory,
+} from "@/modules/ordering/ui";
 import { ConfigureProduct } from "./ConfigureProduct";
-import { Chat } from "./Chat";
+import { Chat } from "@/modules/conversation/ui";
 import { StoreHeader } from "./StoreHeader";
 import { useOrderingView } from "./useOrderingView";
 import { SheetPresence } from "@/shared/Sheet";
 import { createId } from "@/shared/create-id";
 import { useHydrated } from "@/shared/useHydrated";
-import { applyCartProposal } from "../index";
-import type { ChatAction } from "../index";
-import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
-import { SavedOrders } from "@/modules/ordering/ui/SavedOrders";
+import { applyCartProposal } from "@/modules/conversation";
+import type { ChatAction } from "@/modules/conversation";
 
 export function OrderingExperience() {
   const { view, setView: changeView, root } = useOrderingView();

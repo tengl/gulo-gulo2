@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { HoursOverview } from "@/modules/business-hours/ui/HoursOverview";
+import { HoursOverview } from "@/modules/business-hours/ui";
 
 // OPPEN-016: the chat renders this inside its scroll area, other views above it.
 export function StoreHeader({ children }: { children?: ReactNode }) {

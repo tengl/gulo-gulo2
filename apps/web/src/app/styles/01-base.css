@@ -1,0 +1,84 @@
+:root {
+  color-scheme: light;
+  --paper: #f6f4ec;
+  --ink: #272b24;
+  --muted: #6c6f64;
+  --green: #3f5142;
+  --yellow: #edc964;
+  --line: #dedfd3;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+.order-status.status-paid {
+  background: #e2eddc;
+  color: #3f6333;
+}
+.order-status.status-collected {
+  background: #e3e9ec;
+  color: #4d626b;
+}
+.order-preparation {
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  border-radius: 5px;
+  background: #eeeadb;
+  color: #75613b;
+}
+.order-preparation.preparation-preparing {
+  background: #f6e6cb;
+  color: #815b23;
+}
+.order-preparation.preparation-prepared {
+  background: #e2eddc;
+  color: #3f6333;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select,
+textarea,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+  color: inherit;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+a {
+  color: inherit;
+}
+button,
+a,
+input,
+textarea,
+select,
+summary {
+  outline-offset: 5px;
+}
+:focus-visible {
+  outline: 3px solid #b17220;
+}
+button {
+  touch-action: manipulation;
+}
+svg {
+  flex-shrink: 0;
+}

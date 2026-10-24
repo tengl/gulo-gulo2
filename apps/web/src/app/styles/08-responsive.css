@@ -1,0 +1,341 @@
+@media (max-width: 1230px) {
+  .experience-nav {
+    margin-left: 28px;
+    margin-right: 28px;
+  }
+}
+@media (max-width: 1000px) and (min-width: 761px) {
+  .experience-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 20px;
+  }
+  .hero-copy {
+    padding: 28px 22px;
+  }
+  h1 {
+    font-size: 43px;
+  }
+  .product-card {
+    padding: 16px;
+  }
+  .product-card h3 {
+    font-size: 15px;
+  }
+  .order-summary {
+    padding: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .ordering-app {
+    padding-bottom: calc(86px + env(safe-area-inset-bottom));
+  }
+  .demo-banner {
+    gap: 7px;
+    padding: 5px 12px;
+    font-size: 9px;
+    flex-wrap: wrap;
+  }
+  .demo-banner strong {
+    font-size: 9px;
+  }
+  .demo-banner > span:last-child {
+    font-size: 9px;
+  }
+  .site-header {
+    padding: 8px 16px;
+    min-height: 64px;
+    gap: 12px;
+  }
+  .brand {
+    gap: 15px;
+  }
+  .brand img {
+    width: 48px;
+    height: 48px;
+  }
+  .header-cart {
+    margin-left: 0;
+    padding: 10px 13px;
+  }
+  .experience-nav {
+    margin: 0 12px 12px;
+    padding-bottom: 8px;
+    gap: 5px;
+  }
+  .experience-nav > button {
+    flex: 1;
+    font-size: 11px;
+    padding: 12px 7px;
+    gap: 6px;
+    min-height: 44px;
+  }
+  .experience-nav > span {
+    display: none;
+  }
+  .experience-layout {
+    display: block;
+    padding: 0 20px;
+  }
+  .cart-pane {
+    display: none;
+    position: static;
+  }
+  .view-cart .experience-main {
+    display: none;
+  }
+  .view-cart .cart-pane {
+    display: block;
+  }
+  .menu-hero {
+    min-height: 248px;
+  }
+  .hero-copy {
+    padding: 26px 22px;
+    width: 69%;
+  }
+  .hero-copy .eyebrow {
+    font-size: 8px;
+    margin-bottom: 19px;
+  }
+  h1 {
+    font-size: 43px;
+    margin-bottom: 16px;
+  }
+  .hero-copy p {
+    font-size: 10px;
+    line-height: 1.7;
+    margin-bottom: 19px;
+  }
+  .hero-label {
+    font-size: 6px;
+    gap: 8px;
+  }
+  .hero-photo {
+    width: 42%;
+    clip-path: ellipse(103% 78% at 103% 54%);
+  }
+  .menu-section {
+    padding-top: 28px;
+  }
+  .section-heading h2 {
+    font-size: 27px;
+  }
+  .section-heading {
+    margin-bottom: 18px;
+  }
+  .category-intro {
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .product-card {
+    position: relative;
+    padding: 18px;
+    min-height: 166px;
+  }
+  .product-top {
+    margin-bottom: 12px;
+  }
+  .product-card h3 {
+    font-size: 18px;
+  }
+  .product-card p {
+    font-size: 14px;
+    max-width: 92%;
+    margin-bottom: 15px;
+  }
+  .product-bottom {
+    font-size: 14px;
+  }
+  .product-badge {
+    font-size: 9px;
+  }
+  .order-summary {
+    padding: 23px;
+  }
+  .summary-heading h2 {
+    font-size: 21px;
+  }
+  .summary-heading .eyebrow {
+    font-size: 8px;
+  }
+  .cart-line h3 {
+    font-size: 14px;
+  }
+  .cart-line p {
+    font-size: 12px;
+  }
+  .cart-line-bottom {
+    font-size: 14px;
+  }
+  .quantity-control.small button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .remove-line {
+    min-width: 44px;
+    min-height: 44px;
+    margin-right: -10px;
+  }
+  .summary-hint {
+    font-size: 9px;
+  }
+  .primary-button {
+    min-height: 52px;
+    font-size: 13px;
+  }
+  .mobile-dock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: #f6f4ecf5;
+    border-top: 1px solid #daddce;
+    backdrop-filter: blur(14px);
+    z-index: 5;
+  }
+  .dock-write {
+    border: 1px solid #bfc8ad;
+    color: var(--green);
+    border-radius: 6px;
+    min-width: 52px;
+    min-height: 52px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+  }
+  .dock-cart {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    min-height: 52px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--green);
+    color: #fff;
+    padding: 12px 14px;
+    font-size: 11px;
+  }
+  .dock-cart > strong {
+    margin-left: auto;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .dock-count {
+    display: grid;
+    place-items: center;
+    width: 23px;
+    height: 23px;
+    border-radius: 4px;
+    background: #ffffff1c;
+    font-size: 11px;
+  }
+  .site-footer {
+    margin: 35px 20px 0;
+    padding: 22px 0;
+    justify-content: center;
+    flex-direction: column;
+    gap: 9px;
+    text-align: center;
+  }
+  .site-footer > span:last-child {
+    display: none;
+  }
+  .sheet {
+    --sheet-rise: 36px;
+    --sheet-scale: 1;
+    width: 100%;
+    max-width: 100%;
+    max-height: 94dvh;
+    border-radius: 16px 16px 0 0;
+    margin: auto 0 0;
+  }
+  .sheet-body {
+    padding: 36px 23px 24px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+  .sheet-title {
+    font-size: 29px;
+    padding-right: 15px;
+  }
+  .sheet-description {
+    font-size: 13px;
+  }
+  .variant-option {
+    padding: 16px 12px;
+    gap: 10px;
+  }
+  .variant-option strong {
+    font-size: 13px;
+  }
+  .variant-option b {
+    font-size: 12px;
+  }
+  .customize summary {
+    min-height: 52px;
+  }
+  .omission-options {
+    grid-template-columns: 1fr;
+  }
+  .omission-options label {
+    font-size: 13px;
+  }
+  .write-order {
+    padding: 28px 21px;
+  }
+  .write-order h2 {
+    font-size: 36px;
+  }
+  .suggestion {
+    padding: 16px;
+  }
+  .suggestion-line select {
+    font-size: 14px;
+  }
+}
+@media (max-width: 360px) {
+  .site-header {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .experience-layout {
+    padding: 0 15px;
+  }
+  .experience-nav {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .hero-copy {
+    padding-left: 18px;
+  }
+  h1 {
+    font-size: 37px;
+  }
+  .hero-photo {
+    width: 39%;
+  }
+  .dock-cart {
+    gap: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 10px;
+  }
+  .dock-cart > svg {
+    display: none;
+  }
+  .variant-option {
+    gap: 7px;
+  }
+  .variant-option small {
+    font-size: 9px;
+  }
+}

@@ -17,7 +17,7 @@ import { ChatComposer } from "./ChatComposer";
 import { ChatShortcuts } from "./ChatShortcuts";
 import { createId } from "@/shared/create-id";
 import { scrollChat } from "./scroll-chat";
-import { OrderingHours } from "@/modules/business-hours/ui/OrderingHours";
+import { OrderingHours } from "@/modules/business-hours/ui";
 
 type Message = ChatMessage & { id: string; action?: ChatAction; base?: string };
 const welcome: Message = {
