@@ -65,9 +65,12 @@
   }
 }
 /* UX-013: only the view content moves, in the direction of navigation. The
-   navigation, opening-hours banner, cart panel and dock keep their own
+   header, navigation, opening-hours banner, cart panel and dock keep their own
    snapshots so they stay in place or glide to their new position. The rest of
    the page (root) switches at once instead of fading. */
+.store-top {
+  view-transition-name: ordering-header;
+}
 .experience-main {
   view-transition-name: ordering-view;
 }
@@ -115,13 +118,45 @@
 ::view-transition-new(ordering-hours):only-child {
   animation: view-fade-in 420ms ease both;
 }
+/* The chat shows the header inside its conversation instead. Leaving or
+   entering the chat, the header folds up or down above the navigation and
+   moves with it, so the two never cross. The banner that only one view has
+   follows the same timing as the view content. */
+::view-transition-group(ordering-header),
+::view-transition-group(ordering-nav) {
+  z-index: 1;
+}
+::view-transition-old(ordering-header):only-child,
+::view-transition-new(ordering-header):only-child {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation-fill-mode: both;
+}
+::view-transition-old(ordering-header):only-child {
+  animation-name: header-up;
+}
+::view-transition-new(ordering-header):only-child {
+  animation-name: header-down;
+}
+@keyframes header-up {
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes header-down {
+  from {
+    transform: translateY(-100%);
+  }
+}
 @keyframes view-fade-out {
+  40%,
   to {
     opacity: 0;
   }
 }
 @keyframes view-fade-in {
-  from {
+  from,
+  40% {
     opacity: 0;
   }
 }
@@ -132,7 +167,12 @@ html[data-nav-direction="down"]::view-transition-old(ordering-cart) {
   /* Views differ in width on wide screens; keep each snapshot at its own size. */
   inline-size: auto;
   mix-blend-mode: normal;
-  animation: 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  /* Longhands: the CSS minifier turns a shorthand without a name into
+     `animation: none`, which left both snapshots fully visible on top of
+     each other. */
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation-fill-mode: both;
 }
 html[data-nav-direction="forward"]::view-transition-old(ordering-view) {
   animation-name: view-out-forward;

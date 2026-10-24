@@ -158,7 +158,11 @@ export function OrderingExperience({
       inert={!hydrated}
       className={`ordering-app${view === "chat" ? " has-chat" : ""}`}
     >
-      {view !== "chat" && <StoreHeader>{cartButton}</StoreHeader>}
+      {view !== "chat" && (
+        <div className="store-top">
+          <StoreHeader>{cartButton}</StoreHeader>
+        </div>
+      )}
       <nav className="experience-nav" aria-label="Beställningssätt">
         <button
           type="button"

@@ -54,6 +54,20 @@ for (const mode of ["native", "fallback"] as const) {
           if (match)
             record(match[1] === "in" ? "viewEnter" : "viewExit", match[2]!);
         });
+        // A shorthand without a name was once minified to `animation: none`,
+        // so the snapshots never moved and lay on top of each other.
+        document.addEventListener("animationend", (event) => {
+          const data = document.documentElement.dataset;
+          if (
+            /^(view-(in|out)-\w+|header-(up|down))$/.test(event.animationName)
+          ) {
+            if (event.elapsedTime < 0.4)
+              data.viewTooShort = event.animationName;
+            if (event.animationName.startsWith("header-"))
+              data.viewHeader =
+                `${data.viewHeader ?? ""} ${event.animationName}`.trim();
+          }
+        });
       }
     }, mode === "fallback");
     let posts = 0;
@@ -103,6 +117,14 @@ for (const mode of ["native", "fallback"] as const) {
           document.getAnimations().map((animation) => animation.finished),
         ),
       );
+    }
+    if (mode === "native") {
+      const data = await page.evaluate(() => ({
+        ...document.documentElement.dataset,
+      }));
+      expect(data.viewTooShort).toBeUndefined();
+      // The header folds down when leaving the chat and up when returning.
+      expect(data.viewHeader).toMatch(/^header-down header-up/);
     }
     await expect(input).toHaveValue("Min påbörjade fråga");
     await expect(page.getByRole("log")).toContainText("Niklas på plats");

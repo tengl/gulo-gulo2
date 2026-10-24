@@ -92,3 +92,8 @@ syns bredvid menyn, sker ingen sidövergång mellan dem. Navigering, tidsbanner
 och varukorgspanel ligger kvar eller glider till sin nya plats. Varje vy
 behåller sin scrollposition och en ny vy börjar överst. Reviderad genom
 användarens önskemål 2026-10-24 om rörelse i stället för toning.
+Den gamla vyn har lämnat innan den nya syns, så att de aldrig ligger över
+varandra. Sidhuvudet, som chatten visar inne i samtalet, fälls upp när kunden
+går till chatten och ner när kunden lämnar den, i samma rörelse som
+navigeringen, så att de inte korsar varandra. Reviderad genom användarens
+påpekande 2026-10-24 att sidan och sidhuvudet överlappade grötigt.
