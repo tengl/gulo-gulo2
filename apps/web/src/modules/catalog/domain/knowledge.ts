@@ -13,6 +13,12 @@ export const businessFacts = {
     "Standardtunnbröd och rostad lök innehåller gluten. Loos-senap innehåller senap. Surkålsröra innehåller ägg och senap. Dijondressing innehåller mjölk, ägg och senap. FÄN HÄJLEN, GHOSTDOG och BRÖL innehåller sulfiter genom vin. CHEEZY TOP och GRILLOST innehåller mjölk i själva produkten. TWISTED ISTER innehåller korngryn (gluten). Uppgifter om korskontamination saknas. Kontakta personalen om allergier; jag kan inte lova att en produkt är säker för en viss person.",
 };
 
+// WEBB-020: named in /llms.txt and in chat answers to who built the site, nowhere else.
+export const siteDeveloper = {
+  name: "Tomas Englundh",
+  url: "https://www.linkedin.com/in/tomas-englundh-3a009929/",
+};
+
 export const productFacts: Readonly<Record<string, string>> = {
   "spack-sabbath":
     "Korv på gris med tydlig vitpeppar och lite mer kryddning än en vanlig grillkorv. Surkålsröra.",

@@ -57,6 +57,12 @@ det uttryckligen med SITE_INDEXABLE=true och sin adress i SITE_URL.
 godkänner. Inget läggs i varukorgen eller sparas utan kundens godkännande.
 Okända varor, ogiltiga antal och saknade varianter visas som ej tillagda;
 giltiga rader i samma länk behålls i förslaget. Formatet beskrivs i /llms.txt.
+[WEBB-020] [GÄLLANDE] Webbplatsen är utvecklad av Tomas Englundh
+(https://www.linkedin.com/in/tomas-englundh-3a009929/). Uppgiften står i
+/llms.txt och /llms-full.txt och ges i chatten bara när någon frågar vem som
+utvecklat webbplatsen, appen eller chatten. Den visas inte på sidorna, i
+sidfoten eller i den strukturerade datan. Beslutskälla: användarens önskemål
+2026-10-24.
 
 Nyhetsbrev
 [WEBB-013] [GÄLLANDE] Nyhetsbrevet tar bara emot en e-postadress med uttryckligt

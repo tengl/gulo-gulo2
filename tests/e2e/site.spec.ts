@@ -79,6 +79,9 @@ test("WEBB-010/014: structured data and llms files match the sources; demos are 
   expect(llms).toContain("# Gulo Gulo Deli");
   expect(llms).toContain("varor=ghostdog-dubbel:2,loka:1");
   expect(llms).toContain("demo");
+  // WEBB-020: the developer is named for AI assistants, not on the pages.
+  expect(llms).toContain("Tomas Englundh ([LinkedIn](https://www.linkedin.com/in/tomas-englundh-3a009929/))");
+  await expect(page.getByText("Tomas Englundh")).toHaveCount(0);
   const full = await (await request.get("/llms-full.txt")).text();
   expect(full).toContain("Färskt isterband med rödbeta");
   expect(full).toMatch(/GHOSTDOG: .*Enkel 135\s*kr/);

@@ -118,7 +118,7 @@ Squarespace-siten flyttar in i appen enligt rules/runtime/site.txt. Texterna
 hämtades från gulogulo.se 2026-10-24 och ligger som Markdown i apps/web/content/;
 människor får ändra dem på GitHub (README.md där), agenter följer AGENTS.md där.
 Priser och tider kommer från catalog och business-hours, aldrig från innehållet.
-Strukturerad data, llms-filer, sitemap och robots byggs från samma källor.
+Strukturerad data, llms-filer, sitemap och robots byggs från samma källor. Utvecklaren nämns bara där och i chatten på fråga (WEBB-020).
 Bara produktion indexeras (SITE_INDEXABLE=true, WEBB-014); Netlify-demon gör inte.
 Gamla Squarespace-adresser ger 301 (next.config.ts, gammalAdress i produkterna).
 Squarespace-shoppen ligger kvar och länkas (WEBB-004); /shop leder dit tills

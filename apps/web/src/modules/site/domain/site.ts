@@ -2,6 +2,7 @@ import {
   demoMenu,
   formatPrice,
   DOUBLE_SURCHARGE_ORE,
+  siteDeveloper,
 } from "../../catalog/index.ts";
 import { demoHours } from "../../business-hours/index.ts";
 import type { ContentProduct, Page, SiteSettings } from "./content.ts";
@@ -240,6 +241,10 @@ export function llmsText(content: SiteContent, base: URL): string {
 - [All text som Markdown](${link("/llms-full.txt")})
 
 ${orderLinkHelp(base)}
+
+## Om webbplatsen
+
+Webbplatsen och beställningstjänsten är utvecklade av ${siteDeveloper.name} ([LinkedIn](${siteDeveloper.url})).
 `;
 }
 

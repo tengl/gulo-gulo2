@@ -86,6 +86,8 @@ test("CHATT-003/008: limited mode uses factual answers and rejects partial/unkno
     /tappar vätska vid fermenteringen/,
   );
   assert.match(ask("allergener").text, /kan inte lova/);
+  assert.match(ask("Vem har gjort sidan?").text, /Tomas Englundh: https:\/\/www\.linkedin\.com\//);
+  assert.match(ask("vem som har byggt den här appen").text, /Tomas Englundh/);
   assert.equal(ask("två ghostdog och en pizza").action, undefined);
   assert.equal(ask("två enkla Ghostdog och en Loka").action?.kind, "add");
   assert.equal(ask("avboka").action?.kind, "orders");

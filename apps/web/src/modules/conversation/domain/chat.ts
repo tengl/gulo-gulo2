@@ -6,6 +6,7 @@ import {
   DOUBLE_SURCHARGE_ORE,
   getProduct,
   omissionLabels,
+  siteDeveloper,
 } from "../../catalog/index.ts";
 import {
   describeCart,
@@ -329,6 +330,15 @@ export function limitedReply(context: ChatContext): ChatReply {
     ].includes(text)
   )
     return reply({ text: businessFacts.craft });
+  // WEBB-020: only answered when asked.
+  if (
+    /^vem (som )?(har )?(gjort|byggt|utvecklat|skapat|programmerat) (den har )?(sidan|webbplatsen|hemsidan|sajten|siten|appen|chatten)$|^vem ar utvecklaren$/.test(
+      text,
+    )
+  )
+    return reply({
+      text: `Webbplatsen och beställningstjänsten är utvecklade av ${siteDeveloper.name}: ${siteDeveloper.url}`,
+    });
   if (["allergener", "vilka allergener finns", "innehall"].includes(text))
     return reply({ text: businessFacts.allergens });
   if (["vad ingar", "vilka tillbehor ingar"].includes(text))
