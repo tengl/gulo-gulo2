@@ -64,3 +64,30 @@ samtycke och länk till /integritet. Prenumerationen gäller först när mottaga
 bekräftat via mejl (dubbel bekräftelse). Brevo håller listan och avregistreringen;
 appen sparar inga adresser själv. Utan konfigurerad tjänst säger formuläret
 ärligt att anmälan inte är öppen ännu.
+
+Redigering i admin (beslutat 2026-10-24, inte byggt ännu)
+Beslutskälla: användarens fråga om texter i admingränssnittet, beslut "Lägg in
+det" och upplysningen att personalen som administrerar texter har GitHub-konton,
+alla 2026-10-24. Kräver inte Supabase och kan byggas före lanseringen.
+[WEBB-015] [GÄLLANDE] Personalen ska kunna ändra webbplatsens texter i admin.
+Repot förblir enda källan: admin sparar ändringen som en commit i
+apps/web/content/ via GitHub, så att agenter alltid ser den publicerade texten.
+Texterna läggs inte i databasen eller i någon annan parallell lagring.
+[WEBB-016] [GÄLLANDE] Admin validerar med samma innehållsschema som bygget och
+visar felen i formuläret innan något sparas. Tidigare versioner kan visas och
+återställas. Admin säger ärligt att ändringen publiceras efter nästa bygge,
+inom några minuter, inte direkt.
+[WEBB-017] [GÄLLANDE] En sparning skriver bara över den version personalen
+öppnade. Har filen ändrats under tiden, av en agent eller en annan person,
+stoppas sparningen med ett tydligt besked i stället för att ändringen skrivs över.
+[WEBB-018] [GÄLLANDE] Textredigering i admin kräver inloggning med personens
+eget GitHub-konto. Behörigheten är skrivrätt till repot, och varje commit görs
+i personens namn. Den gemensamma superadmin-koden (BEH-005) räcker inte,
+eftersom en sparning publiceras på den riktiga webbplatsen. Första steget gäller
+sidornas och produkternas texter med förhandsvisning; bilduppladdning, där
+servern optimerar bilden, kommer i ett senare steg. Redigering direkt på
+GitHub enligt WEBB-006 fortsätter att fungera parallellt.
+[WEBB-019] [GÄLLANDE] Uppgifter som måste synas direkt eller ändras ofta,
+som öppettider, avvikelser och korta tillfälliga meddelanden, hör till
+databasen och redigeras i admin med omedelbar verkan, inte via innehållsfilerna.
+Priser och meny styrs fortsatt av katalogen enligt WEBB-007.

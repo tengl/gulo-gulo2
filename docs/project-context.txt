@@ -126,6 +126,11 @@ säger formuläret att anmälan inte är öppen. Charkprodukternas fakta är web
 och inte godkända KAT-fakta för chatten. Integritetstexten bör granskas av
 användaren innan publicering. Beställning från externa AI-chattar via MCP är
 planerad först när riktiga ordrar och betalning finns.
+Personalen ska senare kunna ändra texterna i admin (WEBB-015–019): de loggar in
+med eget GitHub-konto (skrivrätt till repot) och admin committar i deras namn
+till apps/web/content/ med versionskontroll, så att repot förblir enda källan.
+Inte byggt ännu; kräver inte Supabase. Snabba uppgifter (tider, avvikelser,
+tillfälliga meddelanden) hör till databasen och admin, inte till innehållsfilerna.
 
 VAD SOM ÅTERSTÅR
 
