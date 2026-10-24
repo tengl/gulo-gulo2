@@ -50,3 +50,23 @@ orderfunktion anropas. En ändring i utkastet ska synas direkt i sammanställnin
 sidrullning. Produktval och granskning ska också fungera med tangentbord.
 Dialogrutor ska ha rubrik, stängknapp och Escape-stöd; statusmeddelanden ska
 vara tillgängliga för skärmläsare. Röst visas först när funktionen fungerar.
+
+[UX-011] [GÄLLANDE] Varje produktnamn i menyn följs av ett info-i, även när
+menyn visas i chatten. Tryck på namnet eller i:et visar samma produktinformation.
+Plus-knappen är ett separat produktval och behåller plusikonen. Information hämtas från
+samma godkända katalogunderlag som chatten. Visa produktens fakta och priser;
+wraps kan också visa gemensamma bröd-/tillbehörsfakta. Saknade uppgifter får
+inte hittas på. Info-knappen ska vara tydligt skild från produktvalet och inte
+lägga till varor, påbörja ett produktval eller skicka ett chattmeddelande.
+Informationen öppnas i en tillgänglig dialog med stängknapp och Escape-stöd;
+kunden återgår till samma meny och knapp efter stängning utan att tappa utkastet.
+Beslutskälla: användarens önskemål och korrigering 2026-10-23 om namn/info-i
+som informationsknapp och ett separat plus för produktval.
+
+[UX-012] [GÄLLANDE] Informationsrutor och andra dialoger som öppnas, inklusive
+produktval och granskning, ska visas med en kort, mjuk animation. Varukorgen
+ska också få en mjuk övergång när den öppnas. Mobilens bottenpaneler kan glida
+upp och bakgrunden tonas in. Animationerna får inte ändra utkast, bekräftelse-
+krav, stängning eller fokusåterställning, och ska stängas av när användaren
+föredrar minskad rörelse. Beslutskälla: användarens tillägg 2026-10-23 om
+animerade informationsrutor, varukorg och andra rutor som kommer upp.

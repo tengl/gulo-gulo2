@@ -70,3 +70,13 @@ av arbetsinstruktionerna. Inför arbete läses instruktionerna längs hela katal
 filer; förlita dig inte på att alla underkataloger har laddats vid sessionsstart.
 README.md används vid behov för översikt, inte som enda bärare av arbetskrav.
 Verksamhetsreglerna ligger kvar i rules/ och kopieras inte in i agentfilerna.
+
+[SYS-014] [GÄLLANDE] En separat publik test-/demowebb kan köras på Netlify.
+Beslutskälla: användarens val och anslutning av repot till Netlify 2026-10-23.
+Vercel kvarstår som planerad produktionsplattform enligt SYS-001. Netlifys
+automatiska webbbyggen använder samma ändringsklassificering som SYS-008;
+första bygget och uttryckliga ombyggen utan cache får bygga hela trädet.
+Ett ogiltigt Git-intervall ska stoppa publicering, inte tolkas som oförändrat.
+Netlify kör regelkontroll, lint, typer och Node-tester före appbygget. Webbläsar-
+tester körs separat i GitHub Actions; Netlify inväntar inte det jobbets resultat.
+Demowebben använder lokal demodata och får inte migrera produktionsdatabasen.

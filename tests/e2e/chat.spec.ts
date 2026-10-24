@@ -113,6 +113,11 @@ test("CHATT-005/007 / ORD-016: save, reload and cancel a specific order through 
   await view(page, "Mina beställningar");
   await expect(page.getByText(reference, { exact: true })).toBeVisible();
   await view(page, "Chatta med oss");
+  await expect(
+    page
+      .getByRole("group", { name: "Snabbval i chatten", exact: true })
+      .getByRole("button", { name: "Mina beställningar", exact: true }),
+  ).toBeVisible();
   await ask(page, `Avboka ${reference}`);
   await page
     .getByRole("button", { name: "Granska avbokningen", exact: true })
@@ -129,6 +134,11 @@ test("CHATT-005/007 / ORD-016: save, reload and cancel a specific order through 
   await expect(page.getByRole("log")).toContainText(
     "Demobeställningen är avbokad",
   );
+  await expect(
+    page
+      .getByRole("group", { name: "Snabbval i chatten", exact: true })
+      .getByRole("button", { name: "Mina beställningar", exact: true }),
+  ).toHaveCount(0);
   await view(page, "Mina beställningar");
   await expect(page.getByText("Avbokad", { exact: true })).toBeVisible();
   await page.screenshot({
@@ -390,7 +400,7 @@ test("CHATT-002/005: menu changes synchronize to another open tab", async ({
   await other.close();
 });
 
-test("OPPEN-016/017 / CHATT-001: compact header and ordering hours stay with their ordering surface", async ({
+test("OPPEN-016/017 / CHATT-001: the header scrolls away while ordering hours stay visible", async ({
   page,
 }, testInfo) => {
   await page.goto("/");
@@ -412,46 +422,182 @@ test("OPPEN-016/017 / CHATT-001: compact header and ordering hours stay with the
   await expect(page.locator(".chat-avatar").first()).not.toContainText("G");
   const initialChat = (await page.locator(".chat-panel").boundingBox())!;
   if (testInfo.project.name === "mobile")
-    expect(initialChat.y).toBeLessThan(190);
+    expect(initialChat.y).toBeLessThan(80);
+  await expect(page.locator(".chat-log .site-header")).toBeInViewport();
   await page.screenshot({
-    path: testInfo.outputPath("compact-chat-header.png"),
+    path: testInfo.outputPath("scrolling-chat-header.png"),
     fullPage: true,
   });
   await ask(page, "Vem gör korven?");
   await expect(page.getByRole("log")).toContainText("Niklas på plats");
+  await expect(page.locator(".chat-log .site-header")).not.toBeInViewport();
+  await expect(page.locator("#chat-title")).not.toBeInViewport();
+  await expect(orderingHours).toBeInViewport();
+  const activeChat = (await page.locator(".chat-panel").boundingBox())!;
+  expect(activeChat.y).toBe(initialChat.y);
   if (testInfo.project.name === "mobile") {
-    const activeChat = (await page.locator(".chat-panel").boundingBox())!;
-    expect(activeChat.y).toBeLessThan(initialChat.y - 30);
-    expect(activeChat.y).toBeLessThan(120);
-    await expect(page.locator(".chat-header")).not.toBeVisible();
-    await expect(page.locator(".chat-panel .ordering-hours")).not.toBeVisible();
     const sendBox = (await page
       .getByRole("button", { name: "Skicka meddelande", exact: true })
       .boundingBox())!;
     expect(sendBox.y + sendBox.height).toBeLessThanOrEqual(
       page.viewportSize()!.height,
     );
-  } else {
-    await expect(orderingHours).toBeVisible();
   }
   await page.screenshot({
     path: testInfo.outputPath("active-chat-header.png"),
     fullPage: true,
   });
+  await page.locator(".chat-log").evaluate((element) => {
+    element.scrollTop = 0;
+  });
+  await expect(page.locator(".chat-log .site-header")).toBeInViewport();
+  await expect(orderingHours).toBeInViewport();
   await view(page, "Välj från menyn");
   await expect(hours).toBeVisible();
   await expect(orderingHours).toContainText("10:30–14:00");
   await expect(
     page.getByRole("heading", { level: 1, name: /Bra korv/ }),
   ).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, 500));
+  await expect(orderingHours).toBeInViewport();
+  await expect
+    .poll(async () => (await orderingHours.boundingBox())!.y)
+    .toBeLessThan(2);
   await page.screenshot({
     path: testInfo.outputPath("menu-ordering-hours.png"),
     fullPage: true,
   });
   await view(page, "Chatta med oss");
   await expect(page.getByRole("log")).toContainText("Niklas på plats");
-  if (testInfo.project.name === "mobile")
-    await expect(page.locator(".chat-header")).not.toBeVisible();
+  await expect(orderingHours).toBeInViewport();
+  if (testInfo.project.name === "mobile") {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await ask(page, "Vad har jag i varukorgen?");
+    await expect(orderingHours).toBeInViewport();
+    await expect(page.locator(".chat-log .site-header")).not.toBeInViewport();
+    await expect(page.locator("#chat-title")).not.toBeInViewport();
+    await expect(
+      page.getByRole("button", { name: "Skicka meddelande", exact: true }),
+    ).toBeInViewport();
+    await expect(
+      page.getByRole("button", {
+        name: "Visa beställning, 0 varor",
+        exact: true,
+      }),
+    ).toBeInViewport();
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(320);
+    await page.screenshot({
+      path: testInfo.outputPath("small-active-chat.png"),
+      fullPage: true,
+    });
+  }
+});
+
+test("CHATT-016: returning from every customer view shows the latest message without resending", async ({
+  page,
+}) => {
+  let posts = 0;
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/chat") && request.method() === "POST")
+      posts++;
+  });
+  await page.goto("/");
+  await ask(page, "meny");
+  const latest = page.getByRole("log").getByRole("article").last();
+  await expect(latest).toContainText("Våra wraps och drycker");
+  await expect(
+    page.getByRole("button", { name: "Välj SPÄCK SABBATH i chatten", exact: true }),
+  ).toBeInViewport();
+  const input = page.getByRole("textbox", {
+    name: "Meddelande till Gulo Gulo",
+  });
+  await input.fill("Min nästa fråga");
+  const before = posts;
+  const scroller = page.locator(".chat-log");
+  for (const destination of [
+    "Välj från menyn",
+    "varukorg",
+    "Mina beställningar",
+  ]) {
+    await scroller.evaluate((element) =>
+      element.scrollTo({ top: 0, behavior: "instant" }),
+    );
+    await expect(page.locator(".chat-log .site-header")).toBeInViewport();
+    if (destination === "varukorg") {
+      await page
+        .getByRole("button", { name: "Visa beställning, 0 varor", exact: true })
+        .click();
+    } else await view(page, destination);
+    await view(page, "Chatta med oss");
+    await expect
+      .poll(() =>
+        scroller.evaluate(
+          (element) =>
+            element.scrollHeight - element.clientHeight - element.scrollTop,
+        ),
+      )
+      .toBeLessThan(2);
+    await expect(
+      latest.getByRole("button", { name: "Välj Björnåsen bärdryck i chatten", exact: true }),
+    ).toBeInViewport();
+    await expect(input).toHaveValue("Min nästa fråga");
+    expect(posts).toBe(before);
+  }
+});
+
+test("CHATT-016: disappearing shortcuts animate and the scroll header respects reduced motion", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.evaluate(() => {
+    document.documentElement.dataset.shortcutMotion = "0";
+    document.addEventListener("transitionstart", (event) => {
+      if (
+        event.target instanceof HTMLElement &&
+        event.target.matches(".chat-shortcut[inert]")
+      )
+        document.documentElement.dataset.shortcutMotion = "1";
+    });
+  });
+  await page
+    .getByRole("button", { name: "Vem gör korven?", exact: true })
+    .click();
+  await expect(page.getByRole("log")).toContainText("Niklas på plats");
+  await expect(
+    page.getByRole("button", { name: "Vem gör korven?", exact: true }),
+  ).toHaveCount(0);
+  await expect
+    .poll(() =>
+      page.evaluate(() => document.documentElement.dataset.shortcutMotion),
+    )
+    .toBe("1");
+  const intro = page.locator(".chat-intro");
+  await page.locator(".chat-log").evaluate((element) => {
+    const intro = element.querySelector<HTMLElement>(".chat-intro")!;
+    element.scrollTo({ top: intro.offsetHeight / 3, behavior: "instant" });
+  });
+  await expect
+    .poll(() =>
+      intro.evaluate((element) => Number(getComputedStyle(element).opacity)),
+    )
+    .toBeLessThan(0.9);
+  expect(
+    await intro.evaluate((element) =>
+      Number(getComputedStyle(element).opacity),
+    ),
+  ).toBeGreaterThan(0);
+  await page.screenshot({
+    path: testInfo.outputPath("fading-chat-header.png"),
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(intro).toHaveCSS("opacity", "1");
+  await expect(intro).toHaveCSS("transform", "none");
+  await expect(page.locator(".chat-shortcut").first()).toHaveCSS(
+    "transition-duration",
+    "0s",
+  );
 });
 
 test("CHATT-010: ready-made messages send immediately and preserve the written draft", async ({
@@ -520,37 +666,47 @@ test("CHATT-011/012: persistent shortcuts and clickable menus share the graphica
   const menu = page
     .getByRole("group", { name: "Meny i chatten", exact: true })
     .last();
-  await expect(menu.getByRole("button")).toHaveCount(17);
   await expect(
-    menu.getByRole("button", { name: "Beställ SPÄCK SABBATH", exact: true }),
+    menu.getByRole("button", { name: /^Välj .+ i chatten$/ }),
+  ).toHaveCount(17);
+  await expect(menu.getByRole("button", { name: /^Mer om / })).toHaveCount(17);
+  await expect(
+    menu.getByRole("button", {
+      name: "Välj SPÄCK SABBATH i chatten",
+      exact: true,
+    }),
   ).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath("clickable-chat-menu.png"),
     fullPage: true,
   });
   await menu
-    .getByRole("button", { name: "Beställ GHOSTDOG", exact: true })
+    .getByRole("button", { name: "Välj GHOSTDOG i chatten", exact: true })
     .click();
   const add = page.getByRole("button", {
     name: "Lägg till dessa val",
     exact: true,
   });
-  await expect(add).toBeDisabled();
-  await page
-    .getByRole("combobox", { name: "Variant för GHOSTDOG", exact: true })
-    .selectOption("single");
-  await add.click();
+  const variants = page.getByRole("group", {
+    name: "Variant för GHOSTDOG",
+    exact: true,
+  });
+  await expect(variants.getByRole("button")).toHaveCount(2);
+  await expect(page.getByRole("combobox")).toHaveCount(0);
+  await page.getByRole("button", { name: /^Lägg till enkel wrap/ }).click();
   await expect(
     shortcuts.getByRole("button", { name: "Visa varukorg", exact: true }),
   ).toBeVisible();
   await expect(
     shortcuts.getByRole("button", { name: "Granska", exact: true }),
-  ).toBeVisible();
+  ).toHaveCount(0);
   await menuButton.click();
   await expect(
     page.getByRole("group", { name: "Meny i chatten", exact: true }),
   ).toHaveCount(2);
-  await menu.getByRole("button", { name: "Beställ Loka", exact: true }).click();
+  await menu
+    .getByRole("button", { name: "Välj Loka i chatten", exact: true })
+    .click();
   await add.click();
   await addFromMenu(page, "BRÖL");
   await view(page, "Chatta med oss");
@@ -581,6 +737,369 @@ test("CHATT-011/012: persistent shortcuts and clickable menus share the graphica
     shortcuts.getByRole("button", { name: "Visa varukorg", exact: true }),
   ).toHaveCount(0);
   await expect(menuButton).toBeVisible();
+});
+
+test("CHATT-011/015: cart replies open editing and review in one click without another message", async ({
+  page,
+}, testInfo) => {
+  let posts = 0;
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/chat") && request.method() === "POST")
+      posts++;
+  });
+  await page.goto("/");
+  await addFromMenu(page);
+  await view(page, "Chatta med oss");
+  const shortcuts = page.getByRole("group", {
+    name: "Snabbval i chatten",
+    exact: true,
+  });
+  await expect(
+    shortcuts.getByRole("button", { name: "Granska", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    shortcuts.getByRole("button", { name: "Mina beställningar", exact: true }),
+  ).toHaveCount(0);
+  await shortcuts
+    .getByRole("button", { name: "Visa varukorg", exact: true })
+    .click();
+  const answer = page
+    .getByRole("log")
+    .getByRole("article", { name: "Gulo Gulo", exact: true })
+    .last();
+  await expect(answer).toContainText("GHOSTDOG");
+  await expect(
+    answer.getByRole("button", { name: "Ändra", exact: true }),
+  ).toBeVisible();
+  await expect(
+    answer.getByRole("button", { name: "Granska beställningen", exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("flat-cart-actions.png"),
+    fullPage: true,
+  });
+  const input = page.getByRole("textbox", {
+    name: "Meddelande till Gulo Gulo",
+  });
+  await input.fill("Min nästa fråga");
+  const before = posts;
+  await answer.getByRole("button", { name: "Ändra", exact: true }).click();
+  const cart = page.getByRole("complementary", {
+    name: "Beställningsöversikt",
+    exact: true,
+  });
+  await expect(cart).toBeVisible();
+  await cart
+    .getByRole("button", { name: "Öka antal GHOSTDOG", exact: true })
+    .click();
+  await view(page, "Chatta med oss");
+  await expect(input).toHaveValue("Min nästa fråga");
+  await answer
+    .getByRole("button", { name: "Granska beställningen", exact: true })
+    .click();
+  const dialog = page.getByRole("dialog", {
+    name: "Granska din demobeställning",
+    exact: true,
+  });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText(/270\s*kr/);
+  expect(posts).toBe(before);
+  await dialog
+    .getByRole("button", { name: "Fortsätt prova", exact: true })
+    .click();
+  await expect(input).toHaveValue("Min nästa fråga");
+});
+
+test("UX-011/012: names and info icons open animated facts without changing the order", async ({
+  page,
+}, testInfo) => {
+  if (testInfo.project.name === "mobile")
+    await page.setViewportSize({ width: 320, height: 568 });
+  let posts = 0;
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/chat") && request.method() === "POST")
+      posts++;
+  });
+  await page.goto("/");
+  const input = page.getByRole("textbox", {
+    name: "Meddelande till Gulo Gulo",
+  });
+  await input.fill("Min påbörjade fråga");
+  await addFromMenu(page);
+  const menuInfo = page.getByRole("button", {
+    name: "Mer om GHOSTDOG",
+    exact: true,
+  });
+  await page.evaluate(() => {
+    document.documentElement.dataset.dialogMotion = "0";
+    document.documentElement.dataset.cartMotion = "0";
+    document.addEventListener("animationstart", (event) => {
+      if (!(event.target instanceof HTMLElement)) return;
+      const key = event.target.matches("dialog.sheet")
+        ? "dialogMotion"
+        : event.target.matches(".cart-pane")
+          ? "cartMotion"
+          : null;
+      if (key)
+        document.documentElement.dataset[key] = String(
+          Number(document.documentElement.dataset[key]) + 1,
+        );
+    });
+  });
+  await menuInfo.getByText("GHOSTDOG", { exact: true }).click();
+  const info = page.getByRole("dialog", { name: "Om GHOSTDOG", exact: true });
+  await expect(info).toContainText("Fermenterad och kallrökt korv på gris");
+  await expect(info).toContainText("ghost chili-pepparsås och rött vin");
+  await expect(info).toContainText("lokalbakat mjukt tunnbröd");
+  await expect(info).toContainText(/135\s*kr/);
+  await expect(info).toContainText(/180\s*kr/);
+  await expect(info.getByRole("radio")).toHaveCount(0);
+  await expect(info.getByRole("button", { name: /Lägg till/ })).toHaveCount(0);
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        Number(document.documentElement.dataset.dialogMotion),
+      ),
+    )
+    .toBeGreaterThan(0);
+  await page.screenshot({
+    path: testInfo.outputPath("product-info.png"),
+    animations: "disabled",
+  });
+  await page.keyboard.press("Escape");
+  await expect(info).not.toBeVisible();
+  await expect(menuInfo).toBeFocused();
+  await menuInfo.locator("svg").click();
+  await expect(info).toBeVisible();
+  await info.getByRole("button", { name: "Stäng", exact: true }).click();
+  await expect(menuInfo).toBeFocused();
+  await expect(
+    page.getByRole("button", {
+      name: "Visa beställning, 1 varor",
+      exact: true,
+    }),
+  ).toBeVisible();
+  expect(posts).toBe(0);
+
+  await view(page, "Chatta med oss");
+  await expect(input).toHaveValue("Min påbörjade fråga");
+  await page
+    .getByRole("group", { name: "Snabbval i chatten", exact: true })
+    .getByRole("button", { name: "Meny", exact: true })
+    .click();
+  const menu = page
+    .getByRole("group", { name: "Meny i chatten", exact: true })
+    .last();
+  await expect(menu.getByRole("button", { name: /^Mer om / })).toHaveCount(17);
+  const before = posts;
+  const messages = await page.getByRole("log").getByRole("article").count();
+  const chatInfo = menu.getByRole("button", {
+    name: "Mer om GHOSTDOG",
+    exact: true,
+  });
+  await chatInfo.getByText("GHOSTDOG", { exact: true }).click();
+  await expect(info).toBeVisible();
+  await info
+    .getByRole("button", { name: "Tillbaka till menyn", exact: true })
+    .click();
+  await expect(chatInfo).toBeFocused();
+
+  const drinkInfo = menu.getByRole("button", {
+    name: "Mer om Loka",
+    exact: true,
+  });
+  await drinkInfo.locator("svg").click();
+  const drink = page.getByRole("dialog", { name: "Om Loka", exact: true });
+  await expect(drink).toContainText(
+    "Loka innehåller enligt underlaget inte socker",
+  );
+  await expect(drink).toContainText(/25\s*kr/);
+  await expect(drink).not.toContainText("Bröd och tillbehör");
+  await drink.getByRole("button", { name: "Stäng", exact: true }).click();
+  await expect(drinkInfo).toBeFocused();
+  expect(posts).toBe(before);
+  await expect(page.getByRole("log").getByRole("article")).toHaveCount(
+    messages,
+  );
+  await expect(input).toHaveValue("Min påbörjade fråga");
+  await expect(
+    page.getByRole("button", {
+      name: "Visa beställning, 1 varor",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Visa beställning, 1 varor", exact: true })
+    .click();
+  await expect
+    .poll(() =>
+      page.evaluate(() => Number(document.documentElement.dataset.cartMotion)),
+    )
+    .toBeGreaterThan(0);
+  await view(page, "Chatta med oss");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const motionBefore = await page.evaluate(
+    () => document.documentElement.dataset.dialogMotion,
+  );
+  await chatInfo.getByText("GHOSTDOG", { exact: true }).click();
+  await expect(info).toBeVisible();
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  expect(
+    await page.evaluate(() => document.documentElement.dataset.dialogMotion),
+  ).toBe(motionBefore);
+  await page.keyboard.press("Escape");
+  await expect(chatInfo).toBeFocused();
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(page.viewportSize()!.width);
+});
+
+test("CHATT-014: either direct variant adds exactly once, preserves the draft and sends no message", async ({
+  page,
+}, testInfo) => {
+  if (testInfo.project.name === "mobile")
+    await page.setViewportSize({ width: 320, height: 568 });
+  let posts = 0;
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/chat") && request.method() === "POST")
+      posts++;
+  });
+  for (const choice of [
+    { label: "enkel", price: 270 },
+    { label: "dubbel", price: 360 },
+  ]) {
+    await page.goto("/");
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await ask(page, "två Ghostdog utan senap");
+    const variants = page.getByRole("group", {
+      name: "Variant för GHOSTDOG",
+      exact: true,
+    });
+    await expect(variants.getByRole("button")).toHaveCount(2);
+    await expect(
+      page.getByRole("button", {
+        name: "Visa beställning, 0 varor",
+        exact: true,
+      }),
+    ).toBeVisible();
+    const button = variants.getByRole("button", {
+      name: new RegExp(`^Lägg till ${choice.label} wrap`),
+    });
+    await expect(button).toContainText(new RegExp(`${choice.price}\\s*kr`));
+    const input = page.getByRole("textbox", {
+      name: "Meddelande till Gulo Gulo",
+    });
+    await input.fill("Min nästa fråga");
+    await variants.scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: testInfo.outputPath(`direct-${choice.label}-buttons.png`),
+      fullPage: true,
+    });
+    const before = posts;
+    await button.evaluate((element) => {
+      // Two queued clicks on the same rendered button still approve only once.
+      (element as HTMLButtonElement).click();
+      (element as HTMLButtonElement).click();
+    });
+    await expect(
+      page.getByRole("button", {
+        name: "Visa beställning, 2 varor",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(input).toHaveValue("Min nästa fråga");
+    expect(posts).toBe(before);
+    await page
+      .getByRole("group", { name: "Snabbval i chatten", exact: true })
+      .getByRole("button", { name: "Visa varukorg", exact: true })
+      .click();
+    const answer = page
+      .getByRole("log")
+      .getByRole("article", { name: "Gulo Gulo", exact: true })
+      .last();
+    await expect(answer).toContainText(
+      `2 × 7. GHOSTDOG · ${choice.label} wrap`,
+    );
+    await expect(answer).toContainText("utan senap");
+    await expect(answer).toContainText(new RegExp(`${choice.price}\\s*kr`));
+    await expect(input).toHaveValue("Min nästa fråga");
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(page.viewportSize()!.width);
+  }
+});
+
+test("CHATT-004/014: multiple variants prepare one shared change and stale direct buttons disappear", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await ask(page, "en Ghostdog och en Bröl");
+  const add = page.getByRole("button", {
+    name: "Lägg till dessa val",
+    exact: true,
+  });
+  const ghostdog = page.getByRole("group", {
+    name: "Variant för GHOSTDOG",
+    exact: true,
+  });
+  const brol = page.getByRole("group", {
+    name: "Variant för BRÖL",
+    exact: true,
+  });
+  await expect(add).toBeDisabled();
+  await ghostdog.getByRole("button", { name: /^Dubbel/ }).click();
+  await ghostdog.getByRole("button", { name: /^Enkel/ }).click();
+  await expect(
+    ghostdog.getByRole("button", { name: /^Enkel/ }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(add).toBeDisabled();
+  await brol.getByRole("button", { name: /^Dubbel/ }).click();
+  await expect(
+    page.getByRole("button", {
+      name: "Visa beställning, 0 varor",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await add.click();
+  await expect(
+    page.getByRole("button", {
+      name: "Visa beställning, 2 varor",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await ask(page, "Vad har jag i varukorgen?");
+  const answer = page
+    .getByRole("log")
+    .getByRole("article", { name: "Gulo Gulo", exact: true })
+    .last();
+  await expect(answer).toContainText("GHOSTDOG · enkel wrap");
+  await expect(answer).toContainText("BRÖL · dubbel wrap");
+  await expect(answer).toContainText(/325\s*kr/);
+
+  await ask(page, "en Ghostdog");
+  await expect(
+    page.getByRole("button", { name: /^Lägg till enkel wrap/ }),
+  ).toBeVisible();
+  await addFromMenu(page, "BRÖL");
+  await view(page, "Chatta med oss");
+  await expect(
+    page.getByRole("button", { name: /^Lägg till enkel wrap/ }),
+  ).toHaveCount(0);
+  await expect(page.getByRole("log")).toContainText(
+    "Varukorgen har ändrats sedan förslaget gjordes",
+  );
+  await expect(
+    page.getByRole("button", {
+      name: "Visa beställning, 3 varor",
+      exact: true,
+    }),
+  ).toBeVisible();
 });
 
 test("CHATT-013: composer grows beyond two lines while focused and preserves text on collapse", async ({

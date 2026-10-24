@@ -4,6 +4,9 @@ En modulär monolit gör att en agent kan arbeta inom ett område med kort konte
 medan appen kan byggas och släppas som en enhet. Next.js kör både gränssnitt och
 server på Vercel. Supabase och Claude ansluts via serveradaptrar. Beslutade
 teknikregler finns i [rules/system.txt](../rules/system.txt).
+En separat publik test/demo använder Netlify enligt SYS-014; Vercel är fortsatt
+den planerade produktionsplattformen. Byggfilter och instruktioner finns i
+[deploymentguiden](deployment.md#publik-test-demowebb-på-netlify).
 
 ```text
 apps/web/
@@ -105,9 +108,10 @@ rapporterar fel; det ersätter inte behörig serveråtkomst till riktiga ordrar.
 
 Sidhuvudets öppettider och beställningsvyernas egna tidsrader använder samma
 demostandardvecka enligt OPPEN-016–017; samma fakta är tillgängliga för Claude.
-Beställningstider ingår inte i det gemensamma huvudet. När kunden börjat chatta
-krymper mobilhuvudet och introduktionen döljs så att samtalet får mer utrymme.
-Tidsraderna visar inte kapacitet.
+Beställningstider ingår inte i huvudet med loggan. `StoreHeader` och introduktionen
+ligger i chattens scrollområde, ovanför meddelandena, och följer med upp när
+chatten används. Navigationen med varukorg är kvar utanför. Tidsbannern ligger
+kvar ovanför samtalet och är sticky även i menyvyn. Tidsraderna visar inte kapacitet.
 
 Administrationen och Google-integrationen är beslutade nya funktioner i
 [access.txt](../rules/runtime/access.txt) och

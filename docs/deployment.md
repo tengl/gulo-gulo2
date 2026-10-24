@@ -51,7 +51,7 @@ giltiga statusar, ersättningsreferenser och enbart gällande poster i `runtime/
 | --- | --- | --- |
 | `apps/web/src/`, `public/`, driftprompter | Webb | Webb |
 | `rules/runtime/*.txt` | Webb | Webb |
-| Appens bygg-/Vercelkonfiguration | Webb | Webb |
+| Appens bygg-/Vercel-/Netlifykonfiguration | Webb | Webb |
 | Paketmanifest, låsfil, npm-/Nodekonfiguration | Webb | Webb |
 | Releaseflöde eller webbens deployskript | Webb | Webb |
 | `supabase/migrations/*.sql` | Lokal databas | Databasmigrationer |
@@ -76,7 +76,66 @@ hela PR:ns förändring. Felaktig Git-historik ger fel i flödet.
 npm run changes -- <base-sha> <head-sha>
 ```
 
-## Koppla miljöerna en gång
+## Publik test-/demowebb på Netlify
+
+Netlify används för en separat demo enligt SYS-014. Vercelflödet nedan är kvar
+för planerad produktion. Skapa inga Supabase-projekt för den nuvarande demon;
+beställningar och tidsscheman lagras fortfarande i respektive webbläsare.
+En beställning på en telefon visas alltså inte på personalens dator.
+
+Anslut repot till ett Netlify Free-projekt och välj `main` som produktionsbranch
+för **demowebben**. Den versionerade [netlify.toml](../netlify.toml) anger:
+
+| Inställning | Värde |
+| --- | --- |
+| Base directory | `apps/web` |
+| Publish directory | `.next` relativt base, alltså `apps/web/.next` |
+| Node | `24` |
+| Build command | Gå till reporoten, verifiera Git-intervallet, kör `npm run check` och `npm run build` |
+| Ignore command | Gå till reporoten och kör `node ./tooling/netlify.mjs ignore` |
+
+Base-katalogen pekar ut Next.js-appen även om Package directory är tomt.
+Inställningar som finns i filen har företräde framför samma fält i Netlifys UI.
+Netlify installerar workspace-beroendena och använder sin automatiska Next.js-
+adapter för serverroutes och statiska filer. Detta är inte en statisk HTML-export.
+
+[tooling/netlify.mjs](../tooling/netlify.mjs) jämför `CACHED_COMMIT_REF` med
+`COMMIT_REF` genom samma klassificerare som Actions. Dokumentation, AGENTS,
+enbart tester/evals eller SQL deployar inte webben. Första bygget och ombygge
+utan cache granskar hela trädet; Netlify kan då sätta båda referenserna lika.
+Jämförelsen gäller sedan senast byggd commit, inte enbart senaste committen.
+Ändrade appfiler som ännu inte har byggts kan därför följa med en senare push.
+
+Netlifys ignore-steg kan endast hoppa över eller fortsätta ett bygge. Vid
+metadata-/Git-fel fortsätter det till byggkommandot, där `verify` kör samma
+kontroll igen och stoppar publicering med fel. Dölj inte sådana fel med en
+tom diff. Explicit omdeployment/miljöändring kan göras med **Trigger deploy**;
+välj ombygge utan cache om Netlify annars återanvänder en jämförelse utan ändringar.
+
+Netlify kör sina egna `check`-kontroller före appbygget och publicerar inte vid
+fel. Playwright körs fortsatt i GitHub Actions; Netlify väntar inte på Actions.
+Denna demoväg kör inga databasreleaser. GitHub Actions Vercel-/databasjobb är ett
+separat flöde som kräver sina egna miljöer och hemligheter enligt nedan.
+
+Sätt `ADMIN_ACCESS_CODE` (separat slumpmässig kod om minst 16 tecken) i Netlifys
+miljövariabler med tillgång för **Functions** samt **Builds**. Ingen kod är förvald;
+utan den är `/admin` låst. För fri Claude-dialog behövs även `ANTHROPIC_API_KEY`
+och `ANTHROPIC_MODEL` med samma scopar. Lämna Claude-fälten tomma för den nyckelfria
+demon. Använd inte produktionsnycklar. Variablerna måste läggas i Netlifys UI,
+inte i `netlify.toml`, och en ändring kräver ny deployment.
+
+Välj Free för gratis hosting inom dess förbrukningsgränser. Claude API debiteras
+separat om det aktiveras. Externt projekts anslutning och en lyckad lokal byggning
+är inte bevis på en lyckad Netlify-deployment; kontrollera byggloggen och prova
+kundsidan, `/api/chat` och adminsessionen på den faktiska HTTPS-adressen.
+
+Referenser: [Netlifys konfigurationsfil](https://docs.netlify.com/build/configure-builds/file-based-configuration/),
+[monorepon](https://docs.netlify.com/build/configure-builds/monorepos/),
+[byggfilter](https://docs.netlify.com/build/configure-builds/ignore-builds/),
+[Next.js-adaptern](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/)
+och [miljövariabler](https://docs.netlify.com/build/configure-builds/environment-variables/).
+
+## Koppla Vercel-/Supabase-miljöerna en gång
 
 1. Skapa Vercel-projektet med **Root Directory `apps/web`**, Next.js och Node 24.
    Tillåt filer utanför Root Directory så att workspace-låsfilen och reglerna

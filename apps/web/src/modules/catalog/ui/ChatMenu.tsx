@@ -3,6 +3,7 @@
 import { demoMenu, DOUBLE_SURCHARGE_ORE, formatPrice } from "../index";
 import type { Product } from "../index";
 import { Icon } from "@/shared/Icon";
+import { ProductInfoButton } from "./ProductInfoButton";
 
 export function ChatMenu({
   onChoose,
@@ -13,6 +14,9 @@ export function ChatMenu({
 }) {
   return (
     <div className="chat-menu" role="group" aria-label="Meny i chatten">
+      <p className="chat-menu-hint">
+        Tryck på namnet för mer info. Plusset väljer produkten.
+      </p>
       {(["wrap", "drink"] as const).map((category) => (
         <div key={category}>
           <h3>{category === "wrap" ? "Korvwraps" : "Dryck"}</h3>
@@ -20,19 +24,20 @@ export function ChatMenu({
             {demoMenu
               .filter((product) => product.category === category)
               .map((product) => (
-                <li key={product.id}>
+                <li key={product.id} className="chat-menu-product">
+                  <div className="chat-menu-name">
+                    {product.number && <small>{product.number}.</small>}
+                    <ProductInfoButton product={product} />
+                  </div>
+                  <strong>{formatPrice(product.priceOre)}</strong>
                   <button
                     type="button"
+                    className="chat-menu-choose"
                     disabled={disabled}
-                    aria-label={`Beställ ${product.name}`}
+                    aria-label={`Välj ${product.name} i chatten`}
                     onClick={() => onChoose(product)}
                   >
-                    <span>
-                      {product.number && <small>{product.number}.</small>}{" "}
-                      {product.name}
-                    </span>
-                    <strong>{formatPrice(product.priceOre)}</strong>
-                    <Icon name="plus" size={15} />
+                    <Icon name="plus" size={17} />
                   </button>
                 </li>
               ))}
@@ -40,7 +45,7 @@ export function ChatMenu({
           {category === "wrap" && (
             <p>
               Enkelpriser. Dubbel wrap +{formatPrice(DOUBLE_SURCHARGE_ORE)}.
-              Välj produkt, sedan enkel eller dubbel.
+              Tryck på +, sedan enkel eller dubbel.
             </p>
           )}
         </div>

@@ -16,6 +16,7 @@ export {
   cancelDemoOrder,
   canCustomerCancel,
   canCancelDemoOrder,
+  hasActiveCustomerOrders,
   canChangeDemoOrderStatus,
   changeDemoOrderStatus,
   demoOrderFingerprint,

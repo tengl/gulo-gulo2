@@ -4,6 +4,7 @@ Gulo Gulos nya interna system och mobila beställningstjänst byggs här från
 grunden med Next.js/Vercel, Supabase och Claude. Kund och personal arbetar med
 samma beställning. Nu finns en provbar app med lokal demodata; den är ännu
 inte ansluten till riktig orderlagring, betalning eller Google-publicering.
+Separat publik test/demo konfigureras för Netlify enligt SYS-014.
 
 Börja varje ny uppgift så här:
 

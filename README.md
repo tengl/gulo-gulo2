@@ -8,8 +8,8 @@ vissa funktioner med superadmin-kod eller inloggning.
 
 Startsidan kombinerar en mobil chatt, meny och gemensam varukorg. Fråga om
 produkter och tillverkning, välj via båda vyerna och granska alla val tillsammans.
-Öppettider syns i det kompakta sidhuvudet. Beställningstider visas i chatt och meny;
-på mobil krymper huvudet ytterligare när samtalet börjar. Snabbval finns kvar
+Öppettider syns med loggan. I chatten scrollar sidhuvud och introduktion upp,
+medan tidsbannern stannar synlig; menyn har samma sticky beställningstider. Snabbval finns kvar
 under samtalet, chattmenyn är klickbar och skrivfältet växer med texten.
 Spara lokala demobeställningar som finns kvar efter omladdning och prova avbokning
 via chatt eller GUI. Ingen riktig order skickas, betalning görs eller tid reserveras.
@@ -72,3 +72,8 @@ kan släppa webben; SQL-migrationer kan släppa databasen. Dokumentation,
 agentinstruktioner, enbart tester och evals skapar inga deployments.
 Miljöer och nycklar konfigureras enligt driftinstruktionen. Repot beskriver
 releaseflödet; faktisk deploymentstatus kontrolleras i GitHub Actions/Vercel.
+
+För publik test/demo finns separat [Netlify-konfiguration](netlify.toml).
+Bygginställningar och filter ligger i repot; enbart dokumentation, tester eller
+agentinstruktioner skapar inga nya automatiska demodeployments efter första bygget.
+Se [Netlify-instruktionen](docs/deployment.md#publik-test-demowebb-på-netlify).

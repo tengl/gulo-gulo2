@@ -1,0 +1,9 @@
+# Public demo. Paths are relative to apps/web; the workspace lockfile is at root.
+[build]
+  base = "apps/web"
+  publish = ".next"
+  command = "cd ../.. && node ./tooling/netlify.mjs verify && npm run check && npm run build"
+  ignore = "cd ../.. && node ./tooling/netlify.mjs ignore"
+
+[build.environment]
+  NODE_VERSION = "24"

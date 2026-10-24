@@ -71,11 +71,15 @@ Granskningskraven för varukorgsändringar, sparande och avbokning gäller forts
 enligt CHATT-004–007. Beslutskälla: användarens uttryckliga tillägg 2026-10-22.
 
 [CHATT-011] [GÄLLANDE] Snabbval ska finnas kvar under hela samtalet, även
-efter svar och vid fel. Meny ska alltid erbjudas; visa varukorg och granskning
-när varukorgen har innehåll, och sparade beställningar när sådana finns.
+efter svar och vid fel. Meny ska alltid erbjudas och Visa varukorg när utkastet
+har innehåll. Granska ska inte vara ett separat snabbval. Mina beställningar
+visas som snabbval endast när kunden har en aktiv beställning: i demon sparad/
+obetald eller betald, inklusive pågående tillagning och redo för hämtning.
+Hämtade och avbokade beställningar är inte aktiva. Historiken ska fortfarande
+gå att nå genom navigationen eller genom att fråga i chatten.
 Snabbval anpassas till aktuella gemensamma data och skickar färdiga meddelanden
 direkt enligt CHATT-010. Under pågående svar får de vara tillfälligt inaktiva.
-Beslutskälla: användarens uttryckliga tillägg 2026-10-22.
+Beslutskälla: användarens tillägg 2026-10-22 och förenkling 2026-10-23.
 
 [CHATT-012] [GÄLLANDE] När chatten visar menyn ska produktvalen vara klickbara
 inne i samtalet, som i den äldre appen. Klick skickar produktvalet direkt och
@@ -88,6 +92,43 @@ minst två rader synas och fältet växa vidare när texten blir längre. Begrä
 höjden så att samtal och snabbval får plats; längre text får rullas inom fältet.
 Texten ska bevaras när fältet krymper. Beslutskälla: användarens uttryckliga
 önskemål och förtydligande 2026-10-22.
+
+[CHATT-014] [GÄLLANDE] Val mellan två alternativ, exempelvis enkel eller dubbel
+wrap, visas som två knappar i stället för en dropdown. Ett chattförslag om en
+enskild produktrad med ännu ej vald variant får ha två direkta lägg-till-knappar:
+visa produkt, antal, bortval och respektive pris innan klick. Knappen anger
+uttryckligen att vald variant läggs till och klicket är kundens godkännande
+enligt CHATT-004. För flera produktrader och ersättning av varukorgen väljs
+varianter med knappar och hela ändringen godkänns sedan gemensamt.
+Knappar som ändrar varukorgen är mörka med tydlig åtgärdstext. Knappar som
+skickar frågor till chatten behåller bakgrundsfärg och rund kant, utan extra
+chattbubbla. Produktmenyn behåller plusset för produktval enligt UX-011.
+Variantval som enbart
+förbereder en gemensam ändring ska visa sitt valda läge och förklara att en
+bekräftelse återstår. Färg får inte ensam förmedla vad som händer.
+Versionskontroll och validering gäller även direkta knappar. Beslutskälla:
+användarens önskemål och korrigering 2026-10-23 om två knappar, plus i menyn
+och befintliga ljusa chattknappar utan bubbelikon.
+
+[CHATT-015] [GÄLLANDE] När chatten visar varukorgen ska svaret ha Ändra som
+öppnar varukorgen direkt. När utkastet har innehåll erbjuds även Granska
+beställningen, som öppnar granskningsdialogen direkt med ett klick. Knapparna
+ska inte skicka ett nytt chattmeddelande eller kräva ett mellanliggande förslag.
+Enkla navigationsknappar ligger direkt under meddelandet, utan en separat
+inramad ruta runt knappen. Konkreta ändringsförslag behåller sin granskning och
+versionskontroll enligt CHATT-004; sparande och avbokning bekräftas fortsatt
+i respektive dialog. Beslutskälla: användarens förenkling 2026-10-23 av nästlade
+rutor, Visa varukorg och vägen till ändring/granskning.
+
+[CHATT-016] [GÄLLANDE] När kunden återvänder till chatten från en annan vy
+ska senaste meddelandet visas längst ner, även om kunden tidigare scrollat upp.
+Samtal och oskickad text bevaras utan att ett nytt chattanrop skickas.
+Sidhuvudet tonas mjukt bort när det scrollar upp, och snabbval som försvinner
+tonas och fälls ihop utan ett abrupt hopp. Sidhuvudet går fortfarande att
+scrolla tillbaka till enligt OPPEN-016. Utgående snabbval blir genast inaktiva
+och tas bort från tangentbordsnavigationen. Minskad rörelse ska respekteras.
+Beslutskälla: användarens önskemål 2026-10-23 om senaste meddelandet vid
+återgång till chatten och mjukare övergångar för knappar och huvud.
 
 Tekniska demogränser för CHATT-005/009: högst 50 unika rader i ett utkast,
 30 lokala demobeställningar och 300 000 tecken i det serialiserade lokala minnet.

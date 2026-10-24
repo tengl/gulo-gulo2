@@ -23,7 +23,7 @@ export type ChatMessage = { role: "user" | "assistant"; content: string };
 export type ChatAction =
   | { kind: "add" | "replace"; items: Selection[] }
   | { kind: "remove"; keys: string[] }
-  | { kind: "review" | "orders" | "menu" }
+  | { kind: "review" | "orders" | "menu" | "cart" }
   | { kind: "cancel"; reference: string };
 export type ChatReply = {
   text: string;
@@ -200,7 +200,11 @@ export function toolReply(
   context: ChatContext,
 ): ChatReply {
   if (name === "show_cart")
-    return { mode: "claude", text: describeCart(context.cart) };
+    return {
+      mode: "claude",
+      text: describeCart(context.cart),
+      action: { kind: "cart" },
+    };
   const action = actionFromTool(name, input, context);
   const text =
     action.kind === "add" || action.kind === "replace"
@@ -213,7 +217,7 @@ export function toolReply(
             ? "Här kan du granska alla dina val. Ingen riktig beställning skickas i demon."
             : action.kind === "orders"
               ? "Här är dina lokalt sparade demobeställningar."
-              : "Våra wraps och drycker. Klicka på en produkt för att välja den, eller fråga om innehållet.";
+              : "Våra wraps och drycker. Tryck på + för att välja, eller på produktnamnet för mer info.";
   return { mode: "claude", text, action };
 }
 
@@ -236,7 +240,7 @@ export function limitedReply(context: ChatContext): ChatReply {
       "varukorg",
     ].includes(text)
   )
-    return reply({ text: describeCart(context.cart) });
+    return reply({ ...toolReply("show_cart", {}, context) });
   if (
     [
       "mina bestallningar",
@@ -310,7 +314,7 @@ export function limitedReply(context: ChatContext): ChatReply {
       ...toolReply("show_menu", {}, context),
     });
   if (parsed.kind === "cart")
-    return reply({ text: describeCart(context.cart) });
+    return reply({ ...toolReply("show_cart", {}, context) });
   if (parsed.kind === "suggestion")
     return reply({
       text: "Så här tolkade jag dina val. Kontrollera dem och välj variant där det saknas.",

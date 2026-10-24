@@ -42,8 +42,10 @@ test("CHATT-002: every current row, variant, omission and calculated total comes
   assert.match(reply.text, /2 × 7\. GHOSTDOG · dubbel wrap · utan senap/);
   assert.match(reply.text, /1 × Loka/);
   assert.match(reply.text, /385\s*kr/);
-  assert.equal(reply.action, undefined);
+  assert.deepEqual(reply.action, { kind: "cart" });
   assert.equal(limitedReply(context).text, reply.text);
+  assert.deepEqual(limitedReply(context).action, { kind: "cart" });
+  assert.equal(limitedReply(context).mode, "limited");
 });
 
 test("CHATT-004/009: model suggestions are validated without mutating state", () => {

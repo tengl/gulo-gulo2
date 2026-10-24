@@ -4,6 +4,7 @@ import { useState } from "react";
 import { demoMenu, formatPrice } from "../index";
 import type { Product } from "../index";
 import { Icon } from "@/shared/Icon";
+import { ProductInfoButton } from "./ProductInfoButton";
 
 export function ProductMenu({
   onChoose,
@@ -48,12 +49,9 @@ export function ProductMenu({
         {demoMenu
           .filter((product) => product.category === category)
           .map((product) => (
-            <button
+            <article
               className={`product-card ${product.id === "grillost" ? "product-vegetarian" : ""}`}
-              type="button"
               key={product.id}
-              onClick={() => onChoose(product)}
-              aria-label={`Välj ${product.name}`}
             >
               <div className="product-top">
                 <span className="product-number">
@@ -69,15 +67,22 @@ export function ProductMenu({
                   </span>
                 )}
               </div>
-              <h3>{product.name}</h3>
+              <h3>
+                <ProductInfoButton product={product} />
+              </h3>
               <p>{product.description}</p>
               <div className="product-bottom">
                 <span>{formatPrice(product.priceOre)}</span>
-                <span className="add-circle">
+                <button
+                  className="add-circle"
+                  type="button"
+                  onClick={() => onChoose(product)}
+                  aria-label={`Välj ${product.name}`}
+                >
                   <Icon name="plus" />
-                </span>
+                </button>
               </div>
-            </button>
+            </article>
           ))}
       </div>
       <p className="menu-footnote">

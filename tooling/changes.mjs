@@ -7,6 +7,7 @@ const webConfig = new Set([
   "apps/web/package.json", "apps/web/next.config.ts",
   "apps/web/tsconfig.json", "apps/web/next-env.d.ts", "apps/web/vercel.json",
   ".github/workflows/pipeline.yml", "tooling/deploy-web.sh",
+  "netlify.toml", "tooling/netlify.mjs",
 ]);
 
 function isTest(path) {

@@ -120,8 +120,9 @@ test("UX-008 / CHATT-001: safe text proposals and conversation survive view swit
   await expect(input).toHaveValue("Min nästa fråga");
   await expect(add).toBeDisabled();
   await page
-    .getByRole("combobox", { name: "Variant för GHOSTDOG", exact: true })
-    .selectOption("double");
+    .getByRole("group", { name: "Variant för GHOSTDOG", exact: true })
+    .getByRole("button", { name: /^Dubbel/ })
+    .click();
   await add.click();
   await expect(page.getByRole("log")).toContainText("Varukorgen är uppdaterad");
   await page

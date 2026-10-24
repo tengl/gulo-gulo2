@@ -9,9 +9,10 @@ Synkriktning mot Google och detaljer om tidsgränser är ännu öppna.
 Regelunderlag: `rules/runtime/business-hours.txt`. Läs status på varje post innan implementation.
 
 `domain/demo-hours.ts` äger ordinarie demotider enligt OPPEN-016–017.
-`ui/HoursOverview.tsx` visar endast öppettider i det kompakta sidhuvudet.
+`ui/HoursOverview.tsx` visar öppettider med loggan; i chatten scrollar huvudet
+med introduktionen enligt OPPEN-016.
 `ui/OrderingHours.tsx` visar beställningsfönstret inne i chatt och meny enligt
-OPPEN-016; det får döljas när kunden börjat chatta på mobil. Samma fakta ges till
+OPPEN-016; bannern stannar synlig vid scroll även efter första meddelandet. Samma fakta ges till
 Claude. Detta är inte kapacitetskontroll eller redigerbar driftkonfiguration.
 `domain/schedule.ts` äger standardvecka, datumundantag, validering och effektiv
 avvikelse enligt OPPEN-004–009 / ADM-003. `ui/HoursAdmin.tsx` är veckovyn;

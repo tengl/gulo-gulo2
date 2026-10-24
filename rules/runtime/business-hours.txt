@@ -49,15 +49,17 @@ Detaljer om framförhållning och bokningsbara kapacitetstider är separata frå
 för att ta emot sammadagsbeställningar är ett eget begrepp och ska inte publiceras
 som verksamhetens öppettider i Google.
 
-[OPPEN-016] [GÄLLANDE] Öppettider visas kompakt i det gemensamma sidhuvudet.
-Fönstret för att lägga beställning för samma dag visas i själva chatt- och
-menyvyn när de öppnas, tillsammans med förklaringen om förbeställning utanför
-fönstret. Beställningsfönstret ska inte visas i det gemensamma sidhuvudet.
-På mobil ska huvudet ta liten plats och krympa ytterligare när kunden skickat
-sitt första chattmeddelande. Introduktion och beställningstider får då döljas
-för att ge samtalet mer utrymme; meny, varukorg och historik ska förbli nåbara.
+[OPPEN-016] [GÄLLANDE] Öppettider visas kompakt tillsammans med loggan.
+I chattvyn ligger sidhuvudet och introduktionen i samtalets scrollområde, så
+att de följer med upp när kunden börjar chatta. De ska gå att scrolla tillbaka
+till. Endast kompakt navigation ska ta plats ovanför chatten på små skärmar;
+meny, varukorg och historik ska förbli nåbara under hela samtalet.
+Fönstret för att lägga beställning för samma dag visas i en egen banner i
+chatt- och menyvyn, med förklaring om förbeställning utanför fönstret. Bannern
+ska stanna synlig vid scroll och efter första meddelandet, inte döljas för att
+krympa huvudet. Beställningsfönstret ingår inte i sidhuvudet med loggan.
 Visa samma tidsunderlag i båda beställningsvyerna. Beslutskälla: användarens
-uttryckliga tillägg och revideringar 2026-10-22.
+tillägg 2026-10-22 och revidering 2026-10-23 om scrollande huvud och sticky banner.
 
 [OPPEN-017] [GÄLLANDE] Den nuvarande demon visar ordinarie tider från gamla
 appens gränssnitt vid 1ef53f5: öppet torsdag–söndag 11:00–15:00; mottagning av

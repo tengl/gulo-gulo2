@@ -5,7 +5,6 @@ import { useState } from "react";
 import { ProductMenu } from "@/modules/catalog/ui/ProductMenu";
 import { demoMenu, formatPrice } from "@/modules/catalog";
 import type { Product } from "@/modules/catalog";
-import { HoursOverview } from "@/modules/business-hours/ui/HoursOverview";
 import { OrderingHours } from "@/modules/business-hours/ui/OrderingHours";
 import {
   addSelections,
@@ -27,6 +26,7 @@ import {
 } from "@/modules/ordering/ui/OrderDialogs";
 import { ConfigureProduct } from "./ConfigureProduct";
 import { Chat } from "./Chat";
+import { StoreHeader } from "./StoreHeader";
 import { applyCartProposal } from "../index";
 import type { ChatAction } from "../index";
 import { useOrderMemory } from "@/modules/ordering/ui/useOrderMemory";
@@ -43,7 +43,6 @@ export function OrderingExperience() {
   } = useOrderMemory();
   const cart = memory.cart;
   const [sessionKey, setSessionKey] = useState(0);
-  const [chatStarted, setChatStarted] = useState(false);
   const [cancelReference, setCancelReference] = useState<string | null>(null);
   const [forget, setForget] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
@@ -97,6 +96,7 @@ export function OrderingExperience() {
     }
   }
   function navigate(action: ChatAction) {
+    if (action.kind === "cart") setView("cart");
     if (action.kind === "menu") setView("menu");
     if (action.kind === "orders") setView("orders");
     if (action.kind === "review") {
@@ -108,39 +108,20 @@ export function OrderingExperience() {
   const cancelOrder = memory.orders.find(
     (order) => order.reference === cancelReference,
   );
-  return (
-    <div
-      className={`ordering-app ${view === "chat" ? `has-chat${chatStarted ? " chat-started" : ""}` : ""}`}
+  const cartButton = (
+    <button
+      type="button"
+      className="header-cart"
+      onClick={() => setView("cart")}
+      aria-label={`Visa beställning, ${count} varor`}
     >
-      <div className="demo-banner">
-        <span className="tiny-dot" />
-        <span>Demoläge · Ingen riktig order skickas</span>
-      </div>
-      <header className="site-header">
-        <a
-          href="#main-content"
-          className="brand"
-          aria-label="Gulo Gulo Deli, till beställningen"
-        >
-          <Image
-            src="/logo-light.png"
-            alt="Gulo Gulo Deli"
-            width={56}
-            height={56}
-            loading="eager"
-          />
-        </a>
-        <HoursOverview />
-        <button
-          type="button"
-          className="header-cart"
-          onClick={() => setView("cart")}
-          aria-label={`Visa beställning, ${count} varor`}
-        >
-          <Icon name="bag" />
-          <span>{count}</span>
-        </button>
-      </header>
+      <Icon name="bag" />
+      <span>{count}</span>
+    </button>
+  );
+  return (
+    <div className={`ordering-app${view === "chat" ? " has-chat" : ""}`}>
+      {view !== "chat" && <StoreHeader>{cartButton}</StoreHeader>}
       <nav className="experience-nav" aria-label="Beställningssätt">
         <button
           type="button"
@@ -163,17 +144,19 @@ export function OrderingExperience() {
         >
           <Icon name="bag" size={18} /> Mina beställningar
         </button>
+        {view === "chat" && cartButton}
       </nav>
       <main id="main-content" className={`experience-layout view-${view}`}>
         <div className="experience-main">
           <div hidden={view !== "chat"}>
             <Chat
               key={sessionKey}
+              active={view === "chat"}
               cart={cart}
               orders={memory.orders}
               onApply={applyAction}
               onNavigate={navigate}
-              onStarted={() => setChatStarted(true)}
+              introduction={<StoreHeader />}
             />
           </div>
           <div hidden={view !== "orders"}>
@@ -341,7 +324,6 @@ export function OrderingExperience() {
           onConfirm={() => {
             forgetMemory();
             setSessionKey((key) => key + 1);
-            setChatStarted(false);
             setForget(false);
             setNotice("Det lokala minnet är rensat.");
             setError("");

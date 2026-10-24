@@ -95,6 +95,15 @@ export function canCancelDemoOrder(order: Pick<SavedOrder, "status">): boolean {
   return canCustomerCancel(order.status === "saved" ? "unpaid" : order.status);
 }
 
+// CHATT-011: follow unpaid and paid customer orders until collection/cancellation.
+export function hasActiveCustomerOrders(
+  orders: readonly Pick<SavedOrder, "status">[],
+): boolean {
+  return orders.some(
+    (order) => order.status === "saved" || order.status === "paid",
+  );
+}
+
 export function demoOrderFingerprint(order: SavedOrder): string {
   return JSON.stringify(order);
 }

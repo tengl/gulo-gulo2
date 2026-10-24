@@ -25,7 +25,7 @@ test("each runtime input independently requires a web deployment", () => {
     "rules/runtime/administration.txt",
     "rules/runtime/business-hours.txt", "rules/runtime/access.txt", "package-lock.json", "package.json", ".node-version",
     "apps/web/next.config.ts", "apps/web/vercel.json", ".github/workflows/pipeline.yml",
-    "tooling/deploy-web.sh",
+    "tooling/deploy-web.sh", "netlify.toml", "tooling/netlify.mjs",
   ]) assert.equal(classifyFiles([path]).web, true, path);
 });
 

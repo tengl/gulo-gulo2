@@ -154,6 +154,16 @@ test("ADM-004–006 / ORD-016: a customer order is shared with admin through pay
   await customer
     .getByRole("textbox", { name: "Meddelande till Gulo Gulo" })
     .fill(`Avboka ${reference}`);
+  const customerShortcuts = customer.getByRole("group", {
+    name: "Snabbval i chatten",
+    exact: true,
+  });
+  await expect(
+    customerShortcuts.getByRole("button", {
+      name: "Mina beställningar",
+      exact: true,
+    }),
+  ).toBeVisible();
   const outgoing = customer.waitForRequest(
     (request) =>
       request.url().endsWith("/api/chat") && request.method() === "POST",
@@ -177,6 +187,12 @@ test("ADM-004–006 / ORD-016: a customer order is shared with admin through pay
     .getByRole("button", { name: "Bekräfta lokal ändring", exact: true })
     .click();
   await expect(detail.getByRole("status")).toContainText("markerad som hämtad");
+  await expect(
+    customerShortcuts.getByRole("button", {
+      name: "Mina beställningar",
+      exact: true,
+    }),
+  ).toHaveCount(0);
   await detail.getByRole("button", { name: "Stäng", exact: true }).click();
   await admin.reload();
   await expect(

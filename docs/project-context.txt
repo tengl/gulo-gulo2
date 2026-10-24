@@ -1,7 +1,7 @@
 PROJEKTKONTEXT FÖR NÄSTA AGENT
 ============================
 
-Uppdaterad 2026-10-23. Verifierad funktionsbas: commit 989b4f6.
+Uppdaterad 2026-10-24. Verifierad funktionsbas: commit 989b4f6.
 Detta är en överlämning av nuläge och arbetsprioritering, inte verksamhetsregler.
 Facit: rules/index.txt, rules/system.txt och berörda rules/runtime/*.txt.
 Verifiera berörd kod och git status; denna fil är ingen garanti om driftsmiljön.
@@ -37,10 +37,31 @@ Adress                       Nuvarande funktion
 /api/chat                    Kontextvalidering, begränsat demoläge eller Claude-adapter.
 /api/admin/session           Serverns login, sessionskontroll och logout.
 
-Kundupplevelsen är avsiktligt genomarbetad för mobil: kompakt huvud som krymper
-när samtalet börjar, järven från loggan som avatar, snabbval under samtalet,
-direktsända färdiga svar, klickbar chattmeny och skrivfält som växer med texten.
+Kundupplevelsen är avsiktligt genomarbetad för mobil: sidhuvud och introduktion
+scrollar med chatten, tidsbannern stannar synlig och navigationen är kompakt.
+Huvudet kan scrollas tillbaka fram. Även menyn har en sticky tidsbanner enligt
+OPPEN-016 (reviderad 2026-10-23). Järven från loggan är avatar. Snabbval finns
+under hela samtalet, färdiga svar skickas direkt, chattmenyn är klickbar och
+skrivfältet växer med texten.
+Återgång från meny, varukorg eller historik visar senaste meddelandet längst
+ner utan att skicka om något; oskickad text bevaras (CHATT-016). Huvudet tonas
+med scrollningen och snabbval fälls ihop/tonas bort när de inte längre behövs.
+Utgående snabbval är genast inaktiva. Minskad rörelse stänger av övergångarna.
 Meny- och chattval använder samma utkast. Se UX- och CHATT-reglerna.
+Enkel/dubbel i chattförslag visas som två knappar (CHATT-014). En ensam rad
+utan variant har två mörka direkta lägg-till-val med pris; flera rader och
+ersättning godkänns gemensamt efter variantval. Ljusa meddelandeknappar behåller
+bakgrundsfärg och rund kant utan chattbubblor (användarens korrigering 2026-10-23).
+Plusset väljer produkten i båda menyerna. Produktnamnet med ett info-i efter öppnar katalogfakta,
+priser och wraparnas tillbehör i en dialog (UX-011). Den skickar inget till
+chatten och påbörjar inget produktval. Stängning återställer fokus till info-knappen.
+Dialoger och varukorg har korta öppningsanimationer via gemensam CSS, med
+glidning för mobilens bottenpaneler och stöd för minskad rörelse (UX-012).
+Varukorgssvar har platta Ändra-/Granska-knappar direkt under texten, utan
+inramad navigationsruta eller extra modellfråga (CHATT-015). Granska är borttaget
+från snabbvalen. Mina beställningar är snabbval enbart för obetalda/betalda
+aktiva ordrar; hämtade/avbokade går fortsatt att se i huvudnavigationens historik
+(CHATT-011, reviderad 2026-10-23).
 
 Två olika lagringar ska hållas isär:
 - gulo-order-memory-v1: kundens utkast och sparade demobeställningar. Kund och
@@ -111,12 +132,15 @@ KODKARTA FÖR ATT HITTA RÄTT
 Alla modulvägar nedan är under apps/web/src/modules/:
 catalog/domain/demo-menu.ts          Produkter och priser i heltalsöre.
 catalog/domain/knowledge.ts          Godkända produkt-/tillverkningsfakta.
+catalog/ui/ProductInfoButton.tsx     Gemensam produktinformation från båda menyerna.
 ordering/domain/cart.ts              Det gemensamma beställningsutkastet.
 ordering/domain/saved-orders.ts      Validering, snapshots, demoövergångar/versioner.
 ordering/ui/useOrderMemory.ts        Delad lokal orderlagring och storage-event.
 conversation/domain/chat.ts         Kontext, verktygsvalidering, begränsad fallback.
 conversation/ui/OrderingExperience.tsx Kundvyerna och deras gemensamma tillstånd.
 conversation/ui/Chat.tsx             Meddelanden och aktuellt order-/utkastunderlag.
+conversation/ui/ChatShortcuts.tsx    Snabbval med mjuk in-/utfällning och inert läge.
+conversation/ui/ChatProposal.tsx     Variantknappar och versionsbundet godkännande.
 staff/ui/OrdersAdmin.tsx             Adminlista och sammansättning av statusändring.
 staff/ui/OrderAdminDetails.tsx       Granskning/bekräftelse av bestämd referens.
 staff/domain/                       Sökning, summeringar och nya referenser.
@@ -154,12 +178,24 @@ Ren dokumentation kräver kontroll av hänvisningar/status, inte nytt appbygge.
 
 DEPLOYMENT OCH EXTERNT TILLSTÅND
 
+Användaren har valt en gratis publik Netlify-demo och uppger 2026-10-23 att
+repot är anslutet och bygginställningarna sparade. En lyckad fjärrdeployment
+är ännu inte verifierad här. netlify.toml anger base apps/web, publish .next
+och Node 24; byggkommandot kör Git-verifiering, check och build från roten.
+tooling/netlify.mjs använder samma klassificerare som Actions även innan npm-
+installation. Första bygget eller cachetömt ombygge granskar hela trädet.
+Git-fel stoppar publicering i byggkommandots verifieringssteg. Playwright körs
+separat i Actions; demowebben väntar inte på den körningen. Se SYS-014.
+Admin- och Claude-variabler sätts separat i Netlify för Builds och Functions;
+Supabase och riktiga betalningar behövs inte för denna demo. Vercel är kvar som
+planerad produktionsplattform, med ett separat releaseflöde och egna hemligheter.
+
 tooling/changes.mjs skiljer kontroller, webbdeployment och databasmigrationer.
 Dokument, AGENTS.md, enbart tester/evals och icke-runtime-regler deployar inte.
 rules/runtime/*.txt följer appens releaser och kan utlösa webbdeployment.
 apps/web/vercel.json stänger av Vercels direkta Git-deployment; GitHub Actions
-är det avsedda releaseflödet. Produktionsmigrationer går före webb när båda ändras.
-Korrekt konfiguration och hemligheter i GitHub/Vercel måste kontrolleras separat;
+är det avsedda produktionsflödet. Produktionsmigrationer går före webb när båda ändras.
+Konfiguration och hemligheter i GitHub/Vercel/Netlify måste kontrolleras separat;
 en push eller en fil i repot är inte bevis på en lyckad deployment eller aktiv tjänst.
 Exakta instruktioner: docs/deployment.md. Inga externa konton eller projekt
 behöver skapas för att börja arbeta med kund-/adminprototypen.

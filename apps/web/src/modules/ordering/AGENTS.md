@@ -22,3 +22,5 @@ inte att en betalningsmarkering innebär bekräftad eller tillagad beställning.
 `ui/OrderSummary.tsx` och `SavedOrders.tsx` visar samma data. Inga riktiga
 ordrar skapas, betalas eller reserveras. Lokalt minne är aldrig behörighetsbevis.
 Se CHATT-005–009. Koppla framtida server-use cases härifrån, inte från UI.
+`hasActiveCustomerOrders` styr kundens uppföljningssnabbval enligt CHATT-011:
+obetald eller betald, inte hämtad/avbokad. Det är inte adminvyns summering i ADM-007.
