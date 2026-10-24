@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 const webConfig = new Set([
   "package.json", "package-lock.json", ".npmrc", ".node-version",
   "apps/web/package.json", "apps/web/next.config.ts",
-  "apps/web/tsconfig.json", "apps/web/next-env.d.ts", "apps/web/vercel.json",
+  "apps/web/tsconfig.json", "apps/web/vercel.json",
   ".github/workflows/pipeline.yml", "tooling/deploy-web.sh",
   "netlify.toml", "tooling/netlify.mjs",
 ]);
@@ -24,6 +24,7 @@ export function classifyFiles(files) {
   for (const path of files) {
     const runtime = !isTest(path) && !isInstructions(path) && (
       path.startsWith("apps/web/src/") || path.startsWith("apps/web/public/")
+      || path.startsWith("apps/web/content/")
       || (path.startsWith("rules/runtime/") && path.endsWith(".txt"))
     );
     if (runtime || webConfig.has(path)) result.web = true;

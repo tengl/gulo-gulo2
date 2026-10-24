@@ -30,7 +30,13 @@ Appen är en lokal demo med fungerande serververifierad admininloggning och
 valfri Claude-dialog. En DEMO-referens innebär inte en riktig registrerad order.
 
 Adress                       Nuvarande funktion
-/                            Kundens chatt, meny, delad varukorg och Mina beställningar.
+/                            Webbplatsens startsida (WEBB-001), ersätter Squarespace-siten.
+/meny, /produkter[/namn]     Menyn med priser som text och charkuteriets produkter.
+/event, /om, /swish, /integritet  Innehållssidor från apps/web/content/.
+/llms.txt, /llms-full.txt    Översikt och all text för AI-assistenter (WEBB-010).
+/bestall                     Kundens chatt, meny, delad varukorg och Mina beställningar.
+/bestall?varor=…             Djuplänk som blir ett förslag i chatten (WEBB-012).
+/api/newsletter              Nyhetsbrev via Brevo med dubbel bekräftelse (WEBB-013).
 /admin                       Kodskyddad veckovy, standardvecka och datumundantag.
 /admin/bestallningar          Lista, filter, detaljer och bekräftade demostatusändringar.
 /admin/anslutningar           Ärlig status för ej ansluten gemensam lagring och Google.
@@ -104,6 +110,22 @@ utredda begrepp i OPPEN-reglerna. Lägg inte tillbaka gamla bokningsslotar som
 öppettider eller blanda ihop beställningstidpunkten med hämtningstidpunkten.
 Kundens nuvarande tidsrader kommer från business-hours/domain/demo-hours.ts;
 adminförhandsvisningen kommer från domain/schedule.ts och sin separata lagring.
+
+WEBBPLATSEN (BESLUT 2026-10-24)
+
+Squarespace-siten flyttar in i appen enligt rules/runtime/site.txt. Texterna
+hämtades från gulogulo.se 2026-10-24 och ligger som Markdown i apps/web/content/;
+människor får ändra dem på GitHub (README.md där), agenter följer AGENTS.md där.
+Priser och tider kommer från catalog och business-hours, aldrig från innehållet.
+Strukturerad data, llms-filer, sitemap och robots byggs från samma källor.
+Bara produktion indexeras (SITE_INDEXABLE=true, WEBB-014); Netlify-demon gör inte.
+Gamla Squarespace-adresser ger 301 (next.config.ts, gammalAdress i produkterna).
+Squarespace-shoppen ligger kvar och länkas (WEBB-004); /shop leder dit tills
+den får en egen adress. Nyhetsbrevet kräver Brevo-konto och nycklar; utan dem
+säger formuläret att anmälan inte är öppen. Charkprodukternas fakta är webbtext
+och inte godkända KAT-fakta för chatten. Integritetstexten bör granskas av
+användaren innan publicering. Beställning från externa AI-chattar via MCP är
+planerad först när riktiga ordrar och betalning finns.
 
 VAD SOM ÅTERSTÅR
 

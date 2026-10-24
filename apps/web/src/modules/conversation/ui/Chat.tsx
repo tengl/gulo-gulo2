@@ -45,6 +45,7 @@ export function Chat({
   onApply,
   onNavigate,
   introduction,
+  incoming,
 }: {
   active: boolean;
   cart: Cart;
@@ -52,8 +53,24 @@ export function Chat({
   onApply: (action: ChatAction, base: string) => string | undefined;
   onNavigate: (action: ChatAction) => void;
   introduction: ReactNode;
+  // A reply that arrives without a customer message, e.g. from an order link.
+  incoming?: { id: string; text: string; action?: ChatAction } | null;
 }) {
   const [messages, setMessages] = useState<Message[]>([welcome]);
+  const [received, setReceived] = useState<string | null>(null);
+  if (incoming && incoming.id !== received) {
+    setReceived(incoming.id);
+    setMessages((current) => [
+      ...current,
+      {
+        id: incoming.id,
+        role: "assistant",
+        content: incoming.text,
+        action: incoming.action,
+        base: cartFingerprint(cart),
+      },
+    ]);
+  }
   const [text, setText] = useState("");
   const [mode, setMode] = useState<"claude" | "limited" | "loading">("loading");
   const [busy, setBusy] = useState(false);

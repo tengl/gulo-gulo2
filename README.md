@@ -6,7 +6,11 @@ Pris, kapacitet, lager och ordrar avgörs av vanlig programkod och databas.
 Administrationen ska även kunna uppdatera öppettider i Google och skydda
 vissa funktioner med superadmin-kod eller inloggning.
 
-Startsidan kombinerar en mobil chatt, meny och gemensam varukorg. Fråga om
+`/` är den publika webbplatsen (tidigare Squarespace): meny med priser,
+charkuteriets produkter, event, om oss och nyhetsbrev. **Texterna ändras i
+[apps/web/content/](apps/web/content/README.md)**, även direkt på GitHub.
+
+`/bestall` kombinerar en mobil chatt, meny och gemensam varukorg. Fråga om
 produkter och tillverkning, välj via båda vyerna och granska alla val tillsammans.
 Öppettider syns med loggan. I chatten scrollar sidhuvud och introduktion upp,
 medan tidsbannern stannar synlig; menyn har samma sticky beställningstider. Snabbval finns kvar

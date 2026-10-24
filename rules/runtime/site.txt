@@ -1,0 +1,66 @@
+WEBBPLATSEN GULOGULO.SE
+=======================
+
+Status: GÄLLANDE för den publika webbplatsen i samma app som beställningen.
+Beslutskälla: användarens beslut 2026-10-24 om att flytta in den befintliga
+Squarespace-siten, med samma rena utseende som beställningen, samt följdbeslut
+samma dag om adresser, texter, nyhetsbrev och läsbarhet för AI-chattar.
+Texterna är hämtade från gulogulo.se 2026-10-24 och är webbplatsinnehåll, inte
+godkända produktfakta för chatten; se KAT-reglerna för vad Claude får påstå.
+
+Adresser och navigering
+[WEBB-001] [GÄLLANDE] Webbplatsen och beställningen delar domän. / är
+webbplatsens startsida och beställningen ligger på /bestall. Övriga sidor är
+/meny, /produkter, /produkter/<namn>, /event, /om, /swish och /integritet.
+[WEBB-002] [GÄLLANDE] Webbplatsens sidhuvud har logga och en tydlig knapp Beställ
+till /bestall. Beställningsvyn behåller sin egen navigation utan webbplatsens
+meny; dess logga leder tillbaka till startsidan.
+[WEBB-003] [GÄLLANDE] Webbplatsen använder beställningens formspråk: färger,
+typsnitt, linjer och luft. Den ska fungera på mobil först.
+[WEBB-004] [GÄLLANDE] Squarespace-shoppen (keps, presentkort, Gästabud) ligger
+kvar tills vidare och nås med en extern länk. Den byggs inte om i denna app.
+[WEBB-005] [GÄLLANDE] Gamla Squarespace-adresser leder permanent (301) till
+motsvarande ny sida, så att länkar och sökträffar fortsätter fungera.
+
+Texter och förvaltning
+[WEBB-006] [GÄLLANDE] Webbplatsens texter ligger som Markdown i
+apps/web/content/. Agenter ändrar dem på uppdrag, även när personalen ber om
+ändringen. Människor får också ändra dem direkt, till exempel i GitHubs editor
+via en pull request. Kontrollerna stoppar en ändring som bryter innehållets
+format, länkar eller bilder och anger fil och fält på svenska.
+[WEBB-007] [GÄLLANDE] Priser, meny och öppettider ändras inte i innehållsfilerna.
+De kommer från katalogen och tidsmodulen så att webbplats, chatt och beställning
+visar samma uppgift. Härledda filer som llms.txt, strukturerad data och sitemap
+skapas vid bygget och versionshanteras inte.
+[WEBB-008] [GÄLLANDE] En agent läser innehållsfilen i aktuellt skick och gör
+minsta möjliga ändring. Den skriver aldrig om en fil från minnet eller från
+den gamla siten, så att en människas ändringar bevaras.
+
+Läsbarhet för AI-assistenter och sökmotorer
+[WEBB-009] [GÄLLANDE] All webbplatstext finns i serverrenderad HTML. Menyn med
+priser finns som vanlig text på /meny, eftersom chattbeställningen inte kan läsas
+av sökmotorer och AI-assistenter.
+[WEBB-010] [GÄLLANDE] Sidorna har strukturerad data enligt schema.org för
+verksamheten, öppettider, menyn och produkterna. Den skapas från samma källor
+som sidorna. /llms.txt ger en kort översikt och /llms-full.txt all text i Markdown.
+[WEBB-011] [GÄLLANDE] Sök- och hämtningsbotar för AI-assistenter (bland andra
+OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot) och
+vanliga sökmotorer får läsa webbplatsen. Botar som samlar träningsdata för
+AI-modeller (GPTBot, ClaudeBot, Google-Extended) får också läsa den, eftersom
+innehållet är marknadsföring. /bestall, /admin och /api indexeras inte.
+[WEBB-014] [GÄLLANDE] Bara produktionswebbplatsen indexeras. Demo- och
+förhandsvisningsmiljöer, som Netlify-demon, ber sökmotorer och botar att inte
+indexera något, så att de inte konkurrerar med gulogulo.se. Produktionen anger
+det uttryckligen med SITE_INDEXABLE=true och sin adress i SITE_URL.
+[WEBB-012] [GÄLLANDE] En länk /bestall?varor=<produkt>[-enkel|-dubbel]:<antal>,…
+öppnar beställningen med varorna som ett förslag som kunden granskar och
+godkänner. Inget läggs i varukorgen eller sparas utan kundens godkännande.
+Okända varor, ogiltiga antal och saknade varianter visas som ej tillagda;
+giltiga rader i samma länk behålls i förslaget. Formatet beskrivs i /llms.txt.
+
+Nyhetsbrev
+[WEBB-013] [GÄLLANDE] Nyhetsbrevet tar bara emot en e-postadress med uttryckligt
+samtycke och länk till /integritet. Prenumerationen gäller först när mottagaren
+bekräftat via mejl (dubbel bekräftelse). Brevo håller listan och avregistreringen;
+appen sparar inga adresser själv. Utan konfigurerad tjänst säger formuläret
+ärligt att anmälan inte är öppen ännu.

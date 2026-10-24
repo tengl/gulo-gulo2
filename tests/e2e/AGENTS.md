@@ -16,3 +16,6 @@ verifierar startade signaler; det verifierar inte operativsystemets högtalare.
 Säkerhetstester för signering finns i
 `tests/security/` och körs via `npm test` med Node-villkoret `react-server`.
 Enbart teständringar ska köra kontroller utan att skapa en deployment.
+`site.spec.ts` provar webbplatsen (WEBB-001–014): sidor, meny som text, 301 från
+gamla adresser, schema.org/llms-filer, noindex i testmiljön, djuplänk och nyhetsbrev.
+Beställningen ligger på `/bestall`; `/` är webbplatsen.

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductMenu } from "@/modules/catalog/ui";
 import { demoMenu, formatPrice } from "@/modules/catalog";
 import type { Product } from "@/modules/catalog";
@@ -33,10 +33,19 @@ import { useOrderingView } from "./useOrderingView";
 import { SheetPresence } from "@/shared/Sheet";
 import { createId } from "@/shared/create-id";
 import { useHydrated } from "@/shared/useHydrated";
-import { applyCartProposal } from "@/modules/conversation";
+import {
+  applyCartProposal,
+  orderLinkReply,
+  parseOrderLink,
+} from "@/modules/conversation";
 import type { ChatAction } from "@/modules/conversation";
 
-export function OrderingExperience() {
+export function OrderingExperience({
+  orderLink,
+}: {
+  // WEBB-012: the raw ?varor= value; it only ever becomes a proposal.
+  orderLink?: string;
+}) {
   const { view, setView: changeView, root } = useOrderingView();
   const hydrated = useHydrated();
   const {
@@ -48,6 +57,18 @@ export function OrderingExperience() {
   } = useOrderMemory();
   const cart = memory.cart;
   const [sessionKey, setSessionKey] = useState(0);
+  // Wait for the stored cart so the proposal is bound to the right version.
+  const linkReply = useMemo(
+    () =>
+      ready && orderLink && sessionKey === 0
+        ? { id: "order-link", ...orderLinkReply(parseOrderLink(orderLink)) }
+        : null,
+    [ready, orderLink, sessionKey],
+  );
+  useEffect(() => {
+    // A reload must not propose the same link again.
+    if (linkReply) window.history.replaceState(null, "", "/bestall");
+  }, [linkReply]);
   const [cancelReference, setCancelReference] = useState<string | null>(null);
   const [forget, setForget] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
@@ -177,6 +198,7 @@ export function OrderingExperience() {
               onApply={applyAction}
               onNavigate={navigate}
               introduction={<StoreHeader />}
+              incoming={linkReply}
             />
           </div>
           <div hidden={view !== "orders"}>

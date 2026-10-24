@@ -11,7 +11,9 @@ Läs `rules/system.txt` SYS-003–007 och regelområdet som berörs av ändringe
   privilegierade integrationer. Klientkomponenter får bara använda säkra DTO:er
   och uttryckligt klientgränssnitt. Validera all data vid servergränsen.
 
-Startsidan kombinerar chatt, meny, gemensam varukorg och lokal demohistorik.
+`/` och övriga sidor i `src/app/(site)/` är den publika webbplatsen; läs
+`rules/runtime/site.txt`, `src/modules/site/AGENTS.md` och `content/AGENTS.md`.
+`/bestall` kombinerar chatt, meny, gemensam varukorg och lokal demohistorik.
 Läs `rules/runtime/ordering-experience.txt`, `conversation.txt`, `catalog.txt` och
 `ordering.txt`. Claude ansluts via `/api/chat` när nyckel och modell är satta.
 `/admin` använder serververifierad superadmin-kod. Läs runtime/access.txt och

@@ -79,7 +79,7 @@ test("ADM-004–006 / ORD-016: a customer order is shared with admin through pay
   page: customer,
   context,
 }) => {
-  await customer.goto("/");
+  await customer.goto("/bestall");
   await customer
     .getByRole("button", { name: "Välj från menyn", exact: true })
     .click();
@@ -309,7 +309,7 @@ test("ADM-006: another tab invalidates a pending status change", async ({
     .getByRole("button", { name: "Markera som betald", exact: true })
     .click();
   const other = await context.newPage();
-  await other.goto("/");
+  await other.goto("/bestall");
   await other.evaluate(
     ({ key, reference }) => {
       const memory = JSON.parse(localStorage.getItem(key)!);
@@ -413,7 +413,7 @@ test("ADM-008: activate sound, detect new orders across tabs/views, ignore histo
   ).toBeVisible();
   expect(await starts()).toBe(2);
   const writer = await context.newPage();
-  await writer.goto("/");
+  await writer.goto("/bestall");
   const second = demoOrder(2);
   await writeOrder(writer, second);
   await expect(

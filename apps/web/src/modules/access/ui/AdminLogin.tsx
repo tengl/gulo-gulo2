@@ -73,7 +73,7 @@ export function AdminLogin({ configured }: { configured: boolean }) {
             </p>
           </div>
         )}
-        <Link href="/">Till beställningen ↗</Link>
+        <Link href="/bestall">Till beställningen ↗</Link>
       </div>
     </main>
   );

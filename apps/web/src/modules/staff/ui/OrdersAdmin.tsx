@@ -78,7 +78,7 @@ export function OrdersAdmin({ today }: { today: string }) {
           <h1>Beställningar</h1>
           <p>Överblick, innehåll och nästa steg.</p>
         </div>
-        <Link className="admin-secondary" href="/">
+        <Link className="admin-secondary" href="/bestall">
           Öppna beställningen <Icon name="arrow" size={16} />
         </Link>
       </div>
@@ -308,7 +308,7 @@ export function OrdersAdmin({ today }: { today: string }) {
                     Visa alla beställningar
                   </button>
                 ) : (
-                  <Link className="admin-secondary" href="/">
+                  <Link className="admin-secondary" href="/bestall">
                     Prova att beställa <Icon name="arrow" size={16} />
                   </Link>
                 )}

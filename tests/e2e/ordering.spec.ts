@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test("UX-003/006/007/009: build, edit and review an order through the menu", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await page
     .getByRole("navigation", { name: "Beställningssätt" })
     .getByRole("button", { name: "Välj från menyn", exact: true })
@@ -84,7 +84,7 @@ test("UX-003/006/007/009: build, edit and review an order through the menu", asy
 test("UX-008 / CHATT-001: safe text proposals and conversation survive view switches", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   const input = page.getByRole("textbox", {
     name: "Meddelande till Gulo Gulo",
   });
@@ -140,7 +140,7 @@ test("UX-008 / CHATT-001: safe text proposals and conversation survive view swit
 
 test("UX-010: narrow viewports and keyboard dismissal", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto("/");
+  await page.goto("/bestall");
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -184,7 +184,7 @@ async function addGhostdog(page: import("@playwright/test").Page) {
 test("UX-010: repeated statuses are announced again and the category switch is a labelled group", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await page
     .getByRole("navigation", { name: "Beställningssätt" })
     .getByRole("button", { name: "Välj från menyn", exact: true })
@@ -203,7 +203,7 @@ test("UX-010: repeated statuses are announced again and the category switch is a
 test("UX-008: the product dialog reports the real limit once, without a toast behind it", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await page
     .getByRole("navigation", { name: "Beställningssätt" })
     .getByRole("button", { name: "Välj från menyn", exact: true })
@@ -230,7 +230,7 @@ test("UX-008: the product dialog reports the real limit once, without a toast be
 test("UX-010: focus lands in the new view after saving from a panel that becomes hidden", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await page
     .getByRole("navigation", { name: "Beställningssätt" })
     .getByRole("button", { name: "Välj från menyn", exact: true })

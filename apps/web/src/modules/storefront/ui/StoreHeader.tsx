@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { HoursOverview } from "@/modules/business-hours/ui";
 
@@ -11,11 +12,7 @@ export function StoreHeader({ children }: { children?: ReactNode }) {
         <span>Demoläge · Ingen riktig order skickas</span>
       </div>
       <header className="site-header">
-        <a
-          href="#main-content"
-          className="brand"
-          aria-label="Gulo Gulo Deli, till beställningen"
-        >
+        <Link href="/" className="brand" aria-label="Gulo Gulo Deli, till startsidan">
           <Image
             src="/logo-light.png"
             alt="Gulo Gulo Deli"
@@ -23,7 +20,7 @@ export function StoreHeader({ children }: { children?: ReactNode }) {
             height={56}
             loading="eager"
           />
-        </a>
+        </Link>
         <HoursOverview />
         {children}
       </header>

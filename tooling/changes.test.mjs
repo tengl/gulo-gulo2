@@ -10,6 +10,7 @@ test("docs, legacy rules, open decisions and agent instructions do not deploy", 
   assert.deepEqual(classifyFiles([
     "README.md", "docs/rules.txt", "docs/deployment.md", "AGENTS.md",
     "apps/web/src/modules/AGENTS.md", "apps/web/src/modules/catalog/README.md",
+    "apps/web/content/AGENTS.md", "apps/web/content/README.md",
     "supabase/AGENTS.md", "rules/index.txt", "rules/system.txt", "rules/open-decisions.txt",
     "rules/proposals/catalog.txt", "rules/proposals/business-hours.txt",
   ]), { web: false, database: false, checks: false, databaseChecks: false });
@@ -28,6 +29,9 @@ test("each runtime input independently requires a web deployment", () => {
     "rules/runtime/business-hours.txt", "rules/runtime/access.txt", "package-lock.json", "package.json", ".node-version",
     "apps/web/next.config.ts", "apps/web/vercel.json", ".github/workflows/pipeline.yml",
     "tooling/deploy-web.sh", "netlify.toml", "tooling/netlify.mjs",
+    // WEBB-006: a text edited by a person on GitHub must reach the site.
+    "apps/web/content/sidor/event.md", "apps/web/content/produkter/brewurst.md",
+    "apps/web/content/webbplats.md",
   ]) assert.equal(classifyFiles([path]).web, true, path);
 });
 

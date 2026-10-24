@@ -8,6 +8,7 @@ import {
   stockholmDate,
   isDate,
 } from "./domain/schedule.ts";
+import { openingStatus } from "./domain/demo-hours.ts";
 
 test("OPPEN-007/009: each type inherits independently; equal overrides do not count as changed", () => {
   const schedule = initialSchedule();
@@ -72,4 +73,26 @@ test("ADM-002/003: reject invalid local schedules without accepting partial data
   assert.throws(() => readSchedule(schedule));
   assert.throws(() => readSchedule({ ...initialSchedule(), week: [] }));
   assert.throws(() => readSchedule({ ...initialSchedule(), version: 2 }));
+});
+
+test("WEBB-009: today's opening status follows Stockholm time and the demo week", () => {
+  // 2026-10-29 is a Thursday; 2026-10-27 a Tuesday. October is CET (UTC+1).
+  assert.deepEqual(openingStatus(new Date("2026-10-29T09:00:00Z")), {
+    kind: "later",
+    from: "11:00",
+  });
+  assert.deepEqual(openingStatus(new Date("2026-10-29T12:30:00Z")), {
+    kind: "open",
+    until: "15:00",
+  });
+  assert.deepEqual(openingStatus(new Date("2026-10-29T14:00:00Z")), {
+    kind: "closed-for-the-day",
+  });
+  assert.deepEqual(openingStatus(new Date("2026-10-27T12:00:00Z")), {
+    kind: "closed-today",
+  });
+  // Sunday 23:30 UTC is already Monday in Stockholm.
+  assert.deepEqual(openingStatus(new Date("2026-11-01T23:30:00Z")), {
+    kind: "closed-today",
+  });
 });

@@ -154,7 +154,7 @@ test("OPPEN-005–009 / ADM-002: standard week and independent date override per
   ).toBeVisible();
   await page.getByRole("link", { name: "Anslutningar", exact: true }).click();
   await expect(page.getByText("Ej anslutet", { exact: true })).toBeVisible();
-  await page.goto("/");
+  await page.goto("/bestall");
   await expect(page.locator(".opening-hours")).not.toContainText("09:00–12:00");
 });
 

@@ -15,3 +15,5 @@ export type {
   ChatReply,
   ChatContext,
 } from "./domain/chat.ts";
+export { parseOrderLink, orderLinkReply } from "./domain/order-link.ts";
+export type { OrderLink } from "./domain/order-link.ts";

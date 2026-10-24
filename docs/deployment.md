@@ -173,6 +173,31 @@ projekt, hemligheter eller releasejobb är aktiverade just nu. Kontrollera fakti
 konfiguration i GitHub/Vercel separat; en lyckad push betyder inte att releasen
 har lyckats. Releasejobben kräver att motsvarande miljö är konfigurerad.
 
+## Flytta gulogulo.se från Squarespace (WEBB-001–014)
+
+Görs först när användaren beslutat att produktionen ska gå live; inget av detta
+är gjort i repot. Ordningen undviker att siten eller shoppen är nere.
+
+1. Ta reda på var domänen gulogulo.se är registrerad och vem som styr DNS.
+2. Ge Squarespace-shoppen en egen adress, till exempel `shop.gulogulo.se`
+   (Squarespace: Domains → Use a domain I own). Ändra `shop` i
+   `apps/web/content/webbplats.md` till den adressen.
+3. Aktivera Vercel enligt avsnittet ovan med funktionsregion `arn1`, och sätt i
+   produktionsmiljön `SITE_URL=https://www.gulogulo.se` och `SITE_INDEXABLE=true`.
+   Kontrollera att Vercels brandvägg inte blockerar AI-botar för webbplatsen
+   (WEBB-011).
+4. Brevo: skapa konto, en lista och en mall för dubbel bekräftelse, verifiera
+   avsändardomänen (SPF, DKIM, DMARC) och sätt `BREVO_API_KEY`,
+   `BREVO_NEWSLETTER_LIST_ID` och `BREVO_DOI_TEMPLATE_ID`.
+5. Peka `www.gulogulo.se` och apex-domänen mot Vercel. Kontrollera med
+   `curl -I` att gamla adresser som `/frskt-isterband` ger 301.
+6. Uppdatera webbplatslänken i Google-företagsprofilen och skicka sitemap
+   (`/sitemap.xml`) i Google Search Console.
+7. Avveckla Netlify-demon när produktionen är verifierad (SYS-014–015).
+
+Netlify-demon och previews ska inte ha `SITE_INDEXABLE`; de svarar då med
+`noindex` och en robots.txt som stänger ute botar (WEBB-014).
+
 ## Release och återhämtning
 
 Pull requests kör kontroller. PR:er från samma repo kan skapa webbpreview efter

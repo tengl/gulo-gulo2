@@ -10,10 +10,13 @@ den planerade produktionsplattformen. Byggfilter och instruktioner finns i
 
 ```text
 apps/web/
-  src/app/              kund-/adminroutes och sammansättning
+  content/              webbplatsens texter i Markdown (WEBB-006)
+  src/app/              routes: (site)/ webbplatsen, bestall/, admin/, api/
     styles/             globala stilar i kaskadordning, importeras av globals.css
   src/modules/          verksamhetsområden; publikt API i index.ts och ui.ts
     storefront/         kundens beställningsvy: sammansättning, vyer, sidhuvud
+    site/               webbplatsen: innehållsschema, sidor, schema.org, llms.txt
+    newsletter/         validering av nyhetsbrevsanmälan
     catalog/            fakta, produkter, priser, ingredienser
     ordering/           utkast, godkännande, order, förfrågan, betalningsstatus
     availability/       planerad: kalender, kapacitet, reservation

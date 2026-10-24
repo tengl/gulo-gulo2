@@ -49,7 +49,7 @@ async function saveOrder(page: Page) {
 test("CHATT-001/002/005: graphical and chat choices share one remembered cart", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await view(page, "Chatta med oss");
   await ask(page, "en Loka");
@@ -83,7 +83,7 @@ test("CHATT-001/002/005: graphical and chat choices share one remembered cart", 
 test("CHATT-003/008: product and manufacturing questions leave the cart intact", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await expect(page.getByText("Begränsad demo", { exact: true })).toBeVisible();
   await ask(page, "Vem gör korven?");
   await expect(page.getByRole("log")).toContainText("Niklas på plats");
@@ -102,7 +102,7 @@ test("CHATT-003/008: product and manufacturing questions leave the cart intact",
 test("CHATT-005/007 / ORD-016: save, reload and cancel a specific order through chat", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await saveOrder(page);
   const reference = (await page
@@ -153,7 +153,7 @@ test("CHATT-005/007 / ORD-016: save, reload and cancel a specific order through 
 test("CHATT-006/007: GUI cancellation selects one order and clearing memory is explicit", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await saveOrder(page);
   const first = (await page
@@ -220,7 +220,7 @@ test("CHATT-004: Claude receives current menu choices and late proposals cannot 
       },
     });
   });
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await view(page, "Chatta med oss");
   await page
@@ -267,7 +267,7 @@ test("CHATT-008: retry after service failure keeps choices and does not duplicat
           json: { text: "Niklas gör korven på plats.", mode: "claude" },
         });
   });
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await view(page, "Chatta med oss");
   await ask(page, "Vem gör korven?");
@@ -293,7 +293,7 @@ test("CHATT-006/009: corrupted local memory is recoverable and never presented a
   await page.addInitScript(() =>
     localStorage.setItem("gulo-order-memory-v1", "{broken"),
   );
-  await page.goto("/");
+  await page.goto("/bestall");
   await expect(page.locator(".memory-error")).toContainText(
     "Det lokala minnet kunde inte läsas",
   );
@@ -348,7 +348,7 @@ test("CHATT-009: API validates origins, roles, prices and body sizes", async ({
 test("CHATT-006: failed writes cannot report a successful save or clear the draft", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await page
     .getByRole("button", { name: "Visa beställning, 1 varor", exact: true })
@@ -385,9 +385,9 @@ test("CHATT-002/005: menu changes synchronize to another open tab", async ({
   page,
   context,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   const other = await context.newPage();
-  await other.goto("/");
+  await other.goto("/bestall");
   await addFromMenu(page);
   await expect(
     other.getByRole("button", {
@@ -403,7 +403,7 @@ test("CHATT-002/005: menu changes synchronize to another open tab", async ({
 test("OPPEN-016/017 / CHATT-001: the header scrolls away while ordering hours stay visible", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   const hours = page.getByRole("complementary", {
     name: "Öppettider",
     exact: true,
@@ -514,7 +514,7 @@ test("CHATT-016: returning from every customer view shows the latest message wit
     if (request.url().endsWith("/api/chat") && request.method() === "POST")
       posts++;
   });
-  await page.goto("/");
+  await page.goto("/bestall");
   await ask(page, "meny");
   const latest = page.getByRole("log").getByRole("article").last();
   await expect(latest).toContainText("Våra wraps och drycker");
@@ -569,7 +569,7 @@ test("CHATT-016: returning from every customer view shows the latest message wit
 test("CHATT-016: disappearing shortcuts animate and the scroll header respects reduced motion", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await expect(page.getByText("Begränsad demo", { exact: true })).toBeVisible();
   await page.evaluate(() => {
     document.documentElement.dataset.shortcutMotion = "0";
@@ -643,7 +643,7 @@ test("CHATT-016: a customer's scroll gesture interrupts the slower automatic mov
     await reply;
     await route.fulfill({ json: { mode: "limited", text: "Ditt testsvar." } });
   });
-  await page.goto("/");
+  await page.goto("/bestall");
   await page
     .getByRole("button", { name: "Vem gör korven?", exact: true })
     .click();
@@ -702,7 +702,7 @@ test("CHATT-010: ready-made messages send immediately and preserve the written d
     },
   ];
   for (const choice of cases) {
-    await page.goto("/");
+    await page.goto("/bestall");
     const input = page.getByRole("textbox", {
       name: "Meddelande till Gulo Gulo",
     });
@@ -730,7 +730,7 @@ test("CHATT-010: ready-made messages send immediately and preserve the written d
 test("CHATT-011/012: persistent shortcuts and clickable menus share the graphical cart", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   const shortcuts = page.getByRole("group", {
     name: "Snabbval i chatten",
     exact: true,
@@ -828,7 +828,7 @@ test("CHATT-011/015: cart replies open editing and review in one click without a
     if (request.url().endsWith("/api/chat") && request.method() === "POST")
       posts++;
   });
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await view(page, "Chatta med oss");
   const shortcuts = page.getByRole("group", {
@@ -901,7 +901,7 @@ test("UX-011/012: names and info icons open animated facts without changing the 
     if (request.url().endsWith("/api/chat") && request.method() === "POST")
       posts++;
   });
-  await page.goto("/");
+  await page.goto("/bestall");
   const input = page.getByRole("textbox", {
     name: "Meddelande till Gulo Gulo",
   });
@@ -1054,7 +1054,7 @@ test("CHATT-014/017: either direct variant confirms the selected choices exactly
     { label: "enkel", price: 270 },
     { label: "dubbel", price: 360 },
   ]) {
-    await page.goto("/");
+    await page.goto("/bestall");
     await page.evaluate(() => localStorage.clear());
     await page.reload();
     await ask(page, "två Ghostdog utan senap");
@@ -1140,7 +1140,7 @@ test("CHATT-014/017: either direct variant confirms the selected choices exactly
 test("CHATT-004/014: multiple variants prepare one shared change and stale direct buttons disappear", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await ask(page, "en Ghostdog och en Bröl");
   const add = page.getByRole("button", {
     name: "Lägg till dessa val",
@@ -1213,7 +1213,7 @@ test("CHATT-004/014: multiple variants prepare one shared change and stale direc
 test("CHATT-013: composer grows beyond two lines while focused and preserves text on collapse", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   const input = page.getByRole("textbox", {
     name: "Meddelande till Gulo Gulo",
   });
@@ -1265,7 +1265,7 @@ test("CHATT-008: a double click on send sends once and is not cancelled by the s
     await new Promise((resolve) => setTimeout(resolve, 300));
     await route.continue();
   });
-  await page.goto("/");
+  await page.goto("/bestall");
   await page
     .getByRole("textbox", { name: "Meddelande till Gulo Gulo" })
     .fill("Vem gör korven?");
@@ -1289,7 +1289,7 @@ test("CHATT-008: an HTML error page from the host gives a Swedish retry message"
         })
       : route.continue(),
   );
-  await page.goto("/");
+  await page.goto("/bestall");
   await page
     .getByRole("textbox", { name: "Meddelande till Gulo Gulo" })
     .fill("Vem gör korven?");
@@ -1305,7 +1305,7 @@ test("CHATT-008: an HTML error page from the host gives a Swedish retry message"
 test("CHATT-006: choices kept after a failed local write are not replaced by the older stored cart", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await addFromMenu(page);
   await expect(
     page.getByRole("button", { name: "Visa beställning, 1 varor", exact: true }),
@@ -1331,7 +1331,7 @@ test("CHATT-006: choices kept after a failed local write are not replaced by the
 test("CHATT-013: a growing composer keeps the latest message in view", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   for (const text of [
     "Vem gör korven?",
     "Berätta om Ghostdog",

@@ -61,7 +61,7 @@ for (const mode of ["native", "fallback"] as const) {
       if (request.url().endsWith("/api/chat") && request.method() === "POST")
         posts++;
     });
-    await page.goto("/");
+    await page.goto("/bestall");
     const wide = (page.viewportSize()?.width ?? 0) > 760;
     const input = page.getByRole("textbox", {
       name: "Meddelande till Gulo Gulo",
@@ -139,7 +139,7 @@ test("UX-013: each view keeps its own scroll position and new views start at the
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+  await page.goto("/bestall");
   await navigate(page, "Välj från menyn");
   await page.evaluate(() => window.scrollTo(0, 600));
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(600);
@@ -158,7 +158,7 @@ test("UX-013: each view keeps its own scroll position and new views start at the
 test("UX-011/012: button, Escape and backdrop close info with an inert exit and restored focus", async ({
   page,
 }, testInfo) => {
-  await page.goto("/");
+  await page.goto("/bestall");
   await navigate(page, "Välj från menyn");
   const opener = page.getByRole("button", {
     name: "Mer om GHOSTDOG",

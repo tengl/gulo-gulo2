@@ -83,7 +83,7 @@ export function AdminApp({
         </nav>
         <div className="admin-sidebar-bottom">
           <span className="admin-role">● Superadmin</span>
-          <Link href="/">Öppna beställningen ↗</Link>
+          <Link href="/bestall">Öppna beställningen ↗</Link>
         </div>
       </aside>
       <div className="admin-content">
@@ -99,7 +99,7 @@ export function AdminApp({
                   : "Anslutningar"}
             </span>
           </span>
-          <Link className="admin-mobile-customer-link" href="/">
+          <Link className="admin-mobile-customer-link" href="/bestall">
             Beställningen ↗
           </Link>
           <button onClick={logout} disabled={busy}>

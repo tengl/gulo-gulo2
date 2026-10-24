@@ -1,4 +1,9 @@
-export { demoHours, ordinaryHoursText } from "./domain/demo-hours.ts";
+export {
+  demoHours,
+  ordinaryHoursText,
+  openingStatus,
+} from "./domain/demo-hours.ts";
+export type { OpeningStatus } from "./domain/demo-hours.ts";
 export {
   weekdays,
   timeKinds,
