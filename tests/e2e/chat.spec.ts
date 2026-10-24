@@ -447,6 +447,16 @@ test("OPPEN-016/017 / CHATT-001: the header scrolls away while ordering hours st
     path: testInfo.outputPath("active-chat-header.png"),
     fullPage: true,
   });
+  await expect
+    .poll(() =>
+      page
+        .locator(".chat-log")
+        .evaluate(
+          (element) =>
+            element.scrollHeight - element.clientHeight - element.scrollTop,
+        ),
+    )
+    .toBeLessThan(2);
   await page.locator(".chat-log").evaluate((element) => {
     element.scrollTop = 0;
   });
@@ -508,7 +518,10 @@ test("CHATT-016: returning from every customer view shows the latest message wit
   const latest = page.getByRole("log").getByRole("article").last();
   await expect(latest).toContainText("Våra wraps och drycker");
   await expect(
-    page.getByRole("button", { name: "Välj SPÄCK SABBATH i chatten", exact: true }),
+    page.getByRole("button", {
+      name: "Välj SPÄCK SABBATH i chatten",
+      exact: true,
+    }),
   ).toBeInViewport();
   const input = page.getByRole("textbox", {
     name: "Meddelande till Gulo Gulo",
@@ -521,6 +534,8 @@ test("CHATT-016: returning from every customer view shows the latest message wit
     "varukorg",
     "Mina beställningar",
   ]) {
+    // A user gesture takes over even while the longer menu scroll is running.
+    await scroller.dispatchEvent("wheel", { deltaY: -600 });
     await scroller.evaluate((element) =>
       element.scrollTo({ top: 0, behavior: "instant" }),
     );
@@ -540,7 +555,10 @@ test("CHATT-016: returning from every customer view shows the latest message wit
       )
       .toBeLessThan(2);
     await expect(
-      latest.getByRole("button", { name: "Välj Björnåsen bärdryck i chatten", exact: true }),
+      latest.getByRole("button", {
+        name: "Välj Björnåsen bärdryck i chatten",
+        exact: true,
+      }),
     ).toBeInViewport();
     await expect(input).toHaveValue("Min nästa fråga");
     expect(posts).toBe(before);
@@ -551,6 +569,7 @@ test("CHATT-016: disappearing shortcuts animate and the scroll header respects r
   page,
 }, testInfo) => {
   await page.goto("/");
+  await expect(page.getByText("Begränsad demo", { exact: true })).toBeVisible();
   await page.evaluate(() => {
     document.documentElement.dataset.shortcutMotion = "0";
     document.addEventListener("transitionstart", (event) => {
@@ -574,6 +593,16 @@ test("CHATT-016: disappearing shortcuts animate and the scroll header respects r
     )
     .toBe("1");
   const intro = page.locator(".chat-intro");
+  await expect
+    .poll(() =>
+      page
+        .locator(".chat-log")
+        .evaluate(
+          (element) =>
+            element.scrollHeight - element.clientHeight - element.scrollTop,
+        ),
+    )
+    .toBeLessThan(2);
   await page.locator(".chat-log").evaluate((element) => {
     const intro = element.querySelector<HTMLElement>(".chat-intro")!;
     element.scrollTo({ top: intro.offsetHeight / 3, behavior: "instant" });
@@ -598,6 +627,56 @@ test("CHATT-016: disappearing shortcuts animate and the scroll header respects r
     "transition-duration",
     "0s",
   );
+});
+
+test("CHATT-016: a customer's scroll gesture interrupts the slower automatic movement", async ({
+  page,
+}) => {
+  let release!: () => void;
+  const reply = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/chat", async (route) => {
+    if (route.request().method() !== "POST") return route.continue();
+    await reply;
+    await route.fulfill({ json: { mode: "limited", text: "Ditt testsvar." } });
+  });
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "Vem gör korven?", exact: true })
+    .click();
+  const scroller = page.locator(".chat-log");
+  await expect
+    .poll(() => scroller.evaluate((element) => element.scrollTop))
+    .toBeGreaterThan(5);
+  await scroller.hover();
+  await scroller.evaluate((element) => {
+    element.addEventListener(
+      "wheel",
+      () => {
+        element.dataset.wheelReceived = "yes";
+      },
+      { once: true },
+    );
+  });
+  await page.mouse.wheel(0, -600);
+  await expect(scroller).toHaveAttribute("data-wheel-received", "yes");
+  // Mobile emulation does not perform the wheel's default scrolling.
+  await scroller.evaluate((element) =>
+    element.scrollTo({ top: 0, behavior: "instant" }),
+  );
+  const furthest = await scroller.evaluate(async (element) => {
+    const until = performance.now() + 650;
+    let furthest = element.scrollTop;
+    while (performance.now() < until) {
+      await new Promise(requestAnimationFrame);
+      furthest = Math.max(furthest, element.scrollTop);
+    }
+    return furthest;
+  });
+  expect(furthest).toBeLessThan(2);
+  release();
+  await expect(page.getByRole("log")).toContainText("Ditt testsvar.");
 });
 
 test("CHATT-010: ready-made messages send immediately and preserve the written draft", async ({

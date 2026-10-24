@@ -47,6 +47,9 @@ skrivfältet växer med texten.
 ner utan att skicka om något; oskickad text bevaras (CHATT-016). Huvudet tonas
 med scrollningen och snabbval fälls ihop/tonas bort när de inte längre behövs.
 Utgående snabbval är genast inaktiva. Minskad rörelse stänger av övergångarna.
+Animationstempot sänktes 2026-10-24: snabbval/dialoger/varukorg cirka 0,4 s,
+automatisk chattscrollning 0,55 s med mjuk start och slut. Egna scrollgester
+avbryter automatiken; återgång till chatten visar slutet omedelbart.
 Meny- och chattval använder samma utkast. Se UX- och CHATT-reglerna.
 Enkel/dubbel i chattförslag visas som två knappar (CHATT-014). En ensam rad
 utan variant har två mörka direkta lägg-till-val med pris; flera rader och

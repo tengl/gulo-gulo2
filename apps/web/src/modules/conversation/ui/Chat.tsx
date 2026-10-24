@@ -14,6 +14,7 @@ import { ChatProposal } from "./ChatProposal";
 import { ChatAvatar } from "./ChatAvatar";
 import { ChatComposer } from "./ChatComposer";
 import { ChatShortcuts } from "./ChatShortcuts";
+import { scrollChat } from "./scroll-chat";
 import { OrderingHours } from "@/modules/business-hours/ui/OrderingHours";
 
 type Message = ChatMessage & { id: string; action?: ChatAction; base?: string };
@@ -86,20 +87,21 @@ export function Chat({
       !returning && !busy && !error && last?.action?.kind === "menu"
         ? container.querySelector<HTMLElement>(`[data-message-id="${last.id}"]`)
         : null;
-    container.scrollTo({
-      top: menu
-        ? menu.getBoundingClientRect().top -
-          container.getBoundingClientRect().top +
-          container.scrollTop -
-          12
-        : container.scrollHeight,
-      behavior:
-        returning ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "instant"
-          : "smooth",
-    });
-    syncIntroduction(container, intro.current);
+    const top = menu
+      ? menu.getBoundingClientRect().top -
+        container.getBoundingClientRect().top +
+        container.scrollTop -
+        12
+      : container.scrollHeight;
+    if (
+      returning ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      container.scrollTo({ top, behavior: "instant" });
+      syncIntroduction(container, intro.current);
+      return;
+    }
+    return scrollChat(container, top);
   }, [active, messages, busy, error]);
   async function send(history: Message[]) {
     if (controller.current) return;

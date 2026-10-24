@@ -736,13 +736,13 @@ h1 em {
 }
 /* UX-012: shared motion for info, configuration and review dialogs. */
 .sheet[open] {
-  animation: sheet-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: sheet-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .sheet[open]::backdrop {
-  animation: backdrop-in 200ms ease-out;
+  animation: backdrop-in 320ms ease-out;
 }
 .view-cart .cart-pane {
-  animation: panel-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: panel-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 @keyframes sheet-in {
   from {
@@ -1598,10 +1598,10 @@ h1 em {
   overflow: hidden;
   margin-inline-end: var(--shortcut-gap);
   transition:
-    width 220ms ease,
-    margin-inline-end 220ms ease,
-    opacity 160ms ease,
-    transform 220ms ease;
+    width 420ms ease,
+    margin-inline-end 420ms ease,
+    opacity 320ms ease,
+    transform 420ms ease;
 }
 .chat-shortcut.shortcut-hidden {
   width: 0;

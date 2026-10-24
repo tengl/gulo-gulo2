@@ -124,11 +124,13 @@ rutor, Visa varukorg och vägen till ändring/granskning.
 ska senaste meddelandet visas längst ner, även om kunden tidigare scrollat upp.
 Samtal och oskickad text bevaras utan att ett nytt chattanrop skickas.
 Sidhuvudet tonas mjukt bort när det scrollar upp, och snabbval som försvinner
-tonas och fälls ihop utan ett abrupt hopp. Sidhuvudet går fortfarande att
+tonas och fälls ihop utan ett abrupt hopp. Övergångarna ska vara tillräckligt
+lugna för att kunden ska hinna följa rörelsen. Sidhuvudet går fortfarande att
 scrolla tillbaka till enligt OPPEN-016. Utgående snabbval blir genast inaktiva
 och tas bort från tangentbordsnavigationen. Minskad rörelse ska respekteras.
 Beslutskälla: användarens önskemål 2026-10-23 om senaste meddelandet vid
 återgång till chatten och mjukare övergångar för knappar och huvud.
+Reviderad genom användarens önskemål 2026-10-24 om långsammare animationer.
 
 Tekniska demogränser för CHATT-005/009: högst 50 unika rader i ett utkast,
 30 lokala demobeställningar och 300 000 tecken i det serialiserade lokala minnet.

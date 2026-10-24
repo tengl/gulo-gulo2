@@ -11,6 +11,9 @@ varukorgsversionen; inga modellverktyg får göra direkta mutationer.
 Chat får aktiv vy uttryckligen och scrollar till slutet före visning vid återgång
 (CHATT-016). Nytillkommen meny scrollas däremot till sina första produktval.
 Huvudets toning följer scrollningen utan att ta bort dess plats i dokumentet.
+`ui/scroll-chat.ts` ger nya meddelanden en lugn scrollning som kan avbrytas med
+egna gester; städa alltid animationen vid vybyte, nytt svar eller avmontering.
+Återgång till chatten och minskad rörelse använder fortsatt omedelbar scrollning.
 `ui/OrderingExperience.tsx` sätter samman samma varukorg, historik och vyer.
 `ui/StoreHeader.tsx` visas inne i chattens scrollområde tillsammans med
 introduktionen (OPPEN-016); tidsbannern ligger kvar ovanför samtalet. Varukorgen

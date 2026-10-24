@@ -64,9 +64,11 @@ Beslutskälla: användarens önskemål och korrigering 2026-10-23 om namn/info-i
 som informationsknapp och ett separat plus för produktval.
 
 [UX-012] [GÄLLANDE] Informationsrutor och andra dialoger som öppnas, inklusive
-produktval och granskning, ska visas med en kort, mjuk animation. Varukorgen
-ska också få en mjuk övergång när den öppnas. Mobilens bottenpaneler kan glida
+produktval och granskning, ska visas med en mjuk animation i ett lugnt tempo
+så att kunden hinner följa rörelsen. Varukorgen ska också få en mjuk övergång
+när den öppnas. Mobilens bottenpaneler kan glida
 upp och bakgrunden tonas in. Animationerna får inte ändra utkast, bekräftelse-
 krav, stängning eller fokusåterställning, och ska stängas av när användaren
 föredrar minskad rörelse. Beslutskälla: användarens tillägg 2026-10-23 om
 animerade informationsrutor, varukorg och andra rutor som kommer upp.
+Reviderad genom användarens önskemål 2026-10-24 om långsammare animationer.

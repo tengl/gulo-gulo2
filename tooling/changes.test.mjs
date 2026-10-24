@@ -19,6 +19,7 @@ test("each runtime input independently requires a web deployment", () => {
   for (const path of [
     "apps/web/src/app/page.tsx", "apps/web/src/server/claude/prompts/order.txt",
     "apps/web/src/modules/ordering/domain/order.ts", "apps/web/public/menu.png",
+    "apps/web/src/modules/conversation/ui/scroll-chat.ts",
     "apps/web/src/app/admin/page.tsx", "apps/web/src/app/admin/admin.css",
     "apps/web/src/app/admin/bestallningar/page.tsx", "apps/web/src/modules/staff/ui/OrdersAdmin.tsx",
     "apps/web/src/app/api/admin/session/route.ts", "apps/web/src/server/access/session.ts",
