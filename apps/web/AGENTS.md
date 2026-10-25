@@ -13,6 +13,8 @@ Läs `rules/system.txt` SYS-003–007 och regelområdet som berörs av ändringe
 
 `/` och övriga sidor i `src/app/(site)/` är den publika webbplatsen; läs
 `rules/runtime/site.txt`, `src/modules/site/AGENTS.md` och `content/AGENTS.md`.
+`/spel` är Canvas-spelet Järvens korvfall; läs modules/game/AGENTS.md och
+runtime/game.txt. Introanimationen är uppskjuten.
 `/bestall` kombinerar chatt, meny, gemensam varukorg och lokal demohistorik.
 Läs `rules/runtime/ordering-experience.txt`, `conversation.txt`, `catalog.txt` och
 `ordering.txt`. Claude ansluts via `/api/chat` när nyckel och modell är satta.

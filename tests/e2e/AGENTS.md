@@ -22,3 +22,7 @@ Beställningen ligger på `/bestall`; `/` är webbplatsen.
 `texts.spec.ts` provar textredigeringen (WEBB-015–018) mot `tests/fakes/github.mjs`,
 som Playwright startar på port 3101. Varje test väljer egen inloggningskod med
 kakan `fake-github-code` och får då en egen kopia av repot i attrappen.
+
+`game.spec.ts` provar SPEL-001–003: start, tangenter/touch, paus, omstart,
+ljudknapp, verklig fångst, avkodad orkesterinspelning, paus/resume-offset,
+avbruten ljudladdning och synlig reserv vid ljudfel på mobil och dator.

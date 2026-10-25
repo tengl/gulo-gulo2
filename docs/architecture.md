@@ -16,6 +16,7 @@ apps/web/
   src/modules/          verksamhetsområden; publikt API i index.ts och ui.ts
     storefront/         kundens beställningsvy: sammansättning, vyer, sidhuvud
     site/               webbplatsen: innehållsschema, sidor, schema.org, llms.txt
+    game/               korvfall: simulering, Canvas, ljud; /spel
     newsletter/         validering av nyhetsbrevsanmälan
     catalog/            fakta, produkter, priser, ingredienser
     ordering/           utkast, godkännande, order, förfrågan, betalningsstatus

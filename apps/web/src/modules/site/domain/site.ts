@@ -23,6 +23,7 @@ export function sitePaths(products: readonly ContentProduct[]): string[] {
   return [
     "/",
     "/meny",
+    "/spel",
     "/produkter",
     ...products.map((product) => `/produkter/${product.slug}`),
     "/event",
@@ -68,6 +69,7 @@ export function linkTargets(content: SiteContent): LinkTarget[] {
         group: "Sidor",
       })),
     ]),
+    { href: "/spel", label: "Järvens korvfall", group: "Sidor" },
     { href: "/meny", label: "Menyn med priser", group: "Sidor" },
     { href: "/bestall", label: "Beställ (chatten och menyn)", group: "Sidor" },
     { href: "/produkter", label: "Alla produkter", group: "Produkter" },

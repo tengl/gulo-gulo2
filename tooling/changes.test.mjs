@@ -18,6 +18,11 @@ test("docs, legacy rules, open decisions and agent instructions do not deploy", 
 
 test("each runtime input independently requires a web deployment", () => {
   for (const path of [
+    "apps/web/public/game/wolverine-dive.webp", "apps/web/public/game/halsingland-slope.webp",
+    "apps/web/public/game/blue-danube.ogg", "apps/web/public/game/blue-danube.mp3",
+    "apps/web/src/modules/game/domain/score.ts",
+    "apps/web/src/app/(site)/spel/page.tsx", "apps/web/src/modules/game/ui/music.ts",
+    "apps/web/src/modules/game/ui/game.module.css", "rules/runtime/game.txt",
     "apps/web/src/app/page.tsx", "apps/web/src/server/claude/prompts/order.txt",
     "apps/web/src/modules/ordering/domain/order.ts", "apps/web/public/menu.png",
     "apps/web/src/modules/conversation/ui/scroll-chat.ts",

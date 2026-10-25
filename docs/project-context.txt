@@ -1,7 +1,7 @@
 PROJEKTKONTEXT FÖR NÄSTA AGENT
 ============================
 
-Uppdaterad 2026-10-24. Verifierad funktionsbas: commit 989b4f6.
+Uppdaterad 2026-10-25. Verifierad funktionsbas: commit 989b4f6.
 Detta är en överlämning av nuläge och arbetsprioritering, inte verksamhetsregler.
 Facit: rules/index.txt, rules/system.txt och berörda rules/runtime/*.txt.
 Verifiera berörd kod och git status; denna fil är ingen garanti om driftsmiljön.
@@ -259,3 +259,29 @@ Kontrollera aktuell HEAD inför en ny jämförelse. Om sökvägen saknas finns d
 bevarade underlaget i docs/rules.txt och rules/proposals/; grundappen är oberoende
 av tillgång till det gamla repot. Gamla STAFF_KEY-länkar, prompttext och
 Swish-konfiguration är referenser och ska inte kopieras som nya behörighetsbeslut.
+
+JÄRVENS KORVFALL (2026-10-25)
+
+/spel är spelversionen enligt SPEL-001–005, länkad från sidfoten.
+modules/game äger Canvas-grafik och testbar simulering. Grafikrevisionen ger
+järven en målad kropp i dykställning, huvud/framtassar först, med loggans
+ansiktsdrag. Bakgrunden är en sammanhängande skogssluttning med markbundna
+träd, stenar och skuggor. Bildprompter finns i public/game/README.md.
+Korvnamnen hämtas från webbplatsens korvprodukter (burgare och bredbar burkkorv
+undantas). Pilar/A/D och touch styr; dubbeltryck ger utfall med trög återgång.
+
+Synten har ersatts av den av användaren länkade orkesterinspelningen från
+Wikimedia Commons (CC0, European Archive via Musopen). Den finns lokalt som
+OGG och MP3-reserv, utan extern hämtning när kunden spelar. domain/score.ts
+har uppmätta taktslag från just den inspelningen. Ljudets klocka styr både
+simulering, korvpar och tuggor, med små simuleringssteg vid tappade bildrutor.
+Tyst-knappen stänger av volymen utan att stoppa tiden. Ljudfel visas och
+spelet kan fortsätta tyst. Paus under ljudladdning hindrar sen uppspelning.
+
+Spelet är ändlöst, med paus, omstart och automatisk paus när fliken döljs
+eller fokus lämnar spelet. Inga poäng sparas på servern. Intro med skåpbilen
+är uppskjutet; en video eller Canvas-scen kan föregå start av simuleringen.
+Verifierat efter grafik-/musikrevisionen: npm run check (71 tester),
+npm run build och 8 webbläsartester på mobil/dator. De provar även avkodad
+orkesterinspelning, återupptagning från paus, avbruten laddning och ljudfel.
+Båda skärmstorlekarna är visuellt granskade. Ingen push/publicering gjord.

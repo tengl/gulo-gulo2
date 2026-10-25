@@ -53,7 +53,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
         </section>
       </div>
       <p className="site-bottom-legal">
-        © Gulo Gulo · <Link href="/integritet">Integritet</Link>
+        © Gulo Gulo · <Link href="/spel">Spela Järvens korvfall</Link> · <Link href="/integritet">Integritet</Link>
       </p>
     </footer>
   );

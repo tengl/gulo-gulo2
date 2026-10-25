@@ -34,6 +34,7 @@ runtime/ordering-experience.txt  UX  Mobil beställning och första demoversion
 runtime/conversation.txt         CHATT  Chatt, gemensam varukorg och lokalt minne
 runtime/catalog.txt              KAT  Godkända produkt- och tillverkningsfakta
 runtime/ordering.txt             ORD  Beslutad kundavbokning före betalning
+runtime/game.txt                 SPEL  Järvens korvfall, styrning, musik och miljö
 runtime/site.txt                 WEBB  Webbplatsen, texter, AI-läsbarhet, nyhetsbrev
 proposals/catalog.txt            KAT  Förslag: verksamhetsfakta, meny, innehåll
 proposals/conversation.txt       DIA  Förslag: ton, dialog, text, röst, knappar
