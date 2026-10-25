@@ -4,8 +4,8 @@ Beslutskälla: användarens spelbeställning 2026-10-25.
 
 [SPEL-001] [GÄLLANDE] Sajten ska ha ett spel där järven liknar Gulo Gulos
 logga. Järven faller överst i bild och fångar korvar som kommer regelbundet
-från nederkanten. Järven ska vara mer realistisk än loggan, med huvud och
-framtassar först i fallriktningen och resten av kroppen efter. Förtydligat av
+från nederkanten. Järven ska ha trovärdigare mårddjursanatomi än loggan, med
+huvud och framtassar först i fallriktningen och resten av kroppen efter. Förtydligat av
 användaren 2026-10-25 vid grafikrevisionen. Korvarna ska vara de som finns på hemsidan och ge olika poäng.
 [SPEL-002] [GÄLLANDE] Piltangenter, A/D och touch styr i sidled. Dubbeltryck
 åt ett håll ger ett snabbt utfall med huvudet och trögare återgång åt andra hållet.
@@ -16,8 +16,12 @@ ersätter syntversionen när möjligt, med timing som följer inspelningen.
 Beslutskälla: användarens grafik- och musikrevision 2026-10-25, med länk till
 Wikimedia Commons File:Strauss, An der schönen blauen Donau.ogg.
 [SPEL-004] [GÄLLANDE] Miljön är Hälsingland med klippor, gran, tall och
-några björkar, även fallna träd. Bildspråket inspireras av Full Throttles
-äventyrsspelsstil. Bakgrunden är en sammanhängande bergssluttning sedd ovanifrån,
+några björkar, även fallna träd. Bildspråket är tecknat i samma stil som
+äventyrsspelet Full Throttle: kraftiga svarta konturer, platta färgfält med
+hårda skuggkanter, ett mustigt skymningsljus och serietidningstext. Bara den
+tecknade stilen lånas, inga figurer eller miljöer från spelet. Reviderat genom
+användarens önskemål 2026-10-25 om den tecknade stilen i stället för målad
+realism. Bakgrunden är en sammanhängande bergssluttning sedd ovanifrån,
 som en liftfärd nedför berget, med ett oändligt fall. Träd och stenar sitter
 fast i marken; inga friflygande träd eller krav på klyfta. Reviderat genom
 användarens grafikbeställning 2026-10-25.

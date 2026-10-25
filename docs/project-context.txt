@@ -263,10 +263,11 @@ Swish-konfiguration är referenser och ska inte kopieras som nya behörighetsbes
 JÄRVENS KORVFALL (2026-10-25)
 
 /spel är spelversionen enligt SPEL-001–005, länkad från sidfoten.
-modules/game äger Canvas-grafik och testbar simulering. Grafikrevisionen ger
-järven en målad kropp i dykställning, huvud/framtassar först, med loggans
-ansiktsdrag. Bakgrunden är en sammanhängande skogssluttning med markbundna
-träd, stenar och skuggor. Bildprompter finns i public/game/README.md.
+modules/game äger Canvas-grafik och testbar simulering. Grafiken är tecknad
+i Full Throttles stil (SPEL-004) och ritas helt i ui/toon.ts: svarta konturer,
+platta färgfält och hårda skuggkanter. Järven dyker med huvud/framtassar först,
+med loggans ansiktsdrag. Bakgrunden är en sömlös skogssluttning med markbundna
+träd, stenar och skuggor.
 Korvnamnen hämtas från webbplatsens korvprodukter (burgare och bredbar burkkorv
 undantas). Pilar/A/D och touch styr; dubbeltryck ger utfall med trög återgång.
 
