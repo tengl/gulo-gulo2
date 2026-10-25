@@ -172,8 +172,8 @@ function fern(c: Ctx, x: number, y: number, color: string, next: () => number) {
 // the edges seamless when the tile repeats.
 function corridor(y: number, side: number) {
   const t = (y / TILE_H) * Math.PI * 2;
-  const centre = TILE_W / 2 + Math.sin(t) * 38 + Math.sin(t * 3 + 1) * 14;
-  const half = 118 + Math.sin(t * 2 + side) * 22 + Math.sin(t * 5 + side * 2) * 9;
+  const centre = TILE_W / 2 + Math.sin(t) * 22 + Math.sin(t * 3 + 1) * 8;
+  const half = 152 + Math.sin(t * 2 + side) * 16 + Math.sin(t * 5 + side * 2) * 6;
   return centre + side * half;
 }
 
@@ -227,24 +227,26 @@ export function toonTerrain(scale = 2): HTMLCanvasElement {
   const place = (x: number, y: number, make: (x: number, y: number) => Thing) => {
     for (const dy of [-TILE_H, 0, TILE_H]) things.push(make(x, y + dy));
   };
-  for (let i = 0; i < 46; i++) {
+  for (let i = 0; i < 56; i++) {
     const y = next() * TILE_H;
     const left = next() < 0.5;
     const x = left ? next() * (corridor(y, -1) - 10) : corridor(y, 1) + 10 + next() * (TILE_W - corridor(y, 1));
     const size = 24 + next() * 18;
     const kind = next();
     const seed = Math.floor(next() * 1e9);
-    place(x, y, (px, py) => (kind < 0.55 ? spruce : kind < 0.85 ? pine : birch)(px, py, size, random(seed)));
+    place(x, y, (px, py) => (kind < 0.5 ? spruce : kind < 0.88 ? pine : birch)(px, py, size, random(seed)));
   }
+  // Decorative stones stay in the forest, so they are never taken for the
+  // stones the game places on the open slope.
   for (let i = 0; i < 9; i++) {
     const y = next() * TILE_H;
-    const x = corridor(y, -1) + next() * (corridor(y, 1) - corridor(y, -1));
+    const x = next() < 0.5 ? next() * (corridor(y, -1) - 30) : corridor(y, 1) + 30 + next() * (TILE_W - corridor(y, 1) - 30);
     const size = 12 + next() * 22, seed = Math.floor(next() * 1e9);
     place(x, y, (px, py) => boulder(px, py, size, random(seed)));
   }
   for (let i = 0; i < 4; i++) {
-    const y = next() * TILE_H, x = next() < 0.5 ? 40 + next() * 70 : TILE_W - 40 - next() * 70;
-    const length = 60 + next() * 40, angle = (next() - 0.5) * 1.2;
+    const y = next() * TILE_H, x = next() < 0.5 ? 20 + next() * 40 : TILE_W - 20 - next() * 40;
+    const length = 50 + next() * 30, angle = Math.PI / 2 + (next() - 0.5) * 0.8;
     place(x, y, (px, py) => log(px, py, length, angle));
   }
   things.sort((a, b) => a.y - b.y);
@@ -255,14 +257,16 @@ export function toonTerrain(scale = 2): HTMLCanvasElement {
 
 // -------------------------------------------------------------- wolverine
 
-// Two cells of 150 × 200 units: mouth closed, mouth open. The mouth sits at
-// (75, 150) in both, which paint.ts places on the collision point.
-export const CELL = { width: 150, height: 200, mouthX: 75, mouthY: 150 };
-
-const FUR = '#4a2a1a';
-const FUR_DARK = '#25140d';
-const TAN = '#d9a866';
-const TAN_DARK = '#a8743f';
+// SPEL-001: an exaggerated cartoon of the logo's wolverine, seen from above
+// while it runs head first down the slope: a huge black head with the logo's
+// peach brow band, cheeks and ears, a snarl full of teeth, a stocky body and
+// short legs. It is drawn every frame in local units with the mouth at (0, 0),
+// which paint.ts places on the collision point.
+const BLACK = '#1f1613';
+const BLACK_SHADE = '#0d0807';
+const PEACH = '#ebb89b';
+const PEACH_SHADE = '#c98c6e';
+const FUR_BROWN = '#3b2519';
 
 type Point = readonly [number, number];
 
@@ -275,15 +279,14 @@ function furry(points: readonly Point[], tuft: number, skip: readonly number[] =
   points.forEach((point, index) => {
     const following = points[(index + 1) % points.length]!;
     if (index === 0) path.moveTo(point[0], point[1]);
+    if (skip.includes(index)) { path.lineTo(following[0], following[1]); return; }
     const length = Math.hypot(following[0] - point[0], following[1] - point[1]);
-    const count = skip.includes(index) ? 1 : Math.max(1, Math.round(length / (tuft * 2.4)));
+    const count = Math.max(1, Math.round(length / (tuft * 2.4)));
     for (let i = 1; i <= count; i++) {
       const t = i / count, half = (i - 0.5) / count;
       const mx = point[0] + (following[0] - point[0]) * half, my = point[1] + (following[1] - point[1]) * half;
-      if (count > 1 || !skip.includes(index)) {
-        const ox = mx - cx, oy = my - cy, d = Math.hypot(ox, oy) || 1;
-        path.lineTo(mx + (ox / d) * tuft, my + (oy / d) * tuft);
-      }
+      const ox = mx - cx, oy = my - cy, d = Math.hypot(ox, oy) || 1;
+      path.lineTo(mx + (ox / d) * tuft, my + (oy / d) * tuft);
       path.lineTo(point[0] + (following[0] - point[0]) * t, point[1] + (following[1] - point[1]) * t);
     }
   });
@@ -291,113 +294,183 @@ function furry(points: readonly Point[], tuft: number, skip: readonly number[] =
   return path;
 }
 
-const mirror = (side: number, points: readonly Point[]) => points.map(([x, y]) => [75 + side * (x - 75), y] as const);
+const mirror = (side: number, points: readonly Point[]) => points.map(([x, y]) => [side * x, y] as const);
 
-function wolverineCell(c: Ctx, open: boolean) {
-  const shade = { color: FUR_DARK, dx: 7, dy: 5 };
-  // Hind legs splay out behind, towards the top, with pale-clawed feet.
-  for (const side of [-1, 1]) {
-    const leg = furry(mirror(side, [[96, 46], [118, 30], [130, 36], [126, 52], [108, 64]]), 2.6);
-    inked(c, leg, FUR, 3, shade);
-    for (let i = 0; i < 3; i++) {
-      const [x, y] = mirror(side, [[121 + i * 4, 31 + i * 5]])[0]!;
-      c.strokeStyle = '#efe4c8'; c.lineWidth = 2;
-      c.beginPath(); c.moveTo(x, y); c.lineTo(x + side * 4, y - 4); c.stroke();
-    }
-  }
-  // A short, bushy tail.
-  const tail = furry([[75, 2], [88, 8], [90, 24], [82, 36], [68, 36], [60, 24], [62, 8]], 3.4);
-  inked(c, tail, FUR, 3, shade);
-  c.strokeStyle = '#7b4a2b'; c.lineWidth = 2;
-  for (const x of [69, 75, 81]) { c.beginPath(); c.moveTo(x, 10); c.lineTo(x + (x - 75) * 0.3, 26); c.stroke(); }
-  // Long, low body: narrow hips, powerful humped shoulders.
-  const bodyPoints: Point[] = [[75, 26], [94, 32], [104, 56], [114, 86], [120, 112], [106, 132], [75, 136], [44, 132], [30, 112], [36, 86], [46, 56], [56, 32]];
-  const body = furry(bodyPoints, 3.2, [5, 6]);
-  inked(c, body, FUR, 3.6, { color: FUR_DARK, dx: 13, dy: 6 });
-  // The pale flank bands that run from shoulder to tail on every wolverine.
-  c.save(); c.clip(body);
-  for (const side of [-1, 1]) {
-    const band = furry(mirror(side, [[82, 30], [98, 42], [108, 72], [114, 102], [104, 104], [96, 74], [86, 46]]), 1.8);
-    c.fillStyle = side < 0 ? TAN : TAN_DARK; c.fill(band);
-  }
-  // Darker saddle down the spine.
-  c.fillStyle = '#2f1a10';
-  c.fill(furry([[75, 30], [84, 44], [86, 90], [75, 110], [64, 90], [66, 44]], 1.6));
-  c.restore();
-  c.lineWidth = 3.6; c.strokeStyle = INK; c.stroke(body);
-  // Thick forelegs reach past the head; oversized paws and long claws.
-  for (const side of [-1, 1]) {
-    const arm = furry(mirror(side, [[98, 98], [120, 104], [126, 140], [124, 168], [104, 170], [100, 140], [94, 118]]), 2.6, [3, 4]);
-    inked(c, arm, FUR, 3.4, shade);
-    const paw = blob(mirror(side, [[100, 160], [126, 158], [132, 176], [116, 184], [98, 178]]));
-    inked(c, paw, '#3a2016', 3, { color: FUR_DARK, dx: 4, dy: 4 });
-    for (let i = 0; i < 4; i++) {
-      const [x] = mirror(side, [[102 + i * 8, 0]])[0]!;
-      const claw = new Path2D();
-      claw.moveTo(x - 2.4, 180); claw.quadraticCurveTo(x - side, 190, x + side * 2, 195); claw.quadraticCurveTo(x + 1.4, 188, x + 2.4, 180); claw.closePath();
-      inked(c, claw, '#efe4c8', 1.6);
-    }
-  }
-  // Broad, flat head with small rounded ears set low and wide.
-  for (const side of [-1, 1]) {
-    const [x] = mirror(side, [[101, 0]])[0]!;
-    inked(c, blob([[x - 6, 112], [x + side * 2, 104], [x + side * 8, 108], [x + side * 6, 117]]), FUR, 2.6);
-    c.fillStyle = TAN; c.beginPath(); c.arc(x + side * 2, 110, 2.6, 0, Math.PI * 2); c.fill();
-  }
-  const head = furry([[75, 106], [94, 108], [106, 120], [104, 136], [92, 150], [75, 158], [58, 150], [46, 136], [44, 120], [56, 108]], 2.4, [3, 4, 5, 6]);
-  inked(c, head, '#33190f', 3.6, { color: FUR_DARK, dx: 8, dy: 5 });
-  // Light brow band from ear to ear, the dark mask below it.
-  c.save(); c.clip(head);
-  c.fillStyle = TAN;
-  c.fill(furry([[48, 116], [62, 110], [75, 113], [88, 110], [102, 116], [104, 126], [92, 121], [75, 125], [58, 121], [46, 126]], 1.6));
-  c.restore();
-  c.lineWidth = 3.6; c.strokeStyle = INK; c.stroke(head);
-  // Small, fierce eyes under one heavy, angry brow.
-  for (const side of [-1, 1]) {
-    const [x] = mirror(side, [[86, 0]])[0]!;
-    const eye = blob([[x - 5, 131], [x + 5, 129], [x + 6, 134], [x - 3, 136]]);
-    inked(c, eye, '#f0c64c', 1.6);
-    c.fillStyle = INK; c.beginPath(); c.arc(x + side * 0.5, 133, 2.2, 0, Math.PI * 2); c.fill();
-    c.strokeStyle = INK; c.lineWidth = 3.4;
-    c.beginPath(); c.moveTo(75 + side * 3, 129); c.lineTo(x + side * 7, 125); c.stroke();
-  }
-  // Short blunt muzzle with a big glossy nose; the open frame bares teeth.
-  inked(c, blob([[75, 137], [87, 141], [89, 152], [75, 159], [61, 152], [63, 141]]), '#8f5a33', 2.4, { color: '#5e3a22', dx: 3, dy: 4 });
-  if (open) {
-    const mouth = blob([[75, 144], [89, 148], [86, 162], [75, 167], [64, 162], [61, 148]]);
-    inked(c, mouth, '#6e1616', 2.8);
-    c.save(); c.clip(mouth);
-    c.fillStyle = '#cf4648'; c.beginPath(); c.ellipse(75, 165, 8, 4, 0, 0, Math.PI * 2); c.fill();
-    c.fillStyle = '#fff8e8';
-    for (const x of [68, 72, 78, 82]) { c.beginPath(); c.moveTo(x - 1.6, 146); c.lineTo(x, 149.5); c.lineTo(x + 1.6, 146); c.fill(); }
-    c.restore();
-    for (const x of [66, 84]) {
-      const fang = new Path2D(); fang.moveTo(x - 2.6, 147); fang.lineTo(x, 155); fang.lineTo(x + 2.6, 147); fang.closePath();
-      inked(c, fang, '#fff8e8', 1.2);
-    }
-  } else {
-    c.strokeStyle = INK; c.lineWidth = 2.4;
-    c.beginPath(); c.moveTo(65, 151); c.quadraticCurveTo(75, 155, 85, 151); c.stroke();
-    c.lineWidth = 1.6; c.beginPath(); c.moveTo(83, 150); c.lineTo(86, 147); c.stroke();
-  }
-  inked(c, blob([[75, 138], [83, 140], [81, 146], [75, 147.5], [69, 146], [67, 140]]), '#141010', 1.6);
-  c.fillStyle = '#f2ece0'; c.beginPath(); c.ellipse(72, 140.5, 2, 1.1, -0.3, 0, Math.PI * 2); c.fill();
-  // Whisker ticks.
-  c.strokeStyle = '#e8dcc0'; c.lineWidth = 1;
-  for (const side of [-1, 1]) for (const dy of [0, 3]) {
-    c.beginPath(); c.moveTo(75 + side * 13, 149 + dy); c.lineTo(75 + side * 22, 147 + dy * 1.6); c.stroke();
+export type WolverinePose = {
+  stride: number;  // running cycle in radians
+  mouth: number;   // 0 closed snarl, 1 wide open bite
+  crawl: number;   // 0 running, 1 flat on the belly
+  lift: number;    // 0 on the ground, 1 at the top of a jump
+  dizzy: number;   // 0 fine, 1 just stumbled
+  time: number;
+};
+
+function leg(c: Ctx, side: number, shoulder: Point, paw: Point, width: number) {
+  const [sx, sy] = shoulder, [px, py] = paw;
+  const angle = Math.atan2(py - sy, px - sx), nx = -Math.sin(angle) * width, ny = Math.cos(angle) * width;
+  const limb = furry([[sx + nx, sy + ny], [px + nx * 0.8, py + ny * 0.8], [px - nx * 0.8, py - ny * 0.8], [sx - nx, sy - ny]], 2.2, [1, 2]);
+  inked(c, limb, BLACK, 3, { color: BLACK_SHADE, dx: side * 3, dy: 2 });
+  const foot = blob(ring(px, py, width * 1.15, 8, 0.15, () => 0.5));
+  inked(c, foot, FUR_BROWN, 2.8);
+  // Long pale claws pointing the way the paw reaches.
+  for (let i = -1; i <= 1; i++) {
+    const a = angle + i * 0.38, x = px + Math.cos(a) * width, y = py + Math.sin(a) * width;
+    const claw = new Path2D();
+    claw.moveTo(x - Math.sin(a) * 2, y + Math.cos(a) * 2);
+    claw.lineTo(x + Math.cos(a) * 8, y + Math.sin(a) * 8);
+    claw.lineTo(x + Math.sin(a) * 2, y - Math.cos(a) * 2);
+    claw.closePath();
+    inked(c, claw, '#f4e6cc', 1.4);
   }
 }
 
-export function toonWolverine(scale = 4): HTMLCanvasElement {
-  const sheet = canvas(CELL.width * 2 * scale, CELL.height * scale);
-  const c = sheet.getContext('2d')!;
-  for (const open of [false, true]) {
-    c.save(); c.scale(scale, scale); if (open) c.translate(CELL.width, 0);
-    wolverineCell(c, open);
-    c.restore();
+function star(c: Ctx, x: number, y: number, r: number, spin: number) {
+  const path = new Path2D();
+  for (let i = 0; i < 10; i++) {
+    const a = spin + (i / 10) * Math.PI * 2, rr = i % 2 ? r * 0.45 : r;
+    if (i) path.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); else path.moveTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
   }
-  return sheet;
+  path.closePath();
+  inked(c, path, '#ffd25e', 1.8);
+}
+
+export function drawWolverine(c: Ctx, pose: WolverinePose) {
+  const { stride, crawl, lift } = pose;
+  const run = 1 - crawl;
+  const swing = Math.sin(stride), counter = Math.sin(stride + Math.PI);
+  const reach = lift > 0 ? 1 : run;
+  const splay = 12 * crawl;
+  // Tail and hind legs trail behind, up the slope.
+  const tail = furry([[0, -176], [13, -168], [15, -150], [8, -138], [-8, -138], [-15, -150], [-13, -168]], 3.6);
+  c.save(); c.translate(0, -150); c.rotate(Math.sin(stride * 0.5) * 0.25 * run); c.translate(0, 150);
+  inked(c, tail, BLACK, 3, { color: BLACK_SHADE, dx: 5, dy: 4 });
+  c.restore();
+  for (const side of [-1, 1]) {
+    const phase = side < 0 ? counter : swing;
+    leg(c, side, [side * 26, -128], [side * (40 + splay), -150 - (lift ? 10 : phase * 11 * reach)], 9);
+  }
+  // Stocky body with the pale flank bands, humped at the shoulders.
+  const body = furry([[0, -152], [22, -146], [34, -122], [42, -92], [40, -66], [0, -58], [-40, -66], [-42, -92], [-34, -122], [-22, -146]], 3.2, [4, 5]);
+  inked(c, body, BLACK, 3.6, { color: BLACK_SHADE, dx: 10, dy: 5 });
+  c.save(); c.clip(body);
+  for (const side of [-1, 1]) {
+    c.fillStyle = side < 0 ? PEACH : PEACH_SHADE;
+    c.fill(furry(mirror(side, [[10, -148], [26, -138], [36, -110], [38, -82], [28, -84], [24, -112], [14, -136]]), 1.8));
+  }
+  c.restore();
+  c.lineWidth = 3.6; c.strokeStyle = INK; c.stroke(body);
+  // Front legs reach forward beside the head.
+  for (const side of [-1, 1]) {
+    const phase = side < 0 ? swing : counter;
+    leg(c, side, [side * 40, -70], [side * (72 + splay), (lift ? 14 : -2 + phase * 16 * reach) - crawl * 10], 10);
+  }
+  // The huge head, drawn last so it overlaps the body like the logo's mask.
+  const bob = Math.sin(stride * 2) * 1.6 * run;
+  c.save(); c.translate(0, bob);
+  const earDrop = crawl * 7;
+  for (const side of [-1, 1]) {
+    const ear = blob(ring(side * 38, -70 + earDrop, 13, 10, 0.08, () => 0.5));
+    inked(c, ear, BLACK, 3);
+    c.fillStyle = PEACH; c.fill(blob(ring(side * 38, -68 + earDrop, 7, 8, 0.1, () => 0.5)));
+  }
+  const head = furry([[0, -76], [26, -74], [44, -64], [52, -44], [64, -28], [54, -22], [62, -10], [46, -2], [26, 10], [0, 14], [-26, 10], [-46, -2], [-62, -10], [-54, -22], [-64, -28], [-52, -44], [-44, -64], [-26, -74]], 2.8, [3, 4, 5, 6, 11, 12, 13, 14]);
+  inked(c, head, BLACK, 4, { color: BLACK_SHADE, dx: 9, dy: 4 });
+  c.save(); c.clip(head);
+  // As in the logo: a peach band arches from the forehead, split by the dark
+  // stripe down the middle, over each eye and down the side of the face to
+  // the cheek, leaving the eyes in the dark mask.
+  c.fillStyle = PEACH;
+  for (const side of [-1, 1]) c.fill(blob(mirror(side, [[5, -66], [26, -72], [46, -62], [56, -44], [64, -26], [52, -14], [40, -18], [36, -32], [32, -44], [20, -50], [5, -52]])));
+  c.restore();
+  c.lineWidth = 4; c.strokeStyle = INK; c.stroke(head);
+  // Fierce eyes under heavy black brows.
+  for (const side of [-1, 1]) {
+    const eye = blob(mirror(side, [[9, -38], [26, -42], [30, -33], [14, -29]]));
+    inked(c, eye, '#f3d2a0', 2);
+    c.fillStyle = '#b8743c'; c.beginPath(); c.arc(side * 19, -35, 4.2, 0, Math.PI * 2); c.fill();
+    c.fillStyle = INK; c.beginPath(); c.arc(side * 19, -35, 2.4, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(side * 18, -36.5, 0.9, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = INK; c.lineWidth = 4.6; c.lineCap = 'round';
+    c.beginPath(); c.moveTo(side * 6, -38); c.lineTo(side * 30, -47); c.stroke();
+  }
+  // Wrinkled peach muzzle and a big glossy nose.
+  inked(c, blob([[0, -28], [16, -24], [24, -10], [16, 2], [0, 6], [-16, 2], [-24, -10], [-16, -24]]), PEACH, 2.6, { color: PEACH_SHADE, dx: 4, dy: 4 });
+  c.strokeStyle = INK; c.lineWidth = 1.6;
+  for (const side of [-1, 1]) { c.beginPath(); c.moveTo(side * 12, -22); c.quadraticCurveTo(side * 17, -18, side * 15, -13); c.stroke(); }
+  inked(c, blob([[0, -26], [11, -23], [10, -16], [0, -13], [-10, -16], [-11, -23]]), '#120c0b', 2);
+  c.fillStyle = '#f2ece0'; c.beginPath(); c.ellipse(-4, -22, 3, 1.4, -0.3, 0, Math.PI * 2); c.fill();
+  // The snarl: always fangs, wide open with rows of teeth when biting.
+  const open = Math.max(0, Math.min(1, pose.mouth));
+  const drop = 3 + open * 11;
+  const mouth = blob([[0, -10], [15, -8], [19, -2], [13, drop], [0, drop + 3], [-13, drop], [-19, -2], [-15, -8]]);
+  inked(c, mouth, '#5a1214', 2.8);
+  c.save(); c.clip(mouth);
+  c.fillStyle = '#c63f43'; c.beginPath(); c.ellipse(0, drop + 2, 9, 4 + open * 2, 0, 0, Math.PI * 2); c.fill();
+  c.fillStyle = '#fff6e4';
+  for (let i = -3; i <= 3; i++) { c.beginPath(); c.moveTo(i * 4.4 - 2.2, -10); c.lineTo(i * 4.4, -5); c.lineTo(i * 4.4 + 2.2, -10); c.fill(); }
+  for (let i = -2; i <= 2; i++) { c.beginPath(); c.moveTo(i * 4.6 - 2.2, drop + 4); c.lineTo(i * 4.6, drop - 1); c.lineTo(i * 4.6 + 2.2, drop + 4); c.fill(); }
+  c.restore();
+  for (const side of [-1, 1]) {
+    const fang = new Path2D();
+    fang.moveTo(side * 14 - 3, -9); fang.lineTo(side * 12.5, -1 + open * 3); fang.lineTo(side * 14 + 3, -9); fang.closePath();
+    inked(c, fang, '#fff6e4', 1.6);
+  }
+  c.restore();
+  // Cartoon stars circle the head after a crash.
+  if (pose.dizzy > 0) {
+    for (let i = 0; i < 3; i++) {
+      const a = pose.time * 6 + (i / 3) * Math.PI * 2;
+      c.globalAlpha = Math.min(1, pose.dizzy * 2);
+      star(c, Math.cos(a) * 52, -46 + Math.sin(a) * 18, 10, a);
+    }
+    c.globalAlpha = 1;
+  }
+}
+
+// -------------------------------------------------------------- obstacles
+
+// SPEL-002/004: a granite boulder to jump over, rooted in the ground.
+export function drawStone(c: Ctx, x: number, y: number, size: number, tilt: number) {
+  const next = random(Math.floor(tilt * 1e6));
+  const stone = blob(ring(x, y, size, 9, 0.3, next).map(([px, py]) => [px, y + (py - y) * 0.8] as const));
+  castShadow(c, stone, size * 0.4, size * 0.5);
+  inked(c, stone, '#9a98a0', 3.2, { color: '#5c586e', dx: size * 0.32, dy: size * 0.3 });
+  c.save(); c.clip(stone);
+  c.fillStyle = '#b9b56a';
+  for (let i = 0; i < 3; i++) c.fill(blob(ring(x + (next() - 0.6) * size, y + (next() - 0.6) * size * 0.6, size * (0.14 + next() * 0.1), 6, 0.4, next)));
+  c.strokeStyle = '#efe9d8'; c.lineWidth = 3; c.lineCap = 'round';
+  c.beginPath(); c.moveTo(x - size * 0.7, y - size * 0.05); c.quadraticCurveTo(x - size * 0.5, y - size * 0.6, x + size * 0.05, y - size * 0.62); c.stroke();
+  c.strokeStyle = INK; c.lineWidth = 1.6;
+  c.beginPath(); c.moveTo(x - size * 0.1, y - size * 0.25); c.lineTo(x + size * 0.15, y + size * 0.1); c.lineTo(x + size * 0.08, y + size * 0.35); c.stroke();
+  c.restore();
+}
+
+// A fallen pine across the whole slope, resting on its branches with a gap
+// beneath it: the shadow on the ground shows how high it lies.
+export function drawLog(c: Ctx, y: number, tilt: number, width: number) {
+  c.save(); c.translate(width / 2, y); c.rotate(tilt);
+  const half = width / 2 + 40;
+  const trunk = new Path2D(); trunk.roundRect(-half, -17, half * 2, 34, 8);
+  c.save(); c.translate(10, 26); c.fillStyle = SHADOW; c.fill(trunk); c.restore();
+  // Dead branch stubs it rests on.
+  for (const bx of [-170, -60, 80, 190]) {
+    const stub = new Path2D(); stub.moveTo(bx - 4, 10); stub.lineTo(bx + 10, 28); stub.lineTo(bx + 16, 24); stub.lineTo(bx + 4, 8); stub.closePath();
+    inked(c, stub, '#6e4430', 2);
+  }
+  inked(c, trunk, '#8a5636', 3.2, { color: '#5b3424', dx: 0, dy: 9 });
+  // Flaking red pine bark and a lighter top where the sun falls.
+  c.save(); c.clip(trunk);
+  c.fillStyle = '#b8683d'; c.fillRect(-half, -17, half * 2, 9);
+  c.strokeStyle = INK; c.lineWidth = 1.4;
+  for (let bx = -half + 12; bx < half; bx += 26) {
+    c.beginPath(); c.moveTo(bx, -8); c.lineTo(bx + 9, -4); c.moveTo(bx + 14, 3); c.lineTo(bx + 22, 6); c.stroke();
+  }
+  c.restore();
+  for (const bx of [-120, 30, 150]) {
+    const knot = blob(ring(bx, -2, 4, 6, 0.2, () => 0.5));
+    inked(c, knot, '#5b3424', 1.4);
+  }
+  c.restore();
 }
 
 // ---------------------------------------------------------------- sausage

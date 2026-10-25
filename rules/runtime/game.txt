@@ -3,28 +3,39 @@ JÄRVENS KORVFALL
 Beslutskälla: användarens spelbeställning 2026-10-25.
 
 [SPEL-001] [GÄLLANDE] Sajten ska ha ett spel där järven liknar Gulo Gulos
-logga. Järven faller överst i bild och fångar korvar som kommer regelbundet
-från nederkanten. Järven ska ha trovärdigare mårddjursanatomi än loggan, med
-huvud och framtassar först i fallriktningen och resten av kroppen efter. Förtydligat av
-användaren 2026-10-25 vid grafikrevisionen. Korvarna ska vara de som finns på hemsidan och ge olika poäng.
+logga. Järven springer nedför en bergssluttning och fångar korvar som ligger
+här och var på marken. Korvarna ska vara de som finns på hemsidan och ge
+olika poäng. Järven är en överdriven tecknad figur som tydligt liknar loggan:
+stort, brett huvud i svart med loggans persikofärgade pannband, kinder och
+öroninsidor, arga ögonbryn och morrande mun med kraftiga tänder. Den ses
+ovanifrån med huvudet först i springriktningen och benen i språngrörelse.
+Reviderat genom användarens önskemål 2026-10-25 att järven ska springa i
+stället för att falla och vara mer överdriven och lik loggan.
 [SPEL-002] [GÄLLANDE] Piltangenter, A/D och touch styr i sidled. Dubbeltryck
 åt ett håll ger ett snabbt utfall med huvudet och trögare återgång åt andra hållet.
+Uppåt (pil upp, W eller touchknapp) hoppar över en sten. Nedåt (pil ner, S
+eller touchknapp) kryper under ett fallet träd. Ett fallet träd ligger tvärs
+över hela sluttningen och måste krypas under; en sten kan hoppas över eller
+undvikas i sidled. Den som krockar snubblar en kort stund, tappar 10 poäng
+(aldrig under noll) och kan inte fånga korv medan den snubblar. Spelet
+fortsätter efter en krock. Reviderat genom användarens önskemål 2026-10-25.
 [SPEL-003] [GÄLLANDE] Johann Strauss An der schönen blauen Donau spelas
-under fallet. Järven tuggar i takt men kan fånga korvar även mellan tuggorna.
-Två korvar ska försöka anlända i takt med tuggorna. En riktig orkesterinspelning
-ersätter syntversionen när möjligt, med timing som följer inspelningen.
+under spelet. Järven tuggar i takt men kan fånga korvar även mellan tuggorna.
+Stenar och fallna träd når järven på inspelningens taktslag, så att hopp och
+krypningar följer valsen. Korvarna ligger utspridda och följer inte takten.
+En riktig orkesterinspelning används, med timing som följer inspelningen.
 Beslutskälla: användarens grafik- och musikrevision 2026-10-25, med länk till
-Wikimedia Commons File:Strauss, An der schönen blauen Donau.ogg.
-[SPEL-004] [GÄLLANDE] Miljön är Hälsingland med klippor, gran, tall och
-några björkar, även fallna träd. Bildspråket är tecknat i samma stil som
-äventyrsspelet Full Throttle: kraftiga svarta konturer, platta färgfält med
-hårda skuggkanter, ett mustigt skymningsljus och serietidningstext. Bara den
-tecknade stilen lånas, inga figurer eller miljöer från spelet. Reviderat genom
-användarens önskemål 2026-10-25 om den tecknade stilen i stället för målad
-realism. Bakgrunden är en sammanhängande bergssluttning sedd ovanifrån,
-som en liftfärd nedför berget, med ett oändligt fall. Träd och stenar sitter
-fast i marken; inga friflygande träd eller krav på klyfta. Reviderat genom
-användarens grafikbeställning 2026-10-25.
+Wikimedia Commons File:Strauss, An der schönen blauen Donau.ogg. Reviderat
+2026-10-25 när korvarna skulle placeras här och var.
+[SPEL-004] [GÄLLANDE] Miljön efterliknar Hälsinglands natur: barrskog med tall
+och gran, några björkar, mossa, ljung, granitstenar och fallna träd. Bakgrunden
+är en sammanhängande bergssluttning sedd ovanifrån som järven springer nedför
+i det oändliga. Träd, stenar, fallna träd och korvar sitter fast i marken och
+rör sig med den. Bildspråket är tecknat i samma stil som äventyrsspelet Full
+Throttle: kraftiga svarta konturer, platta färgfält med hårda skuggkanter, ett
+mustigt skymningsljus och serietidningstext. Bara den tecknade stilen lånas,
+inga figurer eller miljöer från spelet. Reviderat genom användarens önskemål
+2026-10-25 om tecknad stil, springande järv och Hälsinglands natur.
 [SPEL-005] [GÄLLANDE] Introanimationen görs senare men tekniken ska stödja
 den: en skåpbil väjer för järven på en bergsväg, krockar med en sten och
-korvar flyger över stupet. Järven hoppar efter; därefter börjar spelet.
+korvarna sprids nedför berget. Järven springer efter; därefter börjar spelet.

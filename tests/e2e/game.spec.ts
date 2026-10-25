@@ -5,7 +5,7 @@ test('SPEL-001–003: start, steer, pause, mute and restart the fall', async ({ 
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/spel');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Full aptit');
-  await page.getByRole('button', { name: 'Hoppa efter korven' }).click();
+  await page.getByRole('button', { name: 'Spring efter korven' }).click();
   await expect(page.getByRole('button', { name: 'Styr vänster' })).toBeEnabled();
   if (info.project.name === 'mobile') {
     const left = page.getByRole('button', { name: 'Styr vänster' });
@@ -16,6 +16,17 @@ test('SPEL-001–003: start, steer, pause, mute and restart the fall', async ({ 
     await page.keyboard.down('a'); await page.waitForTimeout(600); await page.keyboard.up('a');
     await page.keyboard.press('d'); await page.keyboard.press('d');
   }
+  // SPEL-002: up and down are game moves, not page scrolling.
+  await expect(page.getByRole('button', { name: 'Hoppa', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Kryp', exact: true })).toBeEnabled();
+  const scroll = await page.evaluate(() => window.scrollY);
+  if (info.project.name === 'mobile') {
+    await page.getByRole('button', { name: 'Hoppa', exact: true }).tap();
+    await page.getByRole('button', { name: 'Kryp', exact: true }).tap();
+  } else {
+    await page.keyboard.press('ArrowUp'); await page.waitForTimeout(700); await page.keyboard.press('ArrowDown');
+  }
+  expect(await page.evaluate(() => window.scrollY)).toBe(scroll);
   await page.getByRole('button', { name: 'Pausa', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'En liten andningspaus.' })).toBeVisible();
   const distance = await page.locator('[class*="hud"]').innerText();
@@ -27,7 +38,7 @@ test('SPEL-001–003: start, steer, pause, mute and restart the fall', async ({ 
   await expect(page.getByRole('button', { name: 'Styr vänster' })).toBeEnabled();
   await expect(page.getByTestId('game-score')).toHaveText('00000');
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: 'Fortsätt falla' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Fortsätt springa' })).toBeVisible();
   expect(errors).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
@@ -49,9 +60,9 @@ test('SPEL-001/003: actual catch, decoded orchestra, pause/resume and mute', asy
     };
   });
   await page.goto('/spel');
-  await page.getByRole('button', { name: 'Hoppa efter korven' }).click();
+  await page.getByRole('button', { name: 'Spring efter korven' }).click();
   await expect(page.getByRole('button', { name: 'Styr vänster' })).toBeEnabled();
-  await page.keyboard.down('ArrowLeft'); await page.waitForTimeout(800); await page.keyboard.up('ArrowLeft');
+  // The seeded slope puts sausages in the path of a wolverine running straight.
   await expect(page.getByTestId('game-score')).not.toHaveText('00000', { timeout: 9000 });
   const audio = () => page.evaluate(() => (window as unknown as { gameAudio: { starts: { offset:number; duration:number; loop:boolean }[]; stops:number } }).gameAudio);
   const playing = await audio();
@@ -62,7 +73,7 @@ test('SPEL-001/003: actual catch, decoded orchestra, pause/resume and mute', asy
   await page.getByRole('button', { name: 'Pausa', exact: true }).click();
   expect((await audio()).stops).toBe(1);
   await page.getByRole('button', { name: 'Tysta', exact: true }).click();
-  await page.getByRole('button', { name: 'Fortsätt falla' }).click();
+  await page.getByRole('button', { name: 'Fortsätt springa' }).click();
   await expect(page.getByRole('button', { name: 'Styr vänster' })).toBeEnabled();
   const resumed=await audio();
   expect(resumed.starts).toHaveLength(2);
@@ -75,20 +86,20 @@ test('SPEL-003: cancelling loading cannot start a late recording or game', async
     await new Promise(resolve=>setTimeout(resolve,1000)); await route.continue();
   });
   await page.goto('/spel');
-  await page.getByRole('button', { name: 'Hoppa efter korven' }).click();
+  await page.getByRole('button', { name: 'Spring efter korven' }).click();
   await expect(page.getByRole('heading', { name:'Orkestern gör sig redo.' })).toBeVisible();
   await page.getByRole('button', { name:'Pausa',exact:true }).click();
   await page.waitForTimeout(1400);
-  await expect(page.getByRole('button',{name:'Fortsätt falla'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'Fortsätt springa'})).toBeVisible();
   await expect(page.getByRole('button',{name:'Styr vänster'})).toBeDisabled();
-  await page.getByRole('button',{name:'Fortsätt falla'}).click();
+  await page.getByRole('button',{name:'Fortsätt springa'}).click();
   await expect(page.getByRole('button',{name:'Styr vänster'})).toBeEnabled();
 });
 
 test('SPEL-003: failed audio has a visible silent-play fallback', async ({ page }) => {
   await page.route('**/game/blue-danube.*', route=>route.abort());
   await page.goto('/spel');
-  await page.getByRole('button',{name:'Hoppa efter korven'}).click();
+  await page.getByRole('button',{name:'Spring efter korven'}).click();
   await expect(page.getByRole('status')).toContainText('Ljudet kunde inte starta');
   await expect(page.getByRole('button',{name:'Styr vänster'})).toBeEnabled();
 });

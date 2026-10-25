@@ -4,7 +4,7 @@ import { loadSite } from '@/server/content/load';
 
 export const metadata: Metadata = {
   title: 'Järvens korvfall',
-  description: 'Fritt fall och full aptit. Hjälp Gulo Gulos järv fånga korvarna i ett spel från Hälsingland.',
+  description: 'Full fart och full aptit. Spring nedför berget med Gulo Gulos järv, hoppa över stenar, kryp under fallna träd och fånga korvarna.',
   alternates: { canonical: '/spel' },
 };
 

@@ -2,7 +2,7 @@
 
 SPEL-001–005, grafik-/musikrevision 2026-10-25. Här ligger bara musiken.
 Grafiken ritas i koden, i `src/modules/game/ui/toon.ts`, i tecknad stil
-enligt SPEL-004. Järven består av två lika stora celler (stängd/öppen mun).
+enligt SPEL-004. Järven ritas i varje bildruta med springande ben, hopp och krypning.
 Bakgrunden är en sömlös markyta som upprepas utan skarv.
 
 ## Musik

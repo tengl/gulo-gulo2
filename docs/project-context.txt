@@ -263,11 +263,13 @@ Swish-konfiguration är referenser och ska inte kopieras som nya behörighetsbes
 JÄRVENS KORVFALL (2026-10-25)
 
 /spel är spelversionen enligt SPEL-001–005, länkad från sidfoten.
-modules/game äger Canvas-grafik och testbar simulering. Grafiken är tecknad
-i Full Throttles stil (SPEL-004) och ritas helt i ui/toon.ts: svarta konturer,
-platta färgfält och hårda skuggkanter. Järven dyker med huvud/framtassar först,
-med loggans ansiktsdrag. Bakgrunden är en sömlös skogssluttning med markbundna
-träd, stenar och skuggor.
+modules/game äger Canvas-grafik och testbar simulering. Järven springer nedför
+en skogssluttning i Hälsingland (tall, gran, några björkar) och fångar korvar
+som ligger utspridda på marken. Stenar hoppas över med uppåt (pil/W/knapp) och
+fallna träd, som ligger tvärs över stigen, kryps under med nedåt (pil/S/knapp).
+Krock ger en kort snubbling och minus 10 poäng. Hindren når järven på
+inspelningens taktslag. Grafiken är tecknad i Full Throttles stil (SPEL-004)
+och ritas helt i ui/toon.ts; järven är en överdriven version av loggans järv.
 Korvnamnen hämtas från webbplatsens korvprodukter (burgare och bredbar burkkorv
 undantas). Pilar/A/D och touch styr; dubbeltryck ger utfall med trög återgång.
 
@@ -282,7 +284,8 @@ spelet kan fortsätta tyst. Paus under ljudladdning hindrar sen uppspelning.
 Spelet är ändlöst, med paus, omstart och automatisk paus när fliken döljs
 eller fokus lämnar spelet. Inga poäng sparas på servern. Intro med skåpbilen
 är uppskjutet; en video eller Canvas-scen kan föregå start av simuleringen.
-Verifierat efter grafik-/musikrevisionen: npm run check (71 tester),
-npm run build och 8 webbläsartester på mobil/dator. De provar även avkodad
+Verifierat efter löprevisionen 2026-10-25: npm run check (69 enhetstester och
+6 säkerhetstester), npm run build och 8 webbläsartester för spelet på
+mobil/dator. De provar hopp/kryp-kontroller, verklig fångst, avkodad
 orkesterinspelning, återupptagning från paus, avbruten laddning och ljudfel.
 Båda skärmstorlekarna är visuellt granskade. Ingen push/publicering gjord.
